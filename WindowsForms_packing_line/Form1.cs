@@ -16,5 +16,10 @@ namespace WindowsForms_packing_line
         {
             InitializeComponent();
         }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
