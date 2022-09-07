@@ -34,5 +34,53 @@ namespace WindowsForms_packing_line.Properties {
                 this["dbIPServer"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string InnerAMaster {
+            get {
+                return ((string)(this["InnerAMaster"]));
+            }
+            set {
+                this["InnerAMaster"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string InnerBMaster {
+            get {
+                return ((string)(this["InnerBMaster"]));
+            }
+            set {
+                this["InnerBMaster"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string CartonMaster {
+            get {
+                return ((string)(this["CartonMaster"]));
+            }
+            set {
+                this["CartonMaster"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ExportMaster {
+            get {
+                return ((string)(this["ExportMaster"]));
+            }
+            set {
+                this["ExportMaster"] = value;
+            }
+        }
     }
 }

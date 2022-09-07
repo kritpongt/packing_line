@@ -21,7 +21,11 @@ namespace WindowsForms_packing_line
     {
         private SerialPort port1, port2, port3, port4;
         string connectStr = "server=" + WindowsForms_packing_line.Properties.Settings.Default.dbIPServer + ";port=3306;Database=packing_line_element;uid=root;pwd=;SslMode=none;";
-        int qty, inner_max, carton_max;
+        int qty, innerbox_max, cartonbox_max;
+        string inner_a_master;
+        string inner_b_master = WindowsForms_packing_line.Properties.Settings.Default.InnerBMaster;
+        string carton_master = WindowsForms_packing_line.Properties.Settings.Default.CartonMaster;
+        string export_master = WindowsForms_packing_line.Properties.Settings.Default.ExportMaster;
         public Form1()
         {
             InitializeComponent();
@@ -116,11 +120,12 @@ namespace WindowsForms_packing_line
                 string input_value = port1.ReadExisting();
                 Thread.Sleep(60);
                 Invoke((MethodInvoker)delegate { tbInnerBoxA.Text = input_value; lbLog.Items.Add(input_value); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
-                if (input_value.Equals(tbInnerBoxA.Text))
+               inner_a_master = WindowsForms_packing_line.Properties.Settings.Default.InnerAMaster;
+                if (input_value.Equals(inner_a_master))
                 {
                     qty -= 1;
                     if (qty < 0) { qty = 0; }
-                    Invoke((MethodInvoker)delegate { lRemainingInner.Text = qty.ToString(); });
+                    Invoke((MethodInvoker)delegate { lRemainingInner.Text = "Remaining: " + qty.ToString(); });
                 }
             }
             catch (Exception ex)
@@ -135,11 +140,12 @@ namespace WindowsForms_packing_line
                 string input_value = port2.ReadExisting();
                 Thread.Sleep(60);
                 Invoke((MethodInvoker)delegate { tbInnerBoxB.Text = input_value; lbLog.Items.Add(input_value); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
-                if (input_value.Equals(tbInnerBoxB.Text))
+                inner_b_master = WindowsForms_packing_line.Properties.Settings.Default.InnerAMaster;
+                if (input_value.Equals(inner_b_master))
                 {
                     qty -= 1;
                     if (qty < 0) { qty = 0; }
-                    Invoke((MethodInvoker)delegate { lRemainingInner.Text = qty.ToString(); });
+                    Invoke((MethodInvoker)delegate { lRemainingInner.Text = "Remaining: " + qty.ToString(); });
                 }
             }
             catch (Exception ex)
@@ -182,6 +188,8 @@ namespace WindowsForms_packing_line
         private void btnStart_Click(object sender, EventArgs e)
         {
             queryQTY();
+            queryInnerA();
+            queryInnerB();
         }
         //SQL Connect, Get
         public void login()
@@ -204,10 +212,10 @@ namespace WindowsForms_packing_line
                     tbModel.Text = reader.GetString(2);
                     tbQTY.Text = reader.GetString(9);
                     qty = reader.GetInt32("Qty");
-                    inner_max = reader.GetInt32("InnerMax");
-                    carton_max = reader.GetInt32("CartonMax");
+                    innerbox_max = reader.GetInt32("InnerMax");
+                    cartonbox_max = reader.GetInt32("CartonMax");
                     lRemainingInner.Text = "Remaining: " + qty.ToString();
-                    lRemainingCarton.Text = "Remaining: " + (qty / inner_max).ToString();
+                    lRemainingCarton.Text = "Remaining: " + (qty / innerbox_max).ToString();
                 }
             }
             catch (Exception ex)
@@ -219,20 +227,22 @@ namespace WindowsForms_packing_line
                 dbconnect.Close();
             }
         }
-        public string queryInnerA()
+        public void queryInnerA()
         {
             string queryList = "SELECT * FROM test_model_master WHERE Kanban = '" + tbKanban.Text + "';";
             MySqlConnection dbconnect = new MySqlConnection(connectStr);
             MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
             MySqlDataReader reader;
-            string inner_a_master;
             dbcommand.CommandTimeout = 60;
             try
             {
                 dbconnect.Open();
                 reader = dbcommand.ExecuteReader();
-                inner_a_master = reader.GetString("InnerA");
-                return inner_a_master;
+                while (reader.Read())
+                {
+                    WindowsForms_packing_line.Properties.Settings.Default.InnerAMaster = reader.GetString("InnerA");
+                }
+
             }
             catch (Exception ex)
             {
@@ -242,7 +252,32 @@ namespace WindowsForms_packing_line
             {
                 dbconnect.Close();
             }
-            return "";
+        }
+        public void queryInnerB()
+        {
+            string queryList = "SELECT * FROM test_model_master WHERE Kanban = '" + tbKanban.Text + "';";
+            MySqlConnection dbconnect = new MySqlConnection(connectStr);
+            MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
+            MySqlDataReader reader;
+            dbcommand.CommandTimeout = 60;
+            try
+            {
+                dbconnect.Open();
+                reader = dbcommand.ExecuteReader();
+                while (reader.Read())
+                {
+                    WindowsForms_packing_line.Properties.Settings.Default.InnerBMaster = reader.GetString("InnerB");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                dbconnect.Close();
+            }
         }
     }
 }
