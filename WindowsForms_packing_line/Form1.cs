@@ -20,12 +20,13 @@ namespace WindowsForms_packing_line
     {
         private SerialPort port1, port2, port3, port4;
         string connectStr = "server=" + WindowsForms_packing_line.Properties.Settings.Default.dbIPServer + ";port=3306;Database=packing_line_element;uid=root;pwd=;SslMode=none;";
-        int qty, innerbox_max, cartonbox_max;
-        int inner_count = 0 , carton_count = 0;
-        string inner_a_master;
-        string inner_b_master;
-        string carton_master;
-        string export_master;
+        int qty, innerbox_max, cartonbox_max;   //get from db
+        int cartonbox_rem;  //remaining carton box in export box
+        int inner_count = 0 , carton_count = 0; //counter +1
+        string inner_a_master;  //No. inner master
+        string inner_b_master;  //No. inner master
+        string carton_master;   //No. carton master
+        string export_master;   //No. export master
         public Form1()
         {
             InitializeComponent();
@@ -124,7 +125,7 @@ namespace WindowsForms_packing_line
                 if (input_value.Equals(inner_a_master))
                 {
                     inner_count++;
-                    if (inner_count >= innerbox_max) { inner_count = innerbox_max; }
+                    if (inner_count >= innerbox_max) {inner_count = innerbox_max; } //Alarm
                     qty -= 1;
                     if (qty < 0) { qty = 0; }
                     Invoke((MethodInvoker)delegate { lRemainingInner.Text = "Remaining: " + qty.ToString(); });
@@ -147,7 +148,7 @@ namespace WindowsForms_packing_line
                 if (input_value.Equals(inner_b_master))
                 {
                     inner_count++;
-                    if ( inner_count >= innerbox_max ) { inner_count = innerbox_max; }
+                    if ( inner_count >= innerbox_max ) { inner_count = innerbox_max; }  //Alarm
                     qty -= 1;
                     if (qty < 0) { qty = 0; }
                     Invoke((MethodInvoker)delegate { lRemainingInner.Text = "Remaining: " + qty.ToString(); });
@@ -169,9 +170,12 @@ namespace WindowsForms_packing_line
                 carton_master = WindowsForms_packing_line.Properties.Settings.Default.CartonMaster;
                 if (input_value.Equals(carton_master))
                 {
-                    innerbox_max -= 1;
-                    if (innerbox_max < 0) { innerbox_max = 0; }
-                    Invoke((MethodInvoker)delegate { lRemainingCarton.Text = "Remaining: " + qty.ToString(); });
+                    carton_count++;
+                    if (carton_count >= cartonbox_max) { carton_count = cartonbox_max; }
+                    cartonbox_rem -= 1;
+                    if (cartonbox_rem < 0) { cartonbox_rem = 0; }
+                    Invoke((MethodInvoker)delegate { lRemainingCarton.Text = "Remaining: " + cartonbox_rem.ToString(); });
+                    Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Need: " + carton_count + " / " + cartonbox_max; });
                 }
             }
             catch (Exception ex)
@@ -189,9 +193,7 @@ namespace WindowsForms_packing_line
                 export_master = WindowsForms_packing_line.Properties.Settings.Default.ExportMaster;
                 if (input_value.Equals(export_master))
                 {
-                    //qty -= 1;
-                    //if (qty < 0) { qty = 0; }
-                    //Invoke((MethodInvoker)delegate { lRemainingCarton.Text = "Remaining: " + qty.ToString(); });
+                    //Reset Kanban
                 }
             }
             catch (Exception ex)
@@ -210,6 +212,8 @@ namespace WindowsForms_packing_line
             queryQTY();
             queryInnerA();
             queryInnerB();
+            queryCarton();
+            queryExport();
         }
         //SQL Connect, Get
         public void login()
@@ -234,8 +238,9 @@ namespace WindowsForms_packing_line
                     qty = reader.GetInt32("Qty");
                     innerbox_max = reader.GetInt32("InnerMax");
                     cartonbox_max = reader.GetInt32("CartonMax");
-                    lRemainingInner.Text = "Remaining: " + (qty / innerbox_max).ToString();  //Remaining:
-                    lRemainingCarton.Text = "Remaining: " + (cartonbox_max / innerbox_max).ToString();    //Remaining:
+                    cartonbox_rem  = qty / innerbox_max;
+                    lRemainingInner.Text = "Remaining: " + qty.ToString();  //Remaining:
+                    lRemainingCarton.Text = "Remaining: " + cartonbox_rem.ToString();    //Remaining:
                     lNeedInner.Text = "Need: " + inner_count + " / " + innerbox_max; //Need:
                     lNeedCarton.Text = "Need: " + carton_count + " / " + cartonbox_max;   //Need:
                 }
