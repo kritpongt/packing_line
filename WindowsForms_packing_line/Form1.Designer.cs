@@ -28,23 +28,22 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.Checker = new System.Windows.Forms.TabPage();
+            this.lNeedExport = new System.Windows.Forms.Label();
+            this.lNeedCarton = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.lbLog = new System.Windows.Forms.ListBox();
             this.lRemainingCarton = new System.Windows.Forms.Label();
             this.lRemainingInner = new System.Windows.Forms.Label();
             this.tbExportBox = new System.Windows.Forms.TextBox();
             this.tbCartonBox = new System.Windows.Forms.TextBox();
-            this.label15 = new System.Windows.Forms.Label();
             this.tbInnerBoxB = new System.Windows.Forms.TextBox();
-            this.label13 = new System.Windows.Forms.Label();
             this.tbInnerBoxA = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
             this.btnStart = new System.Windows.Forms.Button();
             this.tbQTY = new System.Windows.Forms.TextBox();
             this.tbModel = new System.Windows.Forms.TextBox();
@@ -52,7 +51,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.Settings = new System.Windows.Forms.TabPage();
             this.btnSavePorts = new System.Windows.Forms.Button();
             this.cbPort4 = new System.Windows.Forms.ComboBox();
             this.label19 = new System.Windows.Forms.Label();
@@ -62,262 +61,275 @@
             this.label17 = new System.Windows.Forms.Label();
             this.cbPort1 = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.lNeedInner = new System.Windows.Forms.Label();
-            this.lNeedCarton = new System.Windows.Forms.Label();
+            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.Edit = new System.Windows.Forms.TabPage();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.lMasterA = new System.Windows.Forms.Label();
+            this.lMasterB = new System.Windows.Forms.Label();
+            this.lMasterCarton = new System.Windows.Forms.Label();
+            this.lMasterExport = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
-            this.tabPage1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
+            this.Checker.SuspendLayout();
+            this.Settings.SuspendLayout();
+            this.panel1.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            this.Edit.SuspendLayout();
+            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 13);
+            this.label1.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label1.Location = new System.Drawing.Point(22, 8);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(65, 13);
+            this.label1.Size = new System.Drawing.Size(194, 32);
             this.label1.TabIndex = 0;
             this.label1.Text = "Operator ID:";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(13, 26);
+            this.label2.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label2.Location = new System.Drawing.Point(21, 49);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(82, 13);
+            this.label2.Size = new System.Drawing.Size(224, 32);
             this.label2.TabIndex = 1;
             this.label2.Text = "Operator Name:";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(13, 39);
+            this.label3.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label3.Location = new System.Drawing.Point(429, 8);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(47, 13);
+            this.label3.Size = new System.Drawing.Size(149, 32);
             this.label3.TabIndex = 2;
             this.label3.Text = "Position:";
             // 
             // tabControl1
             // 
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Location = new System.Drawing.Point(12, 67);
+            this.tabControl1.Controls.Add(this.Checker);
+            this.tabControl1.Controls.Add(this.Settings);
+            this.tabControl1.Controls.Add(this.Edit);
+            this.tabControl1.Cursor = System.Windows.Forms.Cursors.Default;
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.tabControl1.Font = new System.Drawing.Font("Consolas", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tabControl1.Location = new System.Drawing.Point(0, 94);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(776, 357);
+            this.tabControl1.Size = new System.Drawing.Size(1008, 635);
             this.tabControl1.TabIndex = 3;
             // 
-            // tabPage1
+            // Checker
             // 
-            this.tabPage1.Controls.Add(this.lNeedCarton);
-            this.tabPage1.Controls.Add(this.lNeedInner);
-            this.tabPage1.Controls.Add(this.label12);
-            this.tabPage1.Controls.Add(this.lbLog);
-            this.tabPage1.Controls.Add(this.lRemainingCarton);
-            this.tabPage1.Controls.Add(this.lRemainingInner);
-            this.tabPage1.Controls.Add(this.tbExportBox);
-            this.tabPage1.Controls.Add(this.tbCartonBox);
-            this.tabPage1.Controls.Add(this.label15);
-            this.tabPage1.Controls.Add(this.tbInnerBoxB);
-            this.tabPage1.Controls.Add(this.label13);
-            this.tabPage1.Controls.Add(this.tbInnerBoxA);
-            this.tabPage1.Controls.Add(this.label9);
-            this.tabPage1.Controls.Add(this.label8);
-            this.tabPage1.Controls.Add(this.btnStart);
-            this.tabPage1.Controls.Add(this.tbQTY);
-            this.tabPage1.Controls.Add(this.tbModel);
-            this.tabPage1.Controls.Add(this.tbKanban);
-            this.tabPage1.Controls.Add(this.label6);
-            this.tabPage1.Controls.Add(this.label5);
-            this.tabPage1.Controls.Add(this.label4);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(768, 331);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Checker";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.Checker.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(52)))), ((int)(((byte)(96)))));
+            this.Checker.Controls.Add(this.lRemainingCarton);
+            this.Checker.Controls.Add(this.groupBox4);
+            this.Checker.Controls.Add(this.groupBox3);
+            this.Checker.Controls.Add(this.groupBox2);
+            this.Checker.Controls.Add(this.groupBox1);
+            this.Checker.Controls.Add(this.label12);
+            this.Checker.Controls.Add(this.lbLog);
+            this.Checker.Controls.Add(this.lRemainingInner);
+            this.Checker.Controls.Add(this.btnStart);
+            this.Checker.Controls.Add(this.tbQTY);
+            this.Checker.Controls.Add(this.tbModel);
+            this.Checker.Controls.Add(this.tbKanban);
+            this.Checker.Controls.Add(this.label6);
+            this.Checker.Controls.Add(this.label5);
+            this.Checker.Controls.Add(this.label4);
+            this.Checker.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.Checker.Location = new System.Drawing.Point(4, 33);
+            this.Checker.Name = "Checker";
+            this.Checker.Padding = new System.Windows.Forms.Padding(3);
+            this.Checker.Size = new System.Drawing.Size(1000, 598);
+            this.Checker.TabIndex = 0;
+            this.Checker.Text = "Checker";
+            // 
+            // lNeedExport
+            // 
+            this.lNeedExport.AutoSize = true;
+            this.lNeedExport.Location = new System.Drawing.Point(6, 109);
+            this.lNeedExport.Name = "lNeedExport";
+            this.lNeedExport.Size = new System.Drawing.Size(94, 24);
+            this.lNeedExport.TabIndex = 20;
+            this.lNeedExport.Text = "Need: 0";
+            // 
+            // lNeedCarton
+            // 
+            this.lNeedCarton.AutoSize = true;
+            this.lNeedCarton.Location = new System.Drawing.Point(6, 109);
+            this.lNeedCarton.Name = "lNeedCarton";
+            this.lNeedCarton.Size = new System.Drawing.Size(94, 24);
+            this.lNeedCarton.TabIndex = 19;
+            this.lNeedCarton.Text = "Need: 0";
             // 
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(19, 106);
+            this.label12.Location = new System.Drawing.Point(40, 204);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(28, 13);
+            this.label12.Size = new System.Drawing.Size(58, 24);
             this.label12.TabIndex = 18;
             this.label12.Text = "Log:";
             // 
             // lbLog
             // 
             this.lbLog.FormattingEnabled = true;
-            this.lbLog.Location = new System.Drawing.Point(22, 122);
+            this.lbLog.ItemHeight = 24;
+            this.lbLog.Location = new System.Drawing.Point(38, 231);
             this.lbLog.Name = "lbLog";
-            this.lbLog.Size = new System.Drawing.Size(378, 199);
+            this.lbLog.Size = new System.Drawing.Size(428, 340);
             this.lbLog.TabIndex = 17;
             // 
             // lRemainingCarton
             // 
             this.lRemainingCarton.AutoSize = true;
-            this.lRemainingCarton.Location = new System.Drawing.Point(455, 77);
+            this.lRemainingCarton.Location = new System.Drawing.Point(664, 370);
             this.lRemainingCarton.Name = "lRemainingCarton";
-            this.lRemainingCarton.Size = new System.Drawing.Size(60, 13);
+            this.lRemainingCarton.Size = new System.Drawing.Size(130, 24);
             this.lRemainingCarton.TabIndex = 16;
             this.lRemainingCarton.Text = "Remaining:";
             // 
             // lRemainingInner
             // 
             this.lRemainingInner.AutoSize = true;
-            this.lRemainingInner.Location = new System.Drawing.Point(243, 77);
+            this.lRemainingInner.Location = new System.Drawing.Point(664, 204);
             this.lRemainingInner.Name = "lRemainingInner";
-            this.lRemainingInner.Size = new System.Drawing.Size(60, 13);
+            this.lRemainingInner.Size = new System.Drawing.Size(130, 24);
             this.lRemainingInner.TabIndex = 15;
             this.lRemainingInner.Text = "Remaining:";
             // 
             // tbExportBox
             // 
-            this.tbExportBox.Location = new System.Drawing.Point(554, 77);
+            this.tbExportBox.Location = new System.Drawing.Point(6, 31);
             this.tbExportBox.Name = "tbExportBox";
-            this.tbExportBox.Size = new System.Drawing.Size(100, 20);
+            this.tbExportBox.Size = new System.Drawing.Size(478, 32);
             this.tbExportBox.TabIndex = 14;
             // 
             // tbCartonBox
             // 
-            this.tbCartonBox.Location = new System.Drawing.Point(349, 77);
+            this.tbCartonBox.Location = new System.Drawing.Point(6, 31);
             this.tbCartonBox.Name = "tbCartonBox";
-            this.tbCartonBox.Size = new System.Drawing.Size(100, 20);
+            this.tbCartonBox.Size = new System.Drawing.Size(478, 32);
             this.tbCartonBox.TabIndex = 14;
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(551, 61);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(61, 13);
-            this.label15.TabIndex = 12;
-            this.label15.Text = "Export Box:";
             // 
             // tbInnerBoxB
             // 
-            this.tbInnerBoxB.Location = new System.Drawing.Point(137, 77);
+            this.tbInnerBoxB.Location = new System.Drawing.Point(6, 49);
             this.tbInnerBoxB.Name = "tbInnerBoxB";
-            this.tbInnerBoxB.Size = new System.Drawing.Size(100, 20);
+            this.tbInnerBoxB.Size = new System.Drawing.Size(478, 32);
             this.tbInnerBoxB.TabIndex = 14;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(346, 61);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(62, 13);
-            this.label13.TabIndex = 12;
-            this.label13.Text = "Carton Box:";
             // 
             // tbInnerBoxA
             // 
-            this.tbInnerBoxA.Location = new System.Drawing.Point(22, 77);
+            this.tbInnerBoxA.Location = new System.Drawing.Point(6, 49);
             this.tbInnerBoxA.Name = "tbInnerBoxA";
-            this.tbInnerBoxA.Size = new System.Drawing.Size(100, 20);
+            this.tbInnerBoxA.Size = new System.Drawing.Size(478, 32);
             this.tbInnerBoxA.TabIndex = 13;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(134, 61);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(65, 13);
-            this.label9.TabIndex = 12;
-            this.label9.Text = "Inner Box B:";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(19, 61);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(65, 13);
-            this.label8.TabIndex = 11;
-            this.label8.Text = "Inner Box A:";
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(455, 13);
+            this.btnStart.BackColor = System.Drawing.Color.MediumAquamarine;
+            this.btnStart.Location = new System.Drawing.Point(872, 6);
             this.btnStart.Name = "btnStart";
-            this.btnStart.Size = new System.Drawing.Size(75, 23);
+            this.btnStart.Size = new System.Drawing.Size(120, 50);
             this.btnStart.TabIndex = 10;
             this.btnStart.Text = "START";
-            this.btnStart.UseVisualStyleBackColor = true;
+            this.btnStart.UseVisualStyleBackColor = false;
             this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
             // 
             // tbQTY
             // 
-            this.tbQTY.Location = new System.Drawing.Point(349, 15);
+            this.tbQTY.Location = new System.Drawing.Point(743, 16);
             this.tbQTY.Name = "tbQTY";
-            this.tbQTY.Size = new System.Drawing.Size(100, 20);
+            this.tbQTY.Size = new System.Drawing.Size(109, 32);
             this.tbQTY.TabIndex = 9;
             // 
             // tbModel
             // 
-            this.tbModel.Location = new System.Drawing.Point(205, 15);
+            this.tbModel.Enabled = false;
+            this.tbModel.Location = new System.Drawing.Point(402, 16);
             this.tbModel.Name = "tbModel";
-            this.tbModel.Size = new System.Drawing.Size(100, 20);
+            this.tbModel.Size = new System.Drawing.Size(220, 32);
             this.tbModel.TabIndex = 8;
             // 
             // tbKanban
             // 
-            this.tbKanban.Location = new System.Drawing.Point(54, 15);
+            this.tbKanban.Location = new System.Drawing.Point(83, 17);
             this.tbKanban.Name = "tbKanban";
-            this.tbKanban.Size = new System.Drawing.Size(100, 20);
+            this.tbKanban.Size = new System.Drawing.Size(220, 32);
             this.tbKanban.TabIndex = 7;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(311, 15);
+            this.label6.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label6.Location = new System.Drawing.Point(679, 20);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(32, 13);
+            this.label6.Size = new System.Drawing.Size(58, 24);
             this.label6.TabIndex = 6;
             this.label6.Text = "QTY:";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(160, 15);
+            this.label5.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label5.Location = new System.Drawing.Point(314, 20);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(39, 13);
+            this.label5.Size = new System.Drawing.Size(82, 24);
             this.label5.TabIndex = 5;
             this.label5.Text = "Model:";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(19, 18);
+            this.label4.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label4.Location = new System.Drawing.Point(19, 19);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(29, 13);
+            this.label4.Size = new System.Drawing.Size(58, 24);
             this.label4.TabIndex = 4;
             this.label4.Text = "K/B:";
             // 
-            // tabPage2
+            // Settings
             // 
-            this.tabPage2.Controls.Add(this.btnSavePorts);
-            this.tabPage2.Controls.Add(this.cbPort4);
-            this.tabPage2.Controls.Add(this.label19);
-            this.tabPage2.Controls.Add(this.cbPort3);
-            this.tabPage2.Controls.Add(this.label18);
-            this.tabPage2.Controls.Add(this.cbPort2);
-            this.tabPage2.Controls.Add(this.label17);
-            this.tabPage2.Controls.Add(this.cbPort1);
-            this.tabPage2.Controls.Add(this.label7);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(768, 331);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Settings";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.Settings.Controls.Add(this.btnSavePorts);
+            this.Settings.Controls.Add(this.cbPort4);
+            this.Settings.Controls.Add(this.label19);
+            this.Settings.Controls.Add(this.cbPort3);
+            this.Settings.Controls.Add(this.label18);
+            this.Settings.Controls.Add(this.cbPort2);
+            this.Settings.Controls.Add(this.label17);
+            this.Settings.Controls.Add(this.cbPort1);
+            this.Settings.Controls.Add(this.label7);
+            this.Settings.Location = new System.Drawing.Point(4, 33);
+            this.Settings.Name = "Settings";
+            this.Settings.Padding = new System.Windows.Forms.Padding(3);
+            this.Settings.Size = new System.Drawing.Size(1000, 598);
+            this.Settings.TabIndex = 1;
+            this.Settings.Text = "Settings";
+            this.Settings.UseVisualStyleBackColor = true;
             // 
             // btnSavePorts
             // 
-            this.btnSavePorts.Location = new System.Drawing.Point(101, 139);
+            this.btnSavePorts.Location = new System.Drawing.Point(246, 185);
             this.btnSavePorts.Name = "btnSavePorts";
-            this.btnSavePorts.Size = new System.Drawing.Size(75, 23);
+            this.btnSavePorts.Size = new System.Drawing.Size(121, 44);
             this.btnSavePorts.TabIndex = 2;
             this.btnSavePorts.Text = "Save";
             this.btnSavePorts.UseVisualStyleBackColor = true;
@@ -326,62 +338,62 @@
             // cbPort4
             // 
             this.cbPort4.FormattingEnabled = true;
-            this.cbPort4.Location = new System.Drawing.Point(56, 111);
+            this.cbPort4.Location = new System.Drawing.Point(103, 147);
             this.cbPort4.Name = "cbPort4";
-            this.cbPort4.Size = new System.Drawing.Size(121, 21);
+            this.cbPort4.Size = new System.Drawing.Size(264, 32);
             this.cbPort4.TabIndex = 1;
             this.cbPort4.SelectedIndexChanged += new System.EventHandler(this.cbPort4_SelectedIndexChanged);
             // 
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(15, 114);
+            this.label19.Location = new System.Drawing.Point(15, 150);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(35, 13);
+            this.label19.Size = new System.Drawing.Size(82, 24);
             this.label19.TabIndex = 0;
             this.label19.Text = "Port4:";
             // 
             // cbPort3
             // 
             this.cbPort3.FormattingEnabled = true;
-            this.cbPort3.Location = new System.Drawing.Point(56, 84);
+            this.cbPort3.Location = new System.Drawing.Point(103, 109);
             this.cbPort3.Name = "cbPort3";
-            this.cbPort3.Size = new System.Drawing.Size(121, 21);
+            this.cbPort3.Size = new System.Drawing.Size(264, 32);
             this.cbPort3.TabIndex = 1;
             this.cbPort3.SelectedIndexChanged += new System.EventHandler(this.cbPort3_SelectedIndexChanged);
             // 
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(15, 87);
+            this.label18.Location = new System.Drawing.Point(15, 112);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(35, 13);
+            this.label18.Size = new System.Drawing.Size(82, 24);
             this.label18.TabIndex = 0;
             this.label18.Text = "Port3:";
             // 
             // cbPort2
             // 
             this.cbPort2.FormattingEnabled = true;
-            this.cbPort2.Location = new System.Drawing.Point(56, 57);
+            this.cbPort2.Location = new System.Drawing.Point(103, 71);
             this.cbPort2.Name = "cbPort2";
-            this.cbPort2.Size = new System.Drawing.Size(121, 21);
+            this.cbPort2.Size = new System.Drawing.Size(264, 32);
             this.cbPort2.TabIndex = 1;
             this.cbPort2.SelectedIndexChanged += new System.EventHandler(this.cbPort2_SelectedIndexChanged);
             // 
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(15, 60);
+            this.label17.Location = new System.Drawing.Point(15, 74);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(35, 13);
+            this.label17.Size = new System.Drawing.Size(82, 24);
             this.label17.TabIndex = 0;
             this.label17.Text = "Port2:";
             // 
             // cbPort1
             // 
-            this.cbPort1.Location = new System.Drawing.Point(56, 30);
+            this.cbPort1.Location = new System.Drawing.Point(103, 33);
             this.cbPort1.Name = "cbPort1";
-            this.cbPort1.Size = new System.Drawing.Size(121, 21);
+            this.cbPort1.Size = new System.Drawing.Size(264, 32);
             this.cbPort1.TabIndex = 1;
             this.cbPort1.SelectedIndexChanged += new System.EventHandler(this.cbPort1_SelectedIndexChanged);
             // 
@@ -390,47 +402,197 @@
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(15, 33);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(35, 13);
+            this.label7.Size = new System.Drawing.Size(82, 24);
             this.label7.TabIndex = 0;
             this.label7.Text = "Port1:";
             // 
-            // lNeedInner
+            // imageList1
             // 
-            this.lNeedInner.AutoSize = true;
-            this.lNeedInner.Location = new System.Drawing.Point(243, 61);
-            this.lNeedInner.Name = "lNeedInner";
-            this.lNeedInner.Size = new System.Drawing.Size(36, 13);
-            this.lNeedInner.TabIndex = 19;
-            this.lNeedInner.Text = "Need:";
+            this.imageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
+            this.imageList1.ImageSize = new System.Drawing.Size(32, 32);
+            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
             // 
-            // lNeedCarton
+            // panel1
             // 
-            this.lNeedCarton.AutoSize = true;
-            this.lNeedCarton.Location = new System.Drawing.Point(455, 61);
-            this.lNeedCarton.Name = "lNeedCarton";
-            this.lNeedCarton.Size = new System.Drawing.Size(36, 13);
-            this.lNeedCarton.TabIndex = 20;
-            this.lNeedCarton.Text = "Need:";
+            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(33)))), ((int)(((byte)(62)))));
+            this.panel1.Controls.Add(this.label3);
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.label2);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Font = new System.Drawing.Font("Consolas", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(1008, 100);
+            this.panel1.TabIndex = 4;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.lMasterA);
+            this.groupBox1.Controls.Add(this.label8);
+            this.groupBox1.Controls.Add(this.tbInnerBoxA);
+            this.groupBox1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.groupBox1.Location = new System.Drawing.Point(8, 65);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(490, 136);
+            this.groupBox1.TabIndex = 21;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Inner Box A";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.lMasterB);
+            this.groupBox2.Controls.Add(this.label9);
+            this.groupBox2.Controls.Add(this.tbInnerBoxB);
+            this.groupBox2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.groupBox2.Location = new System.Drawing.Point(502, 65);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(490, 136);
+            this.groupBox2.TabIndex = 22;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Inner Box B";
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.lMasterCarton);
+            this.groupBox3.Controls.Add(this.tbCartonBox);
+            this.groupBox3.Controls.Add(this.lNeedCarton);
+            this.groupBox3.ForeColor = System.Drawing.Color.MediumSpringGreen;
+            this.groupBox3.Location = new System.Drawing.Point(502, 231);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(490, 136);
+            this.groupBox3.TabIndex = 23;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Carton Box";
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.lMasterExport);
+            this.groupBox4.Controls.Add(this.tbExportBox);
+            this.groupBox4.Controls.Add(this.lNeedExport);
+            this.groupBox4.ForeColor = System.Drawing.Color.Orange;
+            this.groupBox4.Location = new System.Drawing.Point(502, 397);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(490, 136);
+            this.groupBox4.TabIndex = 24;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Export Box";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Dock = System.Windows.Forms.DockStyle.Right;
+            this.label8.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label8.Location = new System.Drawing.Point(367, 28);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(120, 18);
+            this.label8.TabIndex = 25;
+            this.label8.Text = "Port1: Offline";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Dock = System.Windows.Forms.DockStyle.Right;
+            this.label9.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label9.Location = new System.Drawing.Point(367, 28);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(120, 18);
+            this.label9.TabIndex = 26;
+            this.label9.Text = "Port2: Offline";
+            // 
+            // Edit
+            // 
+            this.Edit.Controls.Add(this.groupBox5);
+            this.Edit.Location = new System.Drawing.Point(4, 33);
+            this.Edit.Name = "Edit";
+            this.Edit.Size = new System.Drawing.Size(1000, 598);
+            this.Edit.TabIndex = 2;
+            this.Edit.Text = "Edit Database";
+            this.Edit.UseVisualStyleBackColor = true;
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.textBox1);
+            this.groupBox5.Location = new System.Drawing.Point(8, 3);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(984, 91);
+            this.groupBox5.TabIndex = 1;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Search";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(16, 31);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(946, 32);
+            this.textBox1.TabIndex = 0;
+            // 
+            // lMasterA
+            // 
+            this.lMasterA.AutoSize = true;
+            this.lMasterA.Location = new System.Drawing.Point(11, 93);
+            this.lMasterA.Name = "lMasterA";
+            this.lMasterA.Size = new System.Drawing.Size(118, 24);
+            this.lMasterA.TabIndex = 26;
+            this.lMasterA.Text = "Master: -";
+            // 
+            // lMasterB
+            // 
+            this.lMasterB.AutoSize = true;
+            this.lMasterB.Location = new System.Drawing.Point(6, 93);
+            this.lMasterB.Name = "lMasterB";
+            this.lMasterB.Size = new System.Drawing.Size(118, 24);
+            this.lMasterB.TabIndex = 27;
+            this.lMasterB.Text = "Master: -";
+            // 
+            // lMasterCarton
+            // 
+            this.lMasterCarton.AutoSize = true;
+            this.lMasterCarton.Location = new System.Drawing.Point(6, 76);
+            this.lMasterCarton.Name = "lMasterCarton";
+            this.lMasterCarton.Size = new System.Drawing.Size(118, 24);
+            this.lMasterCarton.TabIndex = 28;
+            this.lMasterCarton.Text = "Master: -";
+            // 
+            // lMasterExport
+            // 
+            this.lMasterExport.AutoSize = true;
+            this.lMasterExport.Location = new System.Drawing.Point(6, 76);
+            this.lMasterExport.Name = "lMasterExport";
+            this.lMasterExport.Size = new System.Drawing.Size(118, 24);
+            this.lMasterExport.TabIndex = 29;
+            this.lMasterExport.Text = "Master: -";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(1008, 729);
             this.Controls.Add(this.tabControl1);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.panel1);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.tabControl1.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
-            this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
+            this.Checker.ResumeLayout(false);
+            this.Checker.PerformLayout();
+            this.Settings.ResumeLayout(false);
+            this.Settings.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
+            this.Edit.ResumeLayout(false);
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -439,9 +601,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabPage Checker;
+        private System.Windows.Forms.TabPage Settings;
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.TextBox tbQTY;
         private System.Windows.Forms.TextBox tbModel;
@@ -454,15 +615,11 @@
         private System.Windows.Forms.Label lRemainingInner;
         private System.Windows.Forms.TextBox tbInnerBoxB;
         private System.Windows.Forms.TextBox tbInnerBoxA;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.ListBox lbLog;
         private System.Windows.Forms.Label lRemainingCarton;
         private System.Windows.Forms.TextBox tbExportBox;
         private System.Windows.Forms.TextBox tbCartonBox;
-        private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.Label label13;
         private System.Windows.Forms.ComboBox cbPort4;
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.ComboBox cbPort3;
@@ -470,8 +627,24 @@
         private System.Windows.Forms.ComboBox cbPort2;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Button btnSavePorts;
+        private System.Windows.Forms.Label lNeedExport;
         private System.Windows.Forms.Label lNeedCarton;
-        private System.Windows.Forms.Label lNeedInner;
+        private System.Windows.Forms.ImageList imageList1;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TabPage Edit;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label lMasterA;
+        private System.Windows.Forms.Label lMasterB;
+        private System.Windows.Forms.Label lMasterExport;
+        private System.Windows.Forms.Label lMasterCarton;
     }
 }
 

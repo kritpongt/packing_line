@@ -21,8 +21,8 @@ namespace WindowsForms_packing_line
         private SerialPort port1, port2, port3, port4;
         string connectStr = "server=" + WindowsForms_packing_line.Properties.Settings.Default.dbIPServer + ";port=3306;Database=packing_line_element;uid=root;pwd=;SslMode=none;";
         int qty, innerbox_max, cartonbox_max;   //get from db
-        int cartonbox_rem;  //remaining carton box in export box
-        int inner_count = 0 , carton_count = 0; //counter +1
+        int cartonbox_rem, inner_scanned = 0, carton_scanned = 0;  //remaining carton box in export box
+        int inner_count = 0 , carton_count = 0, carton_need = 0, export_need = 0; //counter +1 the larger box
         string inner_a_master;  //No. inner master
         string inner_b_master;  //No. inner master
         string carton_master;   //No. carton master
@@ -124,12 +124,22 @@ namespace WindowsForms_packing_line
                inner_a_master = WindowsForms_packing_line.Properties.Settings.Default.InnerAMaster;
                 if (input_value.Equals(inner_a_master))
                 {
-                    inner_count++;
-                    if (inner_count >= innerbox_max) {inner_count = innerbox_max; } //Alarm
                     qty -= 1;
                     if (qty < 0) { qty = 0; }
-                    Invoke((MethodInvoker)delegate { lRemainingInner.Text = "Remaining: " + qty.ToString(); });
-                    Invoke((MethodInvoker)delegate { lNeedInner.Text = "Need: " + inner_count + " / " + innerbox_max; });
+                    //Invoke((MethodInvoker)delegate { lRemainingInner.Text = "Remaining: " + qty.ToString(); });
+
+                    //inner scanned test
+                    inner_scanned++;
+                    Invoke((MethodInvoker)delegate { lRemainingInner.Text = "inner scanneds: " + inner_scanned; });
+                    //end test
+
+                    inner_count++;
+                    if (inner_count == innerbox_max)
+                    {
+                        inner_count = 0;
+                        carton_need++;
+                        Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Need: " + carton_need.ToString(); });
+                    }
                 }
             }
             catch (Exception ex)
@@ -147,12 +157,22 @@ namespace WindowsForms_packing_line
                 inner_b_master = WindowsForms_packing_line.Properties.Settings.Default.InnerAMaster;
                 if (input_value.Equals(inner_b_master))
                 {
-                    inner_count++;
-                    if ( inner_count >= innerbox_max ) { inner_count = innerbox_max; }  //Alarm
                     qty -= 1;
                     if (qty < 0) { qty = 0; }
-                    Invoke((MethodInvoker)delegate { lRemainingInner.Text = "Remaining: " + qty.ToString(); });
-                    Invoke((MethodInvoker)delegate { lNeedInner.Text = "Need: " + inner_count + " / " + innerbox_max; });
+                    //Invoke((MethodInvoker)delegate { lRemainingInner.Text = "Remaining: " + qty.ToString(); });
+
+                    //inner scanned test
+                    inner_scanned++;
+                    Invoke((MethodInvoker)delegate { lRemainingInner.Text = "inner scanned: " + inner_scanned; });
+                    //end test
+
+                    inner_count++;
+                    if (inner_count == innerbox_max)
+                    {
+                        inner_count = 0;
+                        carton_need++;
+                        Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Need: " + carton_need.ToString(); });
+                    }
                 }
             }
             catch (Exception ex)
@@ -170,12 +190,25 @@ namespace WindowsForms_packing_line
                 carton_master = WindowsForms_packing_line.Properties.Settings.Default.CartonMaster;
                 if (input_value.Equals(carton_master))
                 {
-                    carton_count++;
-                    if (carton_count >= cartonbox_max) { carton_count = cartonbox_max; }
-                    cartonbox_rem -= 1;
-                    if (cartonbox_rem < 0) { cartonbox_rem = 0; }
-                    Invoke((MethodInvoker)delegate { lRemainingCarton.Text = "Remaining: " + cartonbox_rem.ToString(); });
-                    Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Need: " + carton_count + " / " + cartonbox_max; });
+                    carton_scanned++;
+                    Invoke((MethodInvoker)delegate { lRemainingCarton.Text = "carton scanned: " + carton_scanned; });
+                    //end test
+
+                    if (inner_count > 0)    //decrease carton box(Need: ) when carton box is scanned
+                    {
+                        inner_count--;
+                        Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Need: " + inner_count; });
+                    }else if (inner_count == 0)
+                    {
+                        MessageBox.Show("alarm when Carton Box = 0");
+                    }
+                    carton_count++; //increase carton box when carton box is scanned นับจำนวนกล่อง carton เมื่อถูกแสกน
+                    if ( carton_count == cartonbox_max )
+                    {
+                        carton_count = 0;
+                        export_need++;
+                        Invoke((MethodInvoker)delegate { lNeedExport.Text = "Need: " + export_need; });
+                    }
                 }
             }
             catch (Exception ex)
@@ -193,7 +226,15 @@ namespace WindowsForms_packing_line
                 export_master = WindowsForms_packing_line.Properties.Settings.Default.ExportMaster;
                 if (input_value.Equals(export_master))
                 {
-                    //Reset Kanban
+                    if (carton_count > 0)    //decrease export box(Need: ) when export box is scanned
+                    {
+                        carton_count--;
+                        Invoke((MethodInvoker)delegate { lNeedExport.Text = "Need: " + carton_count; });
+                    }
+                    else if (carton_count == 0)
+                    {
+                        MessageBox.Show("alarm when Export Box = 0 then Close port4 and Reset Kanban");
+                    }
                 }
             }
             catch (Exception ex)
@@ -201,6 +242,7 @@ namespace WindowsForms_packing_line
                 MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         //Button Save Ports
         private void btnSavePorts_Click(object sender, EventArgs e)
         {
@@ -215,6 +257,7 @@ namespace WindowsForms_packing_line
             queryCarton();
             queryExport();
         }
+
         //SQL Connect, Get
         public void login()
         {
@@ -241,8 +284,8 @@ namespace WindowsForms_packing_line
                     cartonbox_rem  = qty / innerbox_max;
                     lRemainingInner.Text = "Remaining: " + qty.ToString();  //Remaining:
                     lRemainingCarton.Text = "Remaining: " + cartonbox_rem.ToString();    //Remaining:
-                    lNeedInner.Text = "Need: " + inner_count + " / " + innerbox_max; //Need:
-                    lNeedCarton.Text = "Need: " + carton_count + " / " + cartonbox_max;   //Need:
+                    lNeedCarton.Text = "Need: " + inner_count;   //(Carton)Need: 0
+                    lNeedExport.Text = "Need: " + carton_count;   //(Export)Need: 0
                 }
             }
             catch (Exception ex)
@@ -268,6 +311,7 @@ namespace WindowsForms_packing_line
                 while (reader.Read())
                 {
                     WindowsForms_packing_line.Properties.Settings.Default.InnerAMaster = reader.GetString("InnerA");
+                    lMasterA.Text = WindowsForms_packing_line.Properties.Settings.Default.InnerAMaster;
                 }
 
             }
@@ -294,6 +338,7 @@ namespace WindowsForms_packing_line
                 while (reader.Read())
                 {
                     WindowsForms_packing_line.Properties.Settings.Default.InnerBMaster = reader.GetString("InnerB");
+                    lMasterB.Text = WindowsForms_packing_line.Properties.Settings.Default.InnerBMaster;
                 }
 
             }
@@ -320,6 +365,7 @@ namespace WindowsForms_packing_line
                 while (reader.Read())
                 {
                     WindowsForms_packing_line.Properties.Settings.Default.CartonMaster = reader.GetString("Carton");
+                    lMasterCarton.Text = WindowsForms_packing_line.Properties.Settings.Default.CartonMaster;
                 }
 
             }
@@ -346,6 +392,7 @@ namespace WindowsForms_packing_line
                 while (reader.Read())
                 {
                     WindowsForms_packing_line.Properties.Settings.Default.ExportMaster = reader.GetString("Export");
+                    lMasterExport.Text = WindowsForms_packing_line.Properties.Settings.Default.ExportMaster;
                 }
 
             }
