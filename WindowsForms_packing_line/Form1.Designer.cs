@@ -35,7 +35,6 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.label12 = new System.Windows.Forms.Label();
             this.lbLog = new System.Windows.Forms.ListBox();
-            this.lRemainingExport = new System.Windows.Forms.Label();
             this.lRemainingCarton = new System.Windows.Forms.Label();
             this.lRemainingInner = new System.Windows.Forms.Label();
             this.tbExportBox = new System.Windows.Forms.TextBox();
@@ -63,6 +62,8 @@
             this.label17 = new System.Windows.Forms.Label();
             this.cbPort1 = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
+            this.lNeedInner = new System.Windows.Forms.Label();
+            this.lNeedCarton = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -107,9 +108,10 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.lNeedCarton);
+            this.tabPage1.Controls.Add(this.lNeedInner);
             this.tabPage1.Controls.Add(this.label12);
             this.tabPage1.Controls.Add(this.lbLog);
-            this.tabPage1.Controls.Add(this.lRemainingExport);
             this.tabPage1.Controls.Add(this.lRemainingCarton);
             this.tabPage1.Controls.Add(this.lRemainingInner);
             this.tabPage1.Controls.Add(this.tbExportBox);
@@ -152,19 +154,10 @@
             this.lbLog.Size = new System.Drawing.Size(378, 199);
             this.lbLog.TabIndex = 17;
             // 
-            // lRemainingExport
-            // 
-            this.lRemainingExport.AutoSize = true;
-            this.lRemainingExport.Location = new System.Drawing.Point(536, 202);
-            this.lRemainingExport.Name = "lRemainingExport";
-            this.lRemainingExport.Size = new System.Drawing.Size(60, 13);
-            this.lRemainingExport.TabIndex = 16;
-            this.lRemainingExport.Text = "Remaining:";
-            // 
             // lRemainingCarton
             // 
             this.lRemainingCarton.AutoSize = true;
-            this.lRemainingCarton.Location = new System.Drawing.Point(536, 122);
+            this.lRemainingCarton.Location = new System.Drawing.Point(455, 77);
             this.lRemainingCarton.Name = "lRemainingCarton";
             this.lRemainingCarton.Size = new System.Drawing.Size(60, 13);
             this.lRemainingCarton.TabIndex = 16;
@@ -181,14 +174,14 @@
             // 
             // tbExportBox
             // 
-            this.tbExportBox.Location = new System.Drawing.Point(430, 202);
+            this.tbExportBox.Location = new System.Drawing.Point(554, 77);
             this.tbExportBox.Name = "tbExportBox";
             this.tbExportBox.Size = new System.Drawing.Size(100, 20);
             this.tbExportBox.TabIndex = 14;
             // 
             // tbCartonBox
             // 
-            this.tbCartonBox.Location = new System.Drawing.Point(430, 122);
+            this.tbCartonBox.Location = new System.Drawing.Point(349, 77);
             this.tbCartonBox.Name = "tbCartonBox";
             this.tbCartonBox.Size = new System.Drawing.Size(100, 20);
             this.tbCartonBox.TabIndex = 14;
@@ -196,7 +189,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(427, 186);
+            this.label15.Location = new System.Drawing.Point(551, 61);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(61, 13);
             this.label15.TabIndex = 12;
@@ -212,7 +205,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(427, 106);
+            this.label13.Location = new System.Drawing.Point(346, 61);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(62, 13);
             this.label13.TabIndex = 12;
@@ -401,6 +394,24 @@
             this.label7.TabIndex = 0;
             this.label7.Text = "Port1:";
             // 
+            // lNeedInner
+            // 
+            this.lNeedInner.AutoSize = true;
+            this.lNeedInner.Location = new System.Drawing.Point(243, 61);
+            this.lNeedInner.Name = "lNeedInner";
+            this.lNeedInner.Size = new System.Drawing.Size(36, 13);
+            this.lNeedInner.TabIndex = 19;
+            this.lNeedInner.Text = "Need:";
+            // 
+            // lNeedCarton
+            // 
+            this.lNeedCarton.AutoSize = true;
+            this.lNeedCarton.Location = new System.Drawing.Point(455, 61);
+            this.lNeedCarton.Name = "lNeedCarton";
+            this.lNeedCarton.Size = new System.Drawing.Size(36, 13);
+            this.lNeedCarton.TabIndex = 20;
+            this.lNeedCarton.Text = "Need:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -447,7 +458,6 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.ListBox lbLog;
-        private System.Windows.Forms.Label lRemainingExport;
         private System.Windows.Forms.Label lRemainingCarton;
         private System.Windows.Forms.TextBox tbExportBox;
         private System.Windows.Forms.TextBox tbCartonBox;
@@ -460,6 +470,8 @@
         private System.Windows.Forms.ComboBox cbPort2;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Button btnSavePorts;
+        private System.Windows.Forms.Label lNeedCarton;
+        private System.Windows.Forms.Label lNeedInner;
     }
 }
 
