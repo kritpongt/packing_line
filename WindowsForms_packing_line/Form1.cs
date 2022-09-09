@@ -13,6 +13,8 @@ using MySql.Data.MySqlClient;
 using MySqlX.XDevAPI.Relational;
 using System.Runtime.Remoting.Messaging;
 using System.Linq.Expressions;
+using Org.BouncyCastle.Asn1.Mozilla;
+using System.Windows.Documents;
 
 namespace WindowsForms_packing_line
 {
@@ -32,19 +34,16 @@ namespace WindowsForms_packing_line
             InitializeComponent();
             //this.WindowState = FormWindowState.Maximized;
             //this.FormBorderStyle = FormBorderStyle.None;
+            refreshListView();
         }
         private void Form1_Load(object sender, EventArgs e)
         {
             //Ports Indicator(in ComboBoxes)
             string[] getPorts = SerialPort.GetPortNames();
             cbPort1.Items.AddRange(getPorts);
-            cbPort1.Text = " -- Select Port -- ";
             cbPort2.Items.AddRange(getPorts);
-            cbPort2.Text = " -- Select Port -- ";
             cbPort3.Items.AddRange(getPorts);
-            cbPort3.Text = " -- Select Port -- ";
             cbPort4.Items.AddRange(getPorts);
-            cbPort4.Text = " -- Select Port -- ";
         }
         //IF ports are selected then settings
         private void cbPort1_SelectedIndexChanged(object sender, EventArgs e)
@@ -128,10 +127,13 @@ namespace WindowsForms_packing_line
             {
                 string input_value = port1.ReadExisting();
                 Thread.Sleep(60);
-                Invoke((MethodInvoker)delegate { tbInnerBoxA.Text = input_value; lbLog.Items.Add(input_value); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
-               inner_a_master = WindowsForms_packing_line.Properties.Settings.Default.InnerAMaster;
+                Invoke((MethodInvoker)delegate { tbInnerBoxA.Text = input_value; lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
+                inner_a_master = WindowsForms_packing_line.Properties.Settings.Default.InnerAMaster;
                 if (input_value.Equals(inner_a_master))
                 {
+                    //log
+                    //Invoke((MethodInvoker)delegate { lbLog.Items.Add(input_value); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
+
                     qty -= 1;
                     if (qty < 0) { qty = 0; }
                     //Invoke((MethodInvoker)delegate { lRemainingInner.Text = "Remaining: " + qty.ToString(); });
@@ -250,7 +252,6 @@ namespace WindowsForms_packing_line
                 MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         //Button Save Ports
         private void btnSavePorts_Click(object sender, EventArgs e)
         {
@@ -264,6 +265,10 @@ namespace WindowsForms_packing_line
             try
             {
                 isInteger = int.TryParse(tbQTY.Text, out qty);
+                if (!isInteger)
+                {
+                    MessageBox.Show("Error: K/B is empty or QTY is incorrect!");
+                }
             }
             catch (Exception ex)
             {
@@ -274,10 +279,54 @@ namespace WindowsForms_packing_line
             queryInnerB();
             queryCarton();
             queryExport();
-            //IsPortOpen
-
         }
 
+        //Kanban Textbox text is changed
+        private void tbKBSearch_TextChanged(object sender, EventArgs e)
+        {
+            if(tbKBSearch.Text == "")
+            {
+                refreshListView();
+            }
+            else
+            {
+                lvModelMaster.Items.Clear();
+                string TABLE = "test_model_master";
+                string queryList = "SELECT * FROM " + TABLE + " WHERE Kanban LIKE '%" + tbKBSearch.Text + "%' ORDER BY CAST(Kanban AS UNSIGNED);";
+                MySqlConnection dbconnect = new MySqlConnection(connectStr);
+                MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
+                MySqlDataAdapter da = new MySqlDataAdapter(dbcommand);
+                DataTable dt = new DataTable();
+                dbcommand.CommandTimeout = 60;
+                try
+                {
+                    dbconnect.Open();
+                    da.Fill(dt);
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        DataRow dr = dt.Rows[i];    //dr["Column Name from db"]
+                        ListViewItem list = new ListViewItem(dr["ID"].ToString());
+                        list.SubItems.Add(dr["Kanban"].ToString());
+                        list.SubItems.Add(dr["ModelNo"].ToString());
+                        list.SubItems.Add(dr["InnerA"].ToString());
+                        list.SubItems.Add(dr["InnerB"].ToString());
+                        list.SubItems.Add(dr["Carton"].ToString());
+                        list.SubItems.Add(dr["Export"].ToString());
+                        list.SubItems.Add(dr["InnerMax"].ToString());
+                        list.SubItems.Add(dr["CartonMax"].ToString());
+                        lvModelMaster.Items.Add(list);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    dbconnect.Close();
+                }
+            }
+        }
         //SQL Connect, Get
         public void login()
         {
@@ -423,5 +472,45 @@ namespace WindowsForms_packing_line
                 dbconnect.Close();
             }
         }
+        public void refreshListView()
+        {
+            lvModelMaster.Items.Clear();
+            string TABLE = "test_model_master ORDER BY CAST(Kanban AS UNSIGNED);";
+            string queryList = "SELECT * FROM " + TABLE;
+            MySqlConnection dbconnect = new MySqlConnection(connectStr);
+            MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
+            MySqlDataAdapter da = new MySqlDataAdapter(dbcommand);
+            DataTable dt = new DataTable();
+            dbcommand.CommandTimeout = 60;
+            try
+            {
+                dbconnect.Open();
+                da.Fill(dt);
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    DataRow dr = dt.Rows[i];    //dr["Column Name from db"]
+                    ListViewItem list = new ListViewItem(dr["ID"].ToString());
+                    list.SubItems.Add(dr["Kanban"].ToString());
+                    list.SubItems.Add(dr["ModelNo"].ToString());
+                    list.SubItems.Add(dr["InnerA"].ToString());
+                    list.SubItems.Add(dr["InnerB"].ToString());
+                    list.SubItems.Add(dr["Carton"].ToString());
+                    list.SubItems.Add(dr["Export"].ToString());
+                    list.SubItems.Add(dr["InnerMax"].ToString());
+                    list.SubItems.Add(dr["CartonMax"].ToString());
+                    lvModelMaster.Items.Add(list);
+                    lvModelMaster.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                    lvModelMaster.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                dbconnect.Close();
+            }
+        }   //refreash list view
     }
 }
