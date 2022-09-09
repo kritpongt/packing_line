@@ -56,7 +56,9 @@ namespace WindowsForms_packing_line
                 port1.DataReceived += new SerialDataReceivedEventHandler(dataReceiver1);
                 if (port1.IsOpen)
                 {
-                    //Status: Online
+                    //set port1 Status: Online
+                    lIsPort1Open.Text = "Port1: Online";
+                    lIsPort1Open.BackColor = System.Drawing.Color.Green;
                 }
             }
             catch (Exception ex)
@@ -74,7 +76,9 @@ namespace WindowsForms_packing_line
                 port2.DataReceived += new SerialDataReceivedEventHandler(dataReceiver2);
                 if (port2.IsOpen)
                 {
-                    //Status: Online
+                    //set port2 Status: Online
+                    lIsPort2Open.Text = "Port2: Online";
+                    lIsPort2Open.BackColor = System.Drawing.Color.Green;
                 }
             }
             catch (Exception ex)
@@ -91,7 +95,9 @@ namespace WindowsForms_packing_line
                 port3.DataReceived += new SerialDataReceivedEventHandler(dataReceiver3);
                 if (port3.IsOpen)
                 {
-                    //Status: Online
+                    //set port3 Status: Online
+                    lIsPort3Open.Text = "Port3: Online";
+                    lIsPort3Open.BackColor = System.Drawing.Color.Green;
                 }
             }
             catch (Exception ex)
@@ -108,7 +114,9 @@ namespace WindowsForms_packing_line
                 port4.DataReceived += new SerialDataReceivedEventHandler(dataReceiver4);
                 if (port4.IsOpen)
                 {
-                    //Status: Online
+                    //set port4 Status: Online
+                    lIsPort4Open.Text = "Port4: Online";
+                    lIsPort4Open.BackColor = System.Drawing.Color.Green;
                 }
             }
             catch (Exception ex) { MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error); }
@@ -251,11 +259,23 @@ namespace WindowsForms_packing_line
         //Start Button
         private void btnStart_Click(object sender, EventArgs e)
         {
-            queryQTY();
+            //input qty(Integer)
+            bool isInteger = false;
+            try
+            {
+                isInteger = int.TryParse(tbQTY.Text, out qty);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            queryQTY(); //Display
             queryInnerA();
             queryInnerB();
             queryCarton();
             queryExport();
+            //IsPortOpen
+
         }
 
         //SQL Connect, Get
@@ -277,15 +297,13 @@ namespace WindowsForms_packing_line
                 while (reader.Read())
                 {
                     tbModel.Text = reader.GetString(2);
-                    tbQTY.Text = reader.GetString(9);
-                    qty = reader.GetInt32("Qty");
                     innerbox_max = reader.GetInt32("InnerMax");
                     cartonbox_max = reader.GetInt32("CartonMax");
                     cartonbox_rem  = qty / innerbox_max;
-                    lRemainingInner.Text = "Remaining: " + qty.ToString();  //Remaining:
-                    lRemainingCarton.Text = "Remaining: " + cartonbox_rem.ToString();    //Remaining:
-                    lNeedCarton.Text = "Need: " + inner_count;   //(Carton)Need: 0
-                    lNeedExport.Text = "Need: " + carton_count;   //(Export)Need: 0
+                    lRemainingInner.Text = "InnerMax(db): " + innerbox_max.ToString() + " Remaining: " + qty.ToString();  //InnerMax(db) Remaining:
+                    lRemainingCarton.Text = "CartonMax(db): " + cartonbox_max.ToString() + " Remaining: " + cartonbox_rem.ToString();    //CartonMax(db) Remaining:
+                    lNeedCarton.Text = "Need: " + inner_count;   //Display - (Carton)Need: 0
+                    lNeedExport.Text = "Need: " + carton_count;   //Display - (Export)Need: 0
                 }
             }
             catch (Exception ex)

@@ -34,16 +34,26 @@
             this.label3 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.Checker = new System.Windows.Forms.TabPage();
+            this.lRemainingCarton = new System.Windows.Forms.Label();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.lMasterExport = new System.Windows.Forms.Label();
+            this.tbExportBox = new System.Windows.Forms.TextBox();
             this.lNeedExport = new System.Windows.Forms.Label();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.lMasterCarton = new System.Windows.Forms.Label();
+            this.tbCartonBox = new System.Windows.Forms.TextBox();
             this.lNeedCarton = new System.Windows.Forms.Label();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.lMasterB = new System.Windows.Forms.Label();
+            this.lIsPort2Open = new System.Windows.Forms.Label();
+            this.tbInnerBoxB = new System.Windows.Forms.TextBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lMasterA = new System.Windows.Forms.Label();
+            this.lIsPort1Open = new System.Windows.Forms.Label();
+            this.tbInnerBoxA = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.lbLog = new System.Windows.Forms.ListBox();
-            this.lRemainingCarton = new System.Windows.Forms.Label();
             this.lRemainingInner = new System.Windows.Forms.Label();
-            this.tbExportBox = new System.Windows.Forms.TextBox();
-            this.tbCartonBox = new System.Windows.Forms.TextBox();
-            this.tbInnerBoxB = new System.Windows.Forms.TextBox();
-            this.tbInnerBoxA = new System.Windows.Forms.TextBox();
             this.btnStart = new System.Windows.Forms.Button();
             this.tbQTY = new System.Windows.Forms.TextBox();
             this.tbModel = new System.Windows.Forms.TextBox();
@@ -61,31 +71,23 @@
             this.label17 = new System.Windows.Forms.Label();
             this.cbPort1 = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
             this.Edit = new System.Windows.Forms.TabPage();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.lMasterA = new System.Windows.Forms.Label();
-            this.lMasterB = new System.Windows.Forms.Label();
-            this.lMasterCarton = new System.Windows.Forms.Label();
-            this.lMasterExport = new System.Windows.Forms.Label();
+            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.lIsPort3Open = new System.Windows.Forms.Label();
+            this.lIsPort4Open = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.Checker.SuspendLayout();
-            this.Settings.SuspendLayout();
-            this.panel1.SuspendLayout();
-            this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.Settings.SuspendLayout();
             this.Edit.SuspendLayout();
             this.groupBox5.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -161,23 +163,178 @@
             this.Checker.TabIndex = 0;
             this.Checker.Text = "Checker";
             // 
+            // lRemainingCarton
+            // 
+            this.lRemainingCarton.AutoSize = true;
+            this.lRemainingCarton.Location = new System.Drawing.Point(504, 370);
+            this.lRemainingCarton.Name = "lRemainingCarton";
+            this.lRemainingCarton.Size = new System.Drawing.Size(70, 24);
+            this.lRemainingCarton.TabIndex = 16;
+            this.lRemainingCarton.Text = "Test:";
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.lMasterExport);
+            this.groupBox4.Controls.Add(this.lIsPort4Open);
+            this.groupBox4.Controls.Add(this.tbExportBox);
+            this.groupBox4.Controls.Add(this.lNeedExport);
+            this.groupBox4.ForeColor = System.Drawing.Color.Orange;
+            this.groupBox4.Location = new System.Drawing.Point(502, 397);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(490, 136);
+            this.groupBox4.TabIndex = 24;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Export Box";
+            // 
+            // lMasterExport
+            // 
+            this.lMasterExport.AutoSize = true;
+            this.lMasterExport.Location = new System.Drawing.Point(6, 28);
+            this.lMasterExport.Name = "lMasterExport";
+            this.lMasterExport.Size = new System.Drawing.Size(118, 24);
+            this.lMasterExport.TabIndex = 29;
+            this.lMasterExport.Text = "Master: -";
+            // 
+            // tbExportBox
+            // 
+            this.tbExportBox.Location = new System.Drawing.Point(6, 55);
+            this.tbExportBox.Name = "tbExportBox";
+            this.tbExportBox.Size = new System.Drawing.Size(478, 32);
+            this.tbExportBox.TabIndex = 14;
+            // 
             // lNeedExport
             // 
             this.lNeedExport.AutoSize = true;
-            this.lNeedExport.Location = new System.Drawing.Point(6, 109);
+            this.lNeedExport.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.lNeedExport.Location = new System.Drawing.Point(3, 109);
             this.lNeedExport.Name = "lNeedExport";
             this.lNeedExport.Size = new System.Drawing.Size(94, 24);
             this.lNeedExport.TabIndex = 20;
             this.lNeedExport.Text = "Need: 0";
             // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.lMasterCarton);
+            this.groupBox3.Controls.Add(this.lIsPort3Open);
+            this.groupBox3.Controls.Add(this.tbCartonBox);
+            this.groupBox3.Controls.Add(this.lNeedCarton);
+            this.groupBox3.ForeColor = System.Drawing.Color.MediumSpringGreen;
+            this.groupBox3.Location = new System.Drawing.Point(502, 231);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(490, 136);
+            this.groupBox3.TabIndex = 23;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Carton Box";
+            // 
+            // lMasterCarton
+            // 
+            this.lMasterCarton.AutoSize = true;
+            this.lMasterCarton.Location = new System.Drawing.Point(6, 28);
+            this.lMasterCarton.Name = "lMasterCarton";
+            this.lMasterCarton.Size = new System.Drawing.Size(118, 24);
+            this.lMasterCarton.TabIndex = 28;
+            this.lMasterCarton.Text = "Master: -";
+            // 
+            // tbCartonBox
+            // 
+            this.tbCartonBox.Location = new System.Drawing.Point(6, 55);
+            this.tbCartonBox.Name = "tbCartonBox";
+            this.tbCartonBox.Size = new System.Drawing.Size(478, 32);
+            this.tbCartonBox.TabIndex = 14;
+            // 
             // lNeedCarton
             // 
             this.lNeedCarton.AutoSize = true;
-            this.lNeedCarton.Location = new System.Drawing.Point(6, 109);
+            this.lNeedCarton.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.lNeedCarton.Location = new System.Drawing.Point(3, 109);
             this.lNeedCarton.Name = "lNeedCarton";
             this.lNeedCarton.Size = new System.Drawing.Size(94, 24);
             this.lNeedCarton.TabIndex = 19;
             this.lNeedCarton.Text = "Need: 0";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.lMasterB);
+            this.groupBox2.Controls.Add(this.lIsPort2Open);
+            this.groupBox2.Controls.Add(this.tbInnerBoxB);
+            this.groupBox2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.groupBox2.Location = new System.Drawing.Point(502, 65);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(490, 136);
+            this.groupBox2.TabIndex = 22;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Inner Box B";
+            // 
+            // lMasterB
+            // 
+            this.lMasterB.AutoSize = true;
+            this.lMasterB.Location = new System.Drawing.Point(6, 93);
+            this.lMasterB.Name = "lMasterB";
+            this.lMasterB.Size = new System.Drawing.Size(118, 24);
+            this.lMasterB.TabIndex = 27;
+            this.lMasterB.Text = "Master: -";
+            // 
+            // lIsPort2Open
+            // 
+            this.lIsPort2Open.AutoSize = true;
+            this.lIsPort2Open.BackColor = System.Drawing.Color.Crimson;
+            this.lIsPort2Open.Dock = System.Windows.Forms.DockStyle.Right;
+            this.lIsPort2Open.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lIsPort2Open.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lIsPort2Open.Location = new System.Drawing.Point(367, 28);
+            this.lIsPort2Open.Name = "lIsPort2Open";
+            this.lIsPort2Open.Size = new System.Drawing.Size(120, 18);
+            this.lIsPort2Open.TabIndex = 26;
+            this.lIsPort2Open.Text = "Port2: Offline";
+            // 
+            // tbInnerBoxB
+            // 
+            this.tbInnerBoxB.Location = new System.Drawing.Point(6, 49);
+            this.tbInnerBoxB.Name = "tbInnerBoxB";
+            this.tbInnerBoxB.Size = new System.Drawing.Size(478, 32);
+            this.tbInnerBoxB.TabIndex = 14;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.lMasterA);
+            this.groupBox1.Controls.Add(this.lIsPort1Open);
+            this.groupBox1.Controls.Add(this.tbInnerBoxA);
+            this.groupBox1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.groupBox1.Location = new System.Drawing.Point(8, 65);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(490, 136);
+            this.groupBox1.TabIndex = 21;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Inner Box A";
+            // 
+            // lMasterA
+            // 
+            this.lMasterA.AutoSize = true;
+            this.lMasterA.Location = new System.Drawing.Point(11, 93);
+            this.lMasterA.Name = "lMasterA";
+            this.lMasterA.Size = new System.Drawing.Size(118, 24);
+            this.lMasterA.TabIndex = 26;
+            this.lMasterA.Text = "Master: -";
+            // 
+            // lIsPort1Open
+            // 
+            this.lIsPort1Open.AutoSize = true;
+            this.lIsPort1Open.BackColor = System.Drawing.Color.Crimson;
+            this.lIsPort1Open.Dock = System.Windows.Forms.DockStyle.Right;
+            this.lIsPort1Open.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lIsPort1Open.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lIsPort1Open.Location = new System.Drawing.Point(367, 28);
+            this.lIsPort1Open.Name = "lIsPort1Open";
+            this.lIsPort1Open.Size = new System.Drawing.Size(120, 18);
+            this.lIsPort1Open.TabIndex = 25;
+            this.lIsPort1Open.Text = "Port1: Offline";
+            // 
+            // tbInnerBoxA
+            // 
+            this.tbInnerBoxA.Location = new System.Drawing.Point(6, 49);
+            this.tbInnerBoxA.Name = "tbInnerBoxA";
+            this.tbInnerBoxA.Size = new System.Drawing.Size(478, 32);
+            this.tbInnerBoxA.TabIndex = 13;
             // 
             // label12
             // 
@@ -197,51 +354,14 @@
             this.lbLog.Size = new System.Drawing.Size(428, 340);
             this.lbLog.TabIndex = 17;
             // 
-            // lRemainingCarton
-            // 
-            this.lRemainingCarton.AutoSize = true;
-            this.lRemainingCarton.Location = new System.Drawing.Point(664, 370);
-            this.lRemainingCarton.Name = "lRemainingCarton";
-            this.lRemainingCarton.Size = new System.Drawing.Size(130, 24);
-            this.lRemainingCarton.TabIndex = 16;
-            this.lRemainingCarton.Text = "Remaining:";
-            // 
             // lRemainingInner
             // 
             this.lRemainingInner.AutoSize = true;
-            this.lRemainingInner.Location = new System.Drawing.Point(664, 204);
+            this.lRemainingInner.Location = new System.Drawing.Point(504, 204);
             this.lRemainingInner.Name = "lRemainingInner";
-            this.lRemainingInner.Size = new System.Drawing.Size(130, 24);
+            this.lRemainingInner.Size = new System.Drawing.Size(70, 24);
             this.lRemainingInner.TabIndex = 15;
-            this.lRemainingInner.Text = "Remaining:";
-            // 
-            // tbExportBox
-            // 
-            this.tbExportBox.Location = new System.Drawing.Point(6, 31);
-            this.tbExportBox.Name = "tbExportBox";
-            this.tbExportBox.Size = new System.Drawing.Size(478, 32);
-            this.tbExportBox.TabIndex = 14;
-            // 
-            // tbCartonBox
-            // 
-            this.tbCartonBox.Location = new System.Drawing.Point(6, 31);
-            this.tbCartonBox.Name = "tbCartonBox";
-            this.tbCartonBox.Size = new System.Drawing.Size(478, 32);
-            this.tbCartonBox.TabIndex = 14;
-            // 
-            // tbInnerBoxB
-            // 
-            this.tbInnerBoxB.Location = new System.Drawing.Point(6, 49);
-            this.tbInnerBoxB.Name = "tbInnerBoxB";
-            this.tbInnerBoxB.Size = new System.Drawing.Size(478, 32);
-            this.tbInnerBoxB.TabIndex = 14;
-            // 
-            // tbInnerBoxA
-            // 
-            this.tbInnerBoxA.Location = new System.Drawing.Point(6, 49);
-            this.tbInnerBoxA.Name = "tbInnerBoxA";
-            this.tbInnerBoxA.Size = new System.Drawing.Size(478, 32);
-            this.tbInnerBoxA.TabIndex = 13;
+            this.lRemainingInner.Text = "Test:";
             // 
             // btnStart
             // 
@@ -406,101 +526,6 @@
             this.label7.TabIndex = 0;
             this.label7.Text = "Port1:";
             // 
-            // imageList1
-            // 
-            this.imageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
-            this.imageList1.ImageSize = new System.Drawing.Size(32, 32);
-            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-            // 
-            // panel1
-            // 
-            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(33)))), ((int)(((byte)(62)))));
-            this.panel1.Controls.Add(this.label3);
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.Controls.Add(this.label2);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Font = new System.Drawing.Font("Consolas", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1008, 100);
-            this.panel1.TabIndex = 4;
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.lMasterA);
-            this.groupBox1.Controls.Add(this.label8);
-            this.groupBox1.Controls.Add(this.tbInnerBoxA);
-            this.groupBox1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.groupBox1.Location = new System.Drawing.Point(8, 65);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(490, 136);
-            this.groupBox1.TabIndex = 21;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Inner Box A";
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.lMasterB);
-            this.groupBox2.Controls.Add(this.label9);
-            this.groupBox2.Controls.Add(this.tbInnerBoxB);
-            this.groupBox2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.groupBox2.Location = new System.Drawing.Point(502, 65);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(490, 136);
-            this.groupBox2.TabIndex = 22;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Inner Box B";
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.lMasterCarton);
-            this.groupBox3.Controls.Add(this.tbCartonBox);
-            this.groupBox3.Controls.Add(this.lNeedCarton);
-            this.groupBox3.ForeColor = System.Drawing.Color.MediumSpringGreen;
-            this.groupBox3.Location = new System.Drawing.Point(502, 231);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(490, 136);
-            this.groupBox3.TabIndex = 23;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Carton Box";
-            // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.lMasterExport);
-            this.groupBox4.Controls.Add(this.tbExportBox);
-            this.groupBox4.Controls.Add(this.lNeedExport);
-            this.groupBox4.ForeColor = System.Drawing.Color.Orange;
-            this.groupBox4.Location = new System.Drawing.Point(502, 397);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(490, 136);
-            this.groupBox4.TabIndex = 24;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Export Box";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Dock = System.Windows.Forms.DockStyle.Right;
-            this.label8.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label8.Location = new System.Drawing.Point(367, 28);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(120, 18);
-            this.label8.TabIndex = 25;
-            this.label8.Text = "Port1: Offline";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Dock = System.Windows.Forms.DockStyle.Right;
-            this.label9.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label9.Location = new System.Drawing.Point(367, 28);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(120, 18);
-            this.label9.TabIndex = 26;
-            this.label9.Text = "Port2: Offline";
-            // 
             // Edit
             // 
             this.Edit.Controls.Add(this.groupBox5);
@@ -528,41 +553,50 @@
             this.textBox1.Size = new System.Drawing.Size(946, 32);
             this.textBox1.TabIndex = 0;
             // 
-            // lMasterA
+            // imageList1
             // 
-            this.lMasterA.AutoSize = true;
-            this.lMasterA.Location = new System.Drawing.Point(11, 93);
-            this.lMasterA.Name = "lMasterA";
-            this.lMasterA.Size = new System.Drawing.Size(118, 24);
-            this.lMasterA.TabIndex = 26;
-            this.lMasterA.Text = "Master: -";
+            this.imageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
+            this.imageList1.ImageSize = new System.Drawing.Size(32, 32);
+            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
             // 
-            // lMasterB
+            // panel1
             // 
-            this.lMasterB.AutoSize = true;
-            this.lMasterB.Location = new System.Drawing.Point(6, 93);
-            this.lMasterB.Name = "lMasterB";
-            this.lMasterB.Size = new System.Drawing.Size(118, 24);
-            this.lMasterB.TabIndex = 27;
-            this.lMasterB.Text = "Master: -";
+            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(33)))), ((int)(((byte)(62)))));
+            this.panel1.Controls.Add(this.label3);
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.label2);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Font = new System.Drawing.Font("Consolas", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(1008, 100);
+            this.panel1.TabIndex = 4;
             // 
-            // lMasterCarton
+            // lIsPort3Open
             // 
-            this.lMasterCarton.AutoSize = true;
-            this.lMasterCarton.Location = new System.Drawing.Point(6, 76);
-            this.lMasterCarton.Name = "lMasterCarton";
-            this.lMasterCarton.Size = new System.Drawing.Size(118, 24);
-            this.lMasterCarton.TabIndex = 28;
-            this.lMasterCarton.Text = "Master: -";
+            this.lIsPort3Open.AutoSize = true;
+            this.lIsPort3Open.BackColor = System.Drawing.Color.Crimson;
+            this.lIsPort3Open.Dock = System.Windows.Forms.DockStyle.Right;
+            this.lIsPort3Open.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lIsPort3Open.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lIsPort3Open.Location = new System.Drawing.Point(367, 28);
+            this.lIsPort3Open.Name = "lIsPort3Open";
+            this.lIsPort3Open.Size = new System.Drawing.Size(120, 18);
+            this.lIsPort3Open.TabIndex = 26;
+            this.lIsPort3Open.Text = "Port3: Offline";
             // 
-            // lMasterExport
+            // lIsPort4Open
             // 
-            this.lMasterExport.AutoSize = true;
-            this.lMasterExport.Location = new System.Drawing.Point(6, 76);
-            this.lMasterExport.Name = "lMasterExport";
-            this.lMasterExport.Size = new System.Drawing.Size(118, 24);
-            this.lMasterExport.TabIndex = 29;
-            this.lMasterExport.Text = "Master: -";
+            this.lIsPort4Open.AutoSize = true;
+            this.lIsPort4Open.BackColor = System.Drawing.Color.Crimson;
+            this.lIsPort4Open.Dock = System.Windows.Forms.DockStyle.Right;
+            this.lIsPort4Open.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lIsPort4Open.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lIsPort4Open.Location = new System.Drawing.Point(367, 28);
+            this.lIsPort4Open.Name = "lIsPort4Open";
+            this.lIsPort4Open.Size = new System.Drawing.Size(120, 18);
+            this.lIsPort4Open.TabIndex = 26;
+            this.lIsPort4Open.Text = "Port4: Offline";
             // 
             // Form1
             // 
@@ -577,21 +611,21 @@
             this.tabControl1.ResumeLayout(false);
             this.Checker.ResumeLayout(false);
             this.Checker.PerformLayout();
-            this.Settings.ResumeLayout(false);
-            this.Settings.PerformLayout();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.Settings.ResumeLayout(false);
+            this.Settings.PerformLayout();
             this.Edit.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -635,8 +669,8 @@
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label lIsPort2Open;
+        private System.Windows.Forms.Label lIsPort1Open;
         private System.Windows.Forms.TabPage Edit;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.GroupBox groupBox5;
@@ -645,6 +679,8 @@
         private System.Windows.Forms.Label lMasterB;
         private System.Windows.Forms.Label lMasterExport;
         private System.Windows.Forms.Label lMasterCarton;
+        private System.Windows.Forms.Label lIsPort4Open;
+        private System.Windows.Forms.Label lIsPort3Open;
     }
 }
 
