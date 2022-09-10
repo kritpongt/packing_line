@@ -411,7 +411,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(40, 204);
+            this.label12.Location = new System.Drawing.Point(10, 204);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(58, 24);
             this.label12.TabIndex = 18;
@@ -421,9 +421,9 @@
             // 
             this.lbLog.FormattingEnabled = true;
             this.lbLog.ItemHeight = 24;
-            this.lbLog.Location = new System.Drawing.Point(38, 231);
+            this.lbLog.Location = new System.Drawing.Point(14, 231);
             this.lbLog.Name = "lbLog";
-            this.lbLog.Size = new System.Drawing.Size(428, 340);
+            this.lbLog.Size = new System.Drawing.Size(478, 340);
             this.lbLog.TabIndex = 17;
             // 
             // lRemainingInner

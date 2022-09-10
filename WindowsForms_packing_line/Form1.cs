@@ -129,7 +129,7 @@ namespace WindowsForms_packing_line
             {
                 string input_value = port1.ReadExisting();
                 Thread.Sleep(60);
-                Invoke((MethodInvoker)delegate { tbInnerBoxA.Text = input_value; lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
+                Invoke((MethodInvoker)delegate { tbInnerBoxA.Text = input_value + "/tInnerA"; lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
                 inner_a_master = WindowsForms_packing_line.Properties.Settings.Default.InnerAMaster;
                 if (input_value.Equals(inner_a_master))
                 {
@@ -165,7 +165,7 @@ namespace WindowsForms_packing_line
             {
                 string input_value = port2.ReadExisting();
                 Thread.Sleep(60);
-                Invoke((MethodInvoker)delegate { tbInnerBoxB.Text = input_value; lbLog.Items.Add(input_value); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
+                Invoke((MethodInvoker)delegate { tbInnerBoxB.Text = input_value + "/tInnerB"; lbLog.Items.Add(input_value); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
                 inner_b_master = WindowsForms_packing_line.Properties.Settings.Default.InnerAMaster;
                 if (input_value.Equals(inner_b_master))
                 {
@@ -198,7 +198,7 @@ namespace WindowsForms_packing_line
             {
                 string input_value = port3.ReadExisting();
                 Thread.Sleep(60);
-                Invoke((MethodInvoker)delegate { tbCartonBox.Text = input_value; lbLog.Items.Add(input_value); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
+                Invoke((MethodInvoker)delegate { tbCartonBox.Text = input_value + "/tCarton Box"; lbLog.Items.Add(input_value); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
                 carton_master = WindowsForms_packing_line.Properties.Settings.Default.CartonMaster;
                 if (input_value.Equals(carton_master))
                 {
@@ -235,7 +235,7 @@ namespace WindowsForms_packing_line
             {
                 string input_value = port4.ReadExisting();
                 Thread.Sleep(60);
-                Invoke((MethodInvoker)delegate { tbExportBox.Text = input_value; lbLog.Items.Add(input_value); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
+                Invoke((MethodInvoker)delegate { tbExportBox.Text = input_value + "/tExport Box"; lbLog.Items.Add(input_value); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
                 export_master = WindowsForms_packing_line.Properties.Settings.Default.ExportMaster;
                 if (input_value.Equals(export_master))
                 {
