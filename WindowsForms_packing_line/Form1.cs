@@ -15,6 +15,8 @@ using System.Runtime.Remoting.Messaging;
 using System.Linq.Expressions;
 using Org.BouncyCastle.Asn1.Mozilla;
 using System.Windows.Documents;
+using Org.BouncyCastle.Utilities.Collections;
+using System.Security.Cryptography;
 
 namespace WindowsForms_packing_line
 {
@@ -252,6 +254,7 @@ namespace WindowsForms_packing_line
                 MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         //Button Save Ports
         private void btnSavePorts_Click(object sender, EventArgs e)
         {
@@ -280,7 +283,37 @@ namespace WindowsForms_packing_line
             queryCarton();
             queryExport();
         }
-
+        //Create button
+        private void btnCreateMaster_Click(object sender, EventArgs e)
+        {
+            DialogResult dialog_result = MessageBox.Show("Are you sure to insert new tool setting?", "Database: Create", MessageBoxButtons.YesNo);
+            if(dialog_result== DialogResult.Yes)
+            {
+                string TABLE = "test_model_master";
+                string INSERT_STR = " (Kanban, ModelNo, InnerA, InnerB, Carton, Export, InnerMax, CartonMax) VALUES('" + tbKBSearch.Text + "', '" + tbDBModel.Text + "', '" + tbDBInnerA.Text + "', '" + tbDBInnerB.Text + "', '" + tbDBCarton.Text + "', '" + tbDBExport.Text + "', '" + tbDBInnerMax.Text + "', '" + tbDBCartonMax.Text + "');";
+                string queryList = "INSERT INTO " + TABLE + INSERT_STR;
+                MySqlConnection dbconnect = new MySqlConnection(connectStr);
+                MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
+                MySqlDataReader reader;
+                dbcommand.CommandTimeout = 60;
+                try
+                {
+                    dbconnect.Open();
+                    reader = dbcommand.ExecuteReader();
+                    MessageBox.Show("Insert Success", "Dababase: Insert");
+                    tbDatabaseClear();
+                    refreshListView();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    dbconnect.Close();
+                }
+            }
+        }
         //Kanban Textbox text is changed
         private void tbKBSearch_TextChanged(object sender, EventArgs e)
         {
@@ -327,11 +360,23 @@ namespace WindowsForms_packing_line
                 }
             }
         }
-        //SQL Connect, Get
         public void login()
         {
 
         }
+        //Clear Textbox Edit Database page
+        public void tbDatabaseClear()
+        {
+            tbKBSearch.Clear();
+            tbDBModel.Clear();
+            tbDBInnerA.Clear();
+            tbDBInnerB.Clear();
+            tbDBCarton.Clear();
+            tbDBExport.Clear();
+            tbDBInnerMax.Clear();
+            tbDBCartonMax.Clear();
+        }
+        //SQL Connect, Get
         public void queryQTY()
         {
             string queryList = "SELECT * FROM test_model_master WHERE Kanban = '" + tbKanban.Text + "';";
@@ -472,11 +517,11 @@ namespace WindowsForms_packing_line
                 dbconnect.Close();
             }
         }
-        public void refreshListView()
+        public void refreshListView()   //refreash list view
         {
             lvModelMaster.Items.Clear();
-            string TABLE = "test_model_master ORDER BY CAST(Kanban AS UNSIGNED);";
-            string queryList = "SELECT * FROM " + TABLE;
+            string TABLE = "test_model_master";
+            string queryList = "SELECT * FROM " + TABLE + " ORDER BY CAST(Kanban AS UNSIGNED);";
             MySqlConnection dbconnect = new MySqlConnection(connectStr);
             MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
             MySqlDataAdapter da = new MySqlDataAdapter(dbcommand);
@@ -499,9 +544,9 @@ namespace WindowsForms_packing_line
                     list.SubItems.Add(dr["InnerMax"].ToString());
                     list.SubItems.Add(dr["CartonMax"].ToString());
                     lvModelMaster.Items.Add(list);
-                    lvModelMaster.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
-                    lvModelMaster.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
                 }
+                lvModelMaster.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                lvModelMaster.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
             }
             catch (Exception ex)
             {
@@ -511,6 +556,6 @@ namespace WindowsForms_packing_line
             {
                 dbconnect.Close();
             }
-        }   //refreash list view
+        }
     }
 }

@@ -37,10 +37,12 @@
             this.lRemainingCarton = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.lMasterExport = new System.Windows.Forms.Label();
+            this.lIsPort4Open = new System.Windows.Forms.Label();
             this.tbExportBox = new System.Windows.Forms.TextBox();
             this.lNeedExport = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.lMasterCarton = new System.Windows.Forms.Label();
+            this.lIsPort3Open = new System.Windows.Forms.Label();
             this.tbCartonBox = new System.Windows.Forms.TextBox();
             this.lNeedCarton = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -72,29 +74,26 @@
             this.cbPort1 = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
             this.Edit = new System.Windows.Forms.TabPage();
-            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.lIsPort3Open = new System.Windows.Forms.Label();
-            this.lIsPort4Open = new System.Windows.Forms.Label();
-            this.lvModelMaster = new System.Windows.Forms.ListView();
-            this.label8 = new System.Windows.Forms.Label();
-            this.tbKBSearch = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.label13 = new System.Windows.Forms.Label();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.label14 = new System.Windows.Forms.Label();
-            this.textBox6 = new System.Windows.Forms.TextBox();
-            this.label15 = new System.Windows.Forms.Label();
-            this.textBox7 = new System.Windows.Forms.TextBox();
-            this.label16 = new System.Windows.Forms.Label();
-            this.textBox8 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.btnCreateMaster = new System.Windows.Forms.Button();
+            this.tbDBCartonMax = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.tbDBInnerMax = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.tbDBExport = new System.Windows.Forms.TextBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.tbDBCarton = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.tbDBInnerB = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.tbDBModel = new System.Windows.Forms.TextBox();
+            this.tbDBInnerA = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.tbKBSearch = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.lvModelMaster = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -104,7 +103,8 @@
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.button3 = new System.Windows.Forms.Button();
+            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.panel1 = new System.Windows.Forms.Panel();
             this.tabControl1.SuspendLayout();
             this.Checker.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -221,6 +221,19 @@
             this.lMasterExport.TabIndex = 29;
             this.lMasterExport.Text = "Master: -";
             // 
+            // lIsPort4Open
+            // 
+            this.lIsPort4Open.AutoSize = true;
+            this.lIsPort4Open.BackColor = System.Drawing.Color.Crimson;
+            this.lIsPort4Open.Dock = System.Windows.Forms.DockStyle.Right;
+            this.lIsPort4Open.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lIsPort4Open.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lIsPort4Open.Location = new System.Drawing.Point(367, 28);
+            this.lIsPort4Open.Name = "lIsPort4Open";
+            this.lIsPort4Open.Size = new System.Drawing.Size(120, 18);
+            this.lIsPort4Open.TabIndex = 26;
+            this.lIsPort4Open.Text = "Port4: Offline";
+            // 
             // tbExportBox
             // 
             this.tbExportBox.Location = new System.Drawing.Point(6, 55);
@@ -260,6 +273,19 @@
             this.lMasterCarton.Size = new System.Drawing.Size(118, 24);
             this.lMasterCarton.TabIndex = 28;
             this.lMasterCarton.Text = "Master: -";
+            // 
+            // lIsPort3Open
+            // 
+            this.lIsPort3Open.AutoSize = true;
+            this.lIsPort3Open.BackColor = System.Drawing.Color.Crimson;
+            this.lIsPort3Open.Dock = System.Windows.Forms.DockStyle.Right;
+            this.lIsPort3Open.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lIsPort3Open.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lIsPort3Open.Location = new System.Drawing.Point(367, 28);
+            this.lIsPort3Open.Name = "lIsPort3Open";
+            this.lIsPort3Open.Size = new System.Drawing.Size(120, 18);
+            this.lIsPort3Open.TabIndex = 26;
+            this.lIsPort3Open.Text = "Port3: Offline";
             // 
             // tbCartonBox
             // 
@@ -561,19 +587,19 @@
             this.Edit.BackColor = System.Drawing.Color.Transparent;
             this.Edit.Controls.Add(this.button3);
             this.Edit.Controls.Add(this.button2);
-            this.Edit.Controls.Add(this.button1);
-            this.Edit.Controls.Add(this.textBox8);
+            this.Edit.Controls.Add(this.btnCreateMaster);
+            this.Edit.Controls.Add(this.tbDBCartonMax);
             this.Edit.Controls.Add(this.label16);
-            this.Edit.Controls.Add(this.textBox7);
+            this.Edit.Controls.Add(this.tbDBInnerMax);
             this.Edit.Controls.Add(this.label15);
-            this.Edit.Controls.Add(this.textBox6);
+            this.Edit.Controls.Add(this.tbDBExport);
             this.Edit.Controls.Add(this.label14);
-            this.Edit.Controls.Add(this.textBox5);
+            this.Edit.Controls.Add(this.tbDBCarton);
             this.Edit.Controls.Add(this.label13);
-            this.Edit.Controls.Add(this.textBox4);
+            this.Edit.Controls.Add(this.tbDBInnerB);
             this.Edit.Controls.Add(this.label11);
-            this.Edit.Controls.Add(this.textBox2);
-            this.Edit.Controls.Add(this.textBox3);
+            this.Edit.Controls.Add(this.tbDBModel);
+            this.Edit.Controls.Add(this.tbDBInnerA);
             this.Edit.Controls.Add(this.label9);
             this.Edit.Controls.Add(this.label10);
             this.Edit.Controls.Add(this.tbKBSearch);
@@ -586,50 +612,179 @@
             this.Edit.TabIndex = 2;
             this.Edit.Text = "Edit Database";
             // 
-            // imageList1
+            // button3
             // 
-            this.imageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
-            this.imageList1.ImageSize = new System.Drawing.Size(32, 32);
-            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+            this.button3.Location = new System.Drawing.Point(828, 529);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(120, 50);
+            this.button3.TabIndex = 5;
+            this.button3.Text = "Delete";
+            this.button3.UseVisualStyleBackColor = true;
             // 
-            // panel1
+            // button2
             // 
-            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(33)))), ((int)(((byte)(62)))));
-            this.panel1.Controls.Add(this.label3);
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.Controls.Add(this.label2);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Font = new System.Drawing.Font("Consolas", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1008, 100);
-            this.panel1.TabIndex = 4;
+            this.button2.Location = new System.Drawing.Point(828, 430);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(120, 50);
+            this.button2.TabIndex = 5;
+            this.button2.Text = "Update";
+            this.button2.UseVisualStyleBackColor = true;
             // 
-            // lIsPort3Open
+            // btnCreateMaster
             // 
-            this.lIsPort3Open.AutoSize = true;
-            this.lIsPort3Open.BackColor = System.Drawing.Color.Crimson;
-            this.lIsPort3Open.Dock = System.Windows.Forms.DockStyle.Right;
-            this.lIsPort3Open.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lIsPort3Open.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.lIsPort3Open.Location = new System.Drawing.Point(367, 28);
-            this.lIsPort3Open.Name = "lIsPort3Open";
-            this.lIsPort3Open.Size = new System.Drawing.Size(120, 18);
-            this.lIsPort3Open.TabIndex = 26;
-            this.lIsPort3Open.Text = "Port3: Offline";
+            this.btnCreateMaster.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCreateMaster.Location = new System.Drawing.Point(828, 374);
+            this.btnCreateMaster.Name = "btnCreateMaster";
+            this.btnCreateMaster.Size = new System.Drawing.Size(120, 50);
+            this.btnCreateMaster.TabIndex = 5;
+            this.btnCreateMaster.Text = "Create";
+            this.btnCreateMaster.UseVisualStyleBackColor = true;
+            this.btnCreateMaster.Click += new System.EventHandler(this.btnCreateMaster_Click);
             // 
-            // lIsPort4Open
+            // tbDBCartonMax
             // 
-            this.lIsPort4Open.AutoSize = true;
-            this.lIsPort4Open.BackColor = System.Drawing.Color.Crimson;
-            this.lIsPort4Open.Dock = System.Windows.Forms.DockStyle.Right;
-            this.lIsPort4Open.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lIsPort4Open.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.lIsPort4Open.Location = new System.Drawing.Point(367, 28);
-            this.lIsPort4Open.Name = "lIsPort4Open";
-            this.lIsPort4Open.Size = new System.Drawing.Size(120, 18);
-            this.lIsPort4Open.TabIndex = 26;
-            this.lIsPort4Open.Text = "Port4: Offline";
+            this.tbDBCartonMax.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbDBCartonMax.Location = new System.Drawing.Point(557, 535);
+            this.tbDBCartonMax.Name = "tbDBCartonMax";
+            this.tbDBCartonMax.Size = new System.Drawing.Size(244, 39);
+            this.tbDBCartonMax.TabIndex = 4;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label16.Location = new System.Drawing.Point(387, 538);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(164, 32);
+            this.label16.TabIndex = 3;
+            this.label16.Text = "CartonMax:";
+            // 
+            // tbDBInnerMax
+            // 
+            this.tbDBInnerMax.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbDBInnerMax.Location = new System.Drawing.Point(557, 490);
+            this.tbDBInnerMax.Name = "tbDBInnerMax";
+            this.tbDBInnerMax.Size = new System.Drawing.Size(244, 39);
+            this.tbDBInnerMax.TabIndex = 4;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label15.Location = new System.Drawing.Point(387, 493);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(149, 32);
+            this.label15.TabIndex = 3;
+            this.label15.Text = "InnerMax:";
+            // 
+            // tbDBExport
+            // 
+            this.tbDBExport.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbDBExport.Location = new System.Drawing.Point(557, 419);
+            this.tbDBExport.Name = "tbDBExport";
+            this.tbDBExport.Size = new System.Drawing.Size(244, 39);
+            this.tbDBExport.TabIndex = 4;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.Location = new System.Drawing.Point(387, 422);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(119, 32);
+            this.label14.TabIndex = 3;
+            this.label14.Text = "Export:";
+            // 
+            // tbDBCarton
+            // 
+            this.tbDBCarton.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbDBCarton.Location = new System.Drawing.Point(557, 374);
+            this.tbDBCarton.Name = "tbDBCarton";
+            this.tbDBCarton.Size = new System.Drawing.Size(244, 39);
+            this.tbDBCarton.TabIndex = 4;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.Location = new System.Drawing.Point(387, 377);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(119, 32);
+            this.label13.TabIndex = 3;
+            this.label13.Text = "Carton:";
+            // 
+            // tbDBInnerB
+            // 
+            this.tbDBInnerB.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbDBInnerB.Location = new System.Drawing.Point(128, 535);
+            this.tbDBInnerB.Name = "tbDBInnerB";
+            this.tbDBInnerB.Size = new System.Drawing.Size(244, 39);
+            this.tbDBInnerB.TabIndex = 4;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(3, 538);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(119, 32);
+            this.label11.TabIndex = 3;
+            this.label11.Text = "InnerB:";
+            // 
+            // tbDBModel
+            // 
+            this.tbDBModel.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbDBModel.Location = new System.Drawing.Point(128, 419);
+            this.tbDBModel.Name = "tbDBModel";
+            this.tbDBModel.Size = new System.Drawing.Size(244, 39);
+            this.tbDBModel.TabIndex = 4;
+            // 
+            // tbDBInnerA
+            // 
+            this.tbDBInnerA.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbDBInnerA.Location = new System.Drawing.Point(128, 490);
+            this.tbDBInnerA.Name = "tbDBInnerA";
+            this.tbDBInnerA.Size = new System.Drawing.Size(244, 39);
+            this.tbDBInnerA.TabIndex = 4;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Location = new System.Drawing.Point(8, 422);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(104, 32);
+            this.label9.TabIndex = 3;
+            this.label9.Text = "Model:";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(3, 493);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(119, 32);
+            this.label10.TabIndex = 3;
+            this.label10.Text = "InnerA:";
+            // 
+            // tbKBSearch
+            // 
+            this.tbKBSearch.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbKBSearch.Location = new System.Drawing.Point(128, 374);
+            this.tbKBSearch.Name = "tbKBSearch";
+            this.tbKBSearch.Size = new System.Drawing.Size(244, 39);
+            this.tbKBSearch.TabIndex = 4;
+            this.tbKBSearch.TextChanged += new System.EventHandler(this.tbKBSearch_TextChanged);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(8, 377);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(89, 32);
+            this.label8.TabIndex = 3;
+            this.label8.Text = "K/B*:";
             // 
             // lvModelMaster
             // 
@@ -648,174 +803,10 @@
             this.lvModelMaster.HideSelection = false;
             this.lvModelMaster.Location = new System.Drawing.Point(0, 0);
             this.lvModelMaster.Name = "lvModelMaster";
-            this.lvModelMaster.Size = new System.Drawing.Size(1000, 350);
+            this.lvModelMaster.Size = new System.Drawing.Size(1000, 330);
             this.lvModelMaster.TabIndex = 2;
             this.lvModelMaster.UseCompatibleStateImageBehavior = false;
             this.lvModelMaster.View = System.Windows.Forms.View.Details;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(8, 377);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(89, 32);
-            this.label8.TabIndex = 3;
-            this.label8.Text = "K/B*:";
-            // 
-            // tbKBSearch
-            // 
-            this.tbKBSearch.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbKBSearch.Location = new System.Drawing.Point(128, 374);
-            this.tbKBSearch.Name = "tbKBSearch";
-            this.tbKBSearch.Size = new System.Drawing.Size(244, 39);
-            this.tbKBSearch.TabIndex = 4;
-            this.tbKBSearch.TextChanged += new System.EventHandler(this.tbKBSearch_TextChanged);
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(8, 422);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(104, 32);
-            this.label9.TabIndex = 3;
-            this.label9.Text = "Model:";
-            // 
-            // textBox2
-            // 
-            this.textBox2.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox2.Location = new System.Drawing.Point(128, 419);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(244, 39);
-            this.textBox2.TabIndex = 4;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(3, 493);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(119, 32);
-            this.label10.TabIndex = 3;
-            this.label10.Text = "InnerA:";
-            // 
-            // textBox3
-            // 
-            this.textBox3.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox3.Location = new System.Drawing.Point(128, 490);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(244, 39);
-            this.textBox3.TabIndex = 4;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(3, 538);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(119, 32);
-            this.label11.TabIndex = 3;
-            this.label11.Text = "InnerB:";
-            // 
-            // textBox4
-            // 
-            this.textBox4.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox4.Location = new System.Drawing.Point(128, 535);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(244, 39);
-            this.textBox4.TabIndex = 4;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(387, 377);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(119, 32);
-            this.label13.TabIndex = 3;
-            this.label13.Text = "Carton:";
-            // 
-            // textBox5
-            // 
-            this.textBox5.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox5.Location = new System.Drawing.Point(557, 374);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(244, 39);
-            this.textBox5.TabIndex = 4;
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.Location = new System.Drawing.Point(387, 422);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(119, 32);
-            this.label14.TabIndex = 3;
-            this.label14.Text = "Export:";
-            // 
-            // textBox6
-            // 
-            this.textBox6.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox6.Location = new System.Drawing.Point(557, 419);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(244, 39);
-            this.textBox6.TabIndex = 4;
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label15.Location = new System.Drawing.Point(387, 493);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(149, 32);
-            this.label15.TabIndex = 3;
-            this.label15.Text = "InnerMax:";
-            // 
-            // textBox7
-            // 
-            this.textBox7.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox7.Location = new System.Drawing.Point(557, 490);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(244, 39);
-            this.textBox7.TabIndex = 4;
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label16.Location = new System.Drawing.Point(387, 538);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(164, 32);
-            this.label16.TabIndex = 3;
-            this.label16.Text = "CartonMax:";
-            // 
-            // textBox8
-            // 
-            this.textBox8.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox8.Location = new System.Drawing.Point(557, 535);
-            this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(244, 39);
-            this.textBox8.TabIndex = 4;
-            // 
-            // button1
-            // 
-            this.button1.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(828, 374);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(120, 50);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "Create";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(828, 430);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(120, 50);
-            this.button2.TabIndex = 5;
-            this.button2.Text = "Update";
-            this.button2.UseVisualStyleBackColor = true;
             // 
             // columnHeader1
             // 
@@ -870,14 +861,24 @@
             this.columnHeader9.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.columnHeader9.Width = 147;
             // 
-            // button3
+            // imageList1
             // 
-            this.button3.Location = new System.Drawing.Point(828, 529);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(120, 50);
-            this.button3.TabIndex = 5;
-            this.button3.Text = "Delete";
-            this.button3.UseVisualStyleBackColor = true;
+            this.imageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
+            this.imageList1.ImageSize = new System.Drawing.Size(32, 32);
+            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(33)))), ((int)(((byte)(62)))));
+            this.panel1.Controls.Add(this.label3);
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.label2);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Font = new System.Drawing.Font("Consolas", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(1008, 100);
+            this.panel1.TabIndex = 4;
             // 
             // Form1
             // 
@@ -921,25 +922,21 @@
         private System.Windows.Forms.TextBox tbQTY;
         private System.Windows.Forms.TextBox tbModel;
         private System.Windows.Forms.TextBox tbKanban;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
         private System.Windows.Forms.ComboBox cbPort1;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label lRemainingInner;
         private System.Windows.Forms.TextBox tbInnerBoxB;
         private System.Windows.Forms.TextBox tbInnerBoxA;
-        private System.Windows.Forms.Label label12;
         private System.Windows.Forms.ListBox lbLog;
         private System.Windows.Forms.Label lRemainingCarton;
         private System.Windows.Forms.TextBox tbExportBox;
         private System.Windows.Forms.TextBox tbCartonBox;
         private System.Windows.Forms.ComboBox cbPort4;
-        private System.Windows.Forms.Label label19;
         private System.Windows.Forms.ComboBox cbPort3;
-        private System.Windows.Forms.Label label18;
         private System.Windows.Forms.ComboBox cbPort2;
-        private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Button btnSavePorts;
         private System.Windows.Forms.Label lNeedExport;
         private System.Windows.Forms.Label lNeedCarton;
@@ -959,25 +956,29 @@
         private System.Windows.Forms.Label lMasterCarton;
         private System.Windows.Forms.Label lIsPort4Open;
         private System.Windows.Forms.Label lIsPort3Open;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.TextBox tbKBSearch;
+        private System.Windows.Forms.TextBox tbDBInnerB;
+        private System.Windows.Forms.TextBox tbDBModel;
+        private System.Windows.Forms.TextBox tbDBInnerA;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox tbKBSearch;
+        private System.Windows.Forms.Label label10;
         private System.Windows.Forms.ListView lvModelMaster;
-        private System.Windows.Forms.TextBox textBox8;
-        private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.TextBox textBox7;
-        private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.TextBox textBox6;
-        private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.TextBox tbDBCartonMax;
+        private System.Windows.Forms.TextBox tbDBInnerMax;
+        private System.Windows.Forms.TextBox tbDBExport;
+        private System.Windows.Forms.TextBox tbDBCarton;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnCreateMaster;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
