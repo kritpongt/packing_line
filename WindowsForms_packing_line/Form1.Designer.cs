@@ -103,8 +103,8 @@
             this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel1 = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
+            this.btnDecreaseInnerA = new System.Windows.Forms.Button();
+            this.btnDecreaseInnerB = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.Checker.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -207,7 +207,7 @@
             this.groupBox4.ForeColor = System.Drawing.Color.Orange;
             this.groupBox4.Location = new System.Drawing.Point(502, 397);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(490, 136);
+            this.groupBox4.Size = new System.Drawing.Size(490, 139);
             this.groupBox4.TabIndex = 24;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Export Box";
@@ -250,7 +250,7 @@
             // 
             this.lNeedExport.AutoSize = true;
             this.lNeedExport.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.lNeedExport.Location = new System.Drawing.Point(3, 109);
+            this.lNeedExport.Location = new System.Drawing.Point(3, 112);
             this.lNeedExport.Name = "lNeedExport";
             this.lNeedExport.Size = new System.Drawing.Size(94, 24);
             this.lNeedExport.TabIndex = 20;
@@ -265,7 +265,7 @@
             this.groupBox3.ForeColor = System.Drawing.Color.MediumSpringGreen;
             this.groupBox3.Location = new System.Drawing.Point(502, 231);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(490, 136);
+            this.groupBox3.Size = new System.Drawing.Size(490, 139);
             this.groupBox3.TabIndex = 23;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Carton Box";
@@ -308,7 +308,7 @@
             // 
             this.lNeedCarton.AutoSize = true;
             this.lNeedCarton.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.lNeedCarton.Location = new System.Drawing.Point(3, 109);
+            this.lNeedCarton.Location = new System.Drawing.Point(3, 112);
             this.lNeedCarton.Name = "lNeedCarton";
             this.lNeedCarton.Size = new System.Drawing.Size(94, 24);
             this.lNeedCarton.TabIndex = 19;
@@ -316,14 +316,14 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.button4);
+            this.groupBox2.Controls.Add(this.btnDecreaseInnerB);
             this.groupBox2.Controls.Add(this.lMasterB);
             this.groupBox2.Controls.Add(this.lIsPort2Open);
             this.groupBox2.Controls.Add(this.tbInnerBoxB);
             this.groupBox2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.groupBox2.Location = new System.Drawing.Point(502, 65);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(490, 136);
+            this.groupBox2.Size = new System.Drawing.Size(490, 139);
             this.groupBox2.TabIndex = 22;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Inner Box B";
@@ -363,14 +363,14 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.button1);
+            this.groupBox1.Controls.Add(this.btnDecreaseInnerA);
             this.groupBox1.Controls.Add(this.lMasterA);
             this.groupBox1.Controls.Add(this.lIsPort1Open);
             this.groupBox1.Controls.Add(this.tbInnerBoxA);
             this.groupBox1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.groupBox1.Location = new System.Drawing.Point(8, 65);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(490, 136);
+            this.groupBox1.Size = new System.Drawing.Size(490, 139);
             this.groupBox1.TabIndex = 21;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Inner Box A";
@@ -457,10 +457,10 @@
             // 
             // tbModel
             // 
-            this.tbModel.Enabled = false;
             this.tbModel.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbModel.Location = new System.Drawing.Point(431, 13);
             this.tbModel.Name = "tbModel";
+            this.tbModel.ReadOnly = true;
             this.tbModel.Size = new System.Drawing.Size(220, 39);
             this.tbModel.TabIndex = 8;
             // 
@@ -901,29 +901,31 @@
             this.panel1.Size = new System.Drawing.Size(1008, 86);
             this.panel1.TabIndex = 4;
             // 
-            // button1
+            // btnDecreaseInnerA
             // 
-            this.button1.BackColor = System.Drawing.Color.Transparent;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Font = new System.Drawing.Font("Consolas", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(423, 94);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(61, 36);
-            this.button1.TabIndex = 27;
-            this.button1.Text = "-1";
-            this.button1.UseVisualStyleBackColor = false;
+            this.btnDecreaseInnerA.BackColor = System.Drawing.Color.Transparent;
+            this.btnDecreaseInnerA.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDecreaseInnerA.Font = new System.Drawing.Font("Consolas", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDecreaseInnerA.Location = new System.Drawing.Point(423, 94);
+            this.btnDecreaseInnerA.Name = "btnDecreaseInnerA";
+            this.btnDecreaseInnerA.Size = new System.Drawing.Size(61, 39);
+            this.btnDecreaseInnerA.TabIndex = 27;
+            this.btnDecreaseInnerA.Text = "-1";
+            this.btnDecreaseInnerA.UseVisualStyleBackColor = false;
+            this.btnDecreaseInnerA.Click += new System.EventHandler(this.btnDecreaseInnerA_Click);
             // 
-            // button4
+            // btnDecreaseInnerB
             // 
-            this.button4.BackColor = System.Drawing.Color.Transparent;
-            this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button4.Font = new System.Drawing.Font("Consolas", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button4.Location = new System.Drawing.Point(420, 94);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(64, 36);
-            this.button4.TabIndex = 27;
-            this.button4.Text = "-1";
-            this.button4.UseVisualStyleBackColor = false;
+            this.btnDecreaseInnerB.BackColor = System.Drawing.Color.Transparent;
+            this.btnDecreaseInnerB.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDecreaseInnerB.Font = new System.Drawing.Font("Consolas", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDecreaseInnerB.Location = new System.Drawing.Point(420, 94);
+            this.btnDecreaseInnerB.Name = "btnDecreaseInnerB";
+            this.btnDecreaseInnerB.Size = new System.Drawing.Size(64, 39);
+            this.btnDecreaseInnerB.TabIndex = 27;
+            this.btnDecreaseInnerB.Text = "-1";
+            this.btnDecreaseInnerB.UseVisualStyleBackColor = false;
+            this.btnDecreaseInnerB.Click += new System.EventHandler(this.btnDecreaseInnerB_Click);
             // 
             // Form1
             // 
@@ -1033,8 +1035,8 @@
         private System.Windows.Forms.ColumnHeader columnHeader8;
         private System.Windows.Forms.ColumnHeader columnHeader9;
         private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnDecreaseInnerB;
+        private System.Windows.Forms.Button btnDecreaseInnerA;
     }
 }
 

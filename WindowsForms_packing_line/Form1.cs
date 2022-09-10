@@ -122,6 +122,11 @@ namespace WindowsForms_packing_line
             }
             catch (Exception ex) { MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error); }
         }
+        //Button Save Ports
+        private void btnSavePorts_Click(object sender, EventArgs e)
+        {
+
+        }
         //Data Receiver and Output
         private void dataReceiver1(object sender, SerialDataReceivedEventArgs e)    //Receiver Inner Box A
         {
@@ -129,7 +134,7 @@ namespace WindowsForms_packing_line
             {
                 string input_value = port1.ReadExisting();
                 Thread.Sleep(60);
-                Invoke((MethodInvoker)delegate { tbInnerBoxA.Text = input_value + "/tInnerA"; lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
+                Invoke((MethodInvoker)delegate { tbInnerBoxA.Text = input_value; lbLog.Items.Add(input_value + "\t\t\tInner Box A"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
                 inner_a_master = WindowsForms_packing_line.Properties.Settings.Default.InnerAMaster;
                 if (input_value.Equals(inner_a_master))
                 {
@@ -165,7 +170,7 @@ namespace WindowsForms_packing_line
             {
                 string input_value = port2.ReadExisting();
                 Thread.Sleep(60);
-                Invoke((MethodInvoker)delegate { tbInnerBoxB.Text = input_value + "/tInnerB"; lbLog.Items.Add(input_value); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
+                Invoke((MethodInvoker)delegate { tbInnerBoxB.Text = input_value; lbLog.Items.Add(input_value + "\t\t\tInner Box B"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
                 inner_b_master = WindowsForms_packing_line.Properties.Settings.Default.InnerAMaster;
                 if (input_value.Equals(inner_b_master))
                 {
@@ -198,7 +203,7 @@ namespace WindowsForms_packing_line
             {
                 string input_value = port3.ReadExisting();
                 Thread.Sleep(60);
-                Invoke((MethodInvoker)delegate { tbCartonBox.Text = input_value + "/tCarton Box"; lbLog.Items.Add(input_value); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
+                Invoke((MethodInvoker)delegate { tbCartonBox.Text = input_value; lbLog.Items.Add(input_value + "\t\t\tCarton Box"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
                 carton_master = WindowsForms_packing_line.Properties.Settings.Default.CartonMaster;
                 if (input_value.Equals(carton_master))
                 {
@@ -235,7 +240,7 @@ namespace WindowsForms_packing_line
             {
                 string input_value = port4.ReadExisting();
                 Thread.Sleep(60);
-                Invoke((MethodInvoker)delegate { tbExportBox.Text = input_value + "/tExport Box"; lbLog.Items.Add(input_value); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
+                Invoke((MethodInvoker)delegate { tbExportBox.Text = input_value; lbLog.Items.Add(input_value + "\t\t\tExport Box"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
                 export_master = WindowsForms_packing_line.Properties.Settings.Default.ExportMaster;
                 if (input_value.Equals(export_master))
                 {
@@ -255,11 +260,22 @@ namespace WindowsForms_packing_line
                 MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        //Button Save Ports
-        private void btnSavePorts_Click(object sender, EventArgs e)
+        //Decrease a counter -1 at a time
+        private void btnDecreaseInnerA_Click(object sender, EventArgs e)
         {
-
+            if (inner_count>0)
+            {
+                inner_count--;
+                Invoke((MethodInvoker)delegate { lbLog.Items.Add("Delete 1 Item!\t\tInner Box A"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
+            }
+        }
+        private void btnDecreaseInnerB_Click(object sender, EventArgs e)
+        {
+            if (inner_count > 0)
+            {
+                inner_count--;
+                Invoke((MethodInvoker)delegate { lbLog.Items.Add("Delete 1 Item!\t\tInner Box B"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
+            }
         }
         //Start Button
         private void btnStart_Click(object sender, EventArgs e)
