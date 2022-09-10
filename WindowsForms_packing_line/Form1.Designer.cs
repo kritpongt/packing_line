@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -103,8 +102,9 @@
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.Checker.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -119,33 +119,33 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Consolas", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label1.Location = new System.Drawing.Point(22, 8);
+            this.label1.Location = new System.Drawing.Point(21, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(194, 32);
+            this.label1.Size = new System.Drawing.Size(154, 24);
             this.label1.TabIndex = 0;
             this.label1.Text = "Operator ID:";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Font = new System.Drawing.Font("Consolas", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label2.Location = new System.Drawing.Point(21, 49);
+            this.label2.Location = new System.Drawing.Point(21, 42);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(224, 32);
+            this.label2.Size = new System.Drawing.Size(178, 24);
             this.label2.TabIndex = 1;
             this.label2.Text = "Operator Name:";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Font = new System.Drawing.Font("Consolas", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label3.Location = new System.Drawing.Point(429, 8);
+            this.label3.Location = new System.Drawing.Point(384, 9);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(149, 32);
+            this.label3.Size = new System.Drawing.Size(118, 24);
             this.label3.TabIndex = 2;
             this.label3.Text = "Position:";
             // 
@@ -157,10 +157,10 @@
             this.tabControl1.Cursor = System.Windows.Forms.Cursors.Default;
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.tabControl1.Font = new System.Drawing.Font("Consolas", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tabControl1.Location = new System.Drawing.Point(0, 94);
+            this.tabControl1.Location = new System.Drawing.Point(0, 79);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1008, 635);
+            this.tabControl1.Size = new System.Drawing.Size(1008, 650);
             this.tabControl1.TabIndex = 3;
             // 
             // Checker
@@ -185,7 +185,7 @@
             this.Checker.Location = new System.Drawing.Point(4, 33);
             this.Checker.Name = "Checker";
             this.Checker.Padding = new System.Windows.Forms.Padding(3);
-            this.Checker.Size = new System.Drawing.Size(1000, 598);
+            this.Checker.Size = new System.Drawing.Size(1000, 613);
             this.Checker.TabIndex = 0;
             this.Checker.Text = "Checker";
             // 
@@ -215,9 +215,11 @@
             // lMasterExport
             // 
             this.lMasterExport.AutoSize = true;
-            this.lMasterExport.Location = new System.Drawing.Point(6, 28);
+            this.lMasterExport.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lMasterExport.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lMasterExport.Location = new System.Drawing.Point(3, 28);
             this.lMasterExport.Name = "lMasterExport";
-            this.lMasterExport.Size = new System.Drawing.Size(118, 24);
+            this.lMasterExport.Size = new System.Drawing.Size(149, 32);
             this.lMasterExport.TabIndex = 29;
             this.lMasterExport.Text = "Master: -";
             // 
@@ -233,12 +235,15 @@
             this.lIsPort4Open.Size = new System.Drawing.Size(120, 18);
             this.lIsPort4Open.TabIndex = 26;
             this.lIsPort4Open.Text = "Port4: Offline";
+            this.lIsPort4Open.Click += new System.EventHandler(this.lIsPort4Open_Click);
             // 
             // tbExportBox
             // 
-            this.tbExportBox.Location = new System.Drawing.Point(6, 55);
+            this.tbExportBox.Enabled = false;
+            this.tbExportBox.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbExportBox.Location = new System.Drawing.Point(6, 63);
             this.tbExportBox.Name = "tbExportBox";
-            this.tbExportBox.Size = new System.Drawing.Size(478, 32);
+            this.tbExportBox.Size = new System.Drawing.Size(478, 39);
             this.tbExportBox.TabIndex = 14;
             // 
             // lNeedExport
@@ -268,9 +273,11 @@
             // lMasterCarton
             // 
             this.lMasterCarton.AutoSize = true;
-            this.lMasterCarton.Location = new System.Drawing.Point(6, 28);
+            this.lMasterCarton.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lMasterCarton.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lMasterCarton.Location = new System.Drawing.Point(3, 28);
             this.lMasterCarton.Name = "lMasterCarton";
-            this.lMasterCarton.Size = new System.Drawing.Size(118, 24);
+            this.lMasterCarton.Size = new System.Drawing.Size(149, 32);
             this.lMasterCarton.TabIndex = 28;
             this.lMasterCarton.Text = "Master: -";
             // 
@@ -286,12 +293,15 @@
             this.lIsPort3Open.Size = new System.Drawing.Size(120, 18);
             this.lIsPort3Open.TabIndex = 26;
             this.lIsPort3Open.Text = "Port3: Offline";
+            this.lIsPort3Open.Click += new System.EventHandler(this.lIsPort3Open_Click);
             // 
             // tbCartonBox
             // 
-            this.tbCartonBox.Location = new System.Drawing.Point(6, 55);
+            this.tbCartonBox.Enabled = false;
+            this.tbCartonBox.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbCartonBox.Location = new System.Drawing.Point(6, 63);
             this.tbCartonBox.Name = "tbCartonBox";
-            this.tbCartonBox.Size = new System.Drawing.Size(478, 32);
+            this.tbCartonBox.Size = new System.Drawing.Size(478, 39);
             this.tbCartonBox.TabIndex = 14;
             // 
             // lNeedCarton
@@ -306,6 +316,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.button4);
             this.groupBox2.Controls.Add(this.lMasterB);
             this.groupBox2.Controls.Add(this.lIsPort2Open);
             this.groupBox2.Controls.Add(this.tbInnerBoxB);
@@ -320,9 +331,10 @@
             // lMasterB
             // 
             this.lMasterB.AutoSize = true;
-            this.lMasterB.Location = new System.Drawing.Point(6, 93);
+            this.lMasterB.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lMasterB.Location = new System.Drawing.Point(6, 91);
             this.lMasterB.Name = "lMasterB";
-            this.lMasterB.Size = new System.Drawing.Size(118, 24);
+            this.lMasterB.Size = new System.Drawing.Size(149, 32);
             this.lMasterB.TabIndex = 27;
             this.lMasterB.Text = "Master: -";
             // 
@@ -338,16 +350,20 @@
             this.lIsPort2Open.Size = new System.Drawing.Size(120, 18);
             this.lIsPort2Open.TabIndex = 26;
             this.lIsPort2Open.Text = "Port2: Offline";
+            this.lIsPort2Open.Click += new System.EventHandler(this.lIsPort2Open_Click);
             // 
             // tbInnerBoxB
             // 
+            this.tbInnerBoxB.Enabled = false;
+            this.tbInnerBoxB.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbInnerBoxB.Location = new System.Drawing.Point(6, 49);
             this.tbInnerBoxB.Name = "tbInnerBoxB";
-            this.tbInnerBoxB.Size = new System.Drawing.Size(478, 32);
+            this.tbInnerBoxB.Size = new System.Drawing.Size(478, 39);
             this.tbInnerBoxB.TabIndex = 14;
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Controls.Add(this.lMasterA);
             this.groupBox1.Controls.Add(this.lIsPort1Open);
             this.groupBox1.Controls.Add(this.tbInnerBoxA);
@@ -362,9 +378,10 @@
             // lMasterA
             // 
             this.lMasterA.AutoSize = true;
-            this.lMasterA.Location = new System.Drawing.Point(11, 93);
+            this.lMasterA.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lMasterA.Location = new System.Drawing.Point(7, 91);
             this.lMasterA.Name = "lMasterA";
-            this.lMasterA.Size = new System.Drawing.Size(118, 24);
+            this.lMasterA.Size = new System.Drawing.Size(149, 32);
             this.lMasterA.TabIndex = 26;
             this.lMasterA.Text = "Master: -";
             // 
@@ -380,12 +397,15 @@
             this.lIsPort1Open.Size = new System.Drawing.Size(120, 18);
             this.lIsPort1Open.TabIndex = 25;
             this.lIsPort1Open.Text = "Port1: Offline";
+            this.lIsPort1Open.Click += new System.EventHandler(this.lIsPort1Open_Click);
             // 
             // tbInnerBoxA
             // 
+            this.tbInnerBoxA.Enabled = false;
+            this.tbInnerBoxA.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbInnerBoxA.Location = new System.Drawing.Point(6, 49);
             this.tbInnerBoxA.Name = "tbInnerBoxA";
-            this.tbInnerBoxA.Size = new System.Drawing.Size(478, 32);
+            this.tbInnerBoxA.Size = new System.Drawing.Size(478, 39);
             this.tbInnerBoxA.TabIndex = 13;
             // 
             // label12
@@ -418,7 +438,8 @@
             // btnStart
             // 
             this.btnStart.BackColor = System.Drawing.Color.MediumAquamarine;
-            this.btnStart.Location = new System.Drawing.Point(872, 6);
+            this.btnStart.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnStart.Location = new System.Drawing.Point(866, 13);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(120, 50);
             this.btnStart.TabIndex = 10;
@@ -428,53 +449,59 @@
             // 
             // tbQTY
             // 
-            this.tbQTY.Location = new System.Drawing.Point(743, 16);
+            this.tbQTY.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbQTY.Location = new System.Drawing.Point(737, 13);
             this.tbQTY.Name = "tbQTY";
-            this.tbQTY.Size = new System.Drawing.Size(109, 32);
+            this.tbQTY.Size = new System.Drawing.Size(109, 39);
             this.tbQTY.TabIndex = 9;
             // 
             // tbModel
             // 
             this.tbModel.Enabled = false;
-            this.tbModel.Location = new System.Drawing.Point(402, 16);
+            this.tbModel.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbModel.Location = new System.Drawing.Point(431, 13);
             this.tbModel.Name = "tbModel";
-            this.tbModel.Size = new System.Drawing.Size(220, 32);
+            this.tbModel.Size = new System.Drawing.Size(220, 39);
             this.tbModel.TabIndex = 8;
             // 
             // tbKanban
             // 
-            this.tbKanban.Location = new System.Drawing.Point(83, 17);
+            this.tbKanban.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbKanban.Location = new System.Drawing.Point(95, 13);
             this.tbKanban.Name = "tbKanban";
-            this.tbKanban.Size = new System.Drawing.Size(220, 32);
+            this.tbKanban.Size = new System.Drawing.Size(220, 39);
             this.tbKanban.TabIndex = 7;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label6.Location = new System.Drawing.Point(679, 20);
+            this.label6.Location = new System.Drawing.Point(657, 16);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(58, 24);
+            this.label6.Size = new System.Drawing.Size(74, 32);
             this.label6.TabIndex = 6;
             this.label6.Text = "QTY:";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label5.Location = new System.Drawing.Point(314, 20);
+            this.label5.Location = new System.Drawing.Point(321, 16);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(82, 24);
+            this.label5.Size = new System.Drawing.Size(104, 32);
             this.label5.TabIndex = 5;
             this.label5.Text = "Model:";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label4.Location = new System.Drawing.Point(19, 19);
+            this.label4.Location = new System.Drawing.Point(15, 16);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(58, 24);
+            this.label4.Size = new System.Drawing.Size(74, 32);
             this.label4.TabIndex = 4;
             this.label4.Text = "K/B:";
             // 
@@ -492,7 +519,7 @@
             this.Settings.Location = new System.Drawing.Point(4, 33);
             this.Settings.Name = "Settings";
             this.Settings.Padding = new System.Windows.Forms.Padding(3);
-            this.Settings.Size = new System.Drawing.Size(1000, 598);
+            this.Settings.Size = new System.Drawing.Size(1000, 613);
             this.Settings.TabIndex = 1;
             this.Settings.Text = "Settings";
             this.Settings.UseVisualStyleBackColor = true;
@@ -608,7 +635,7 @@
             this.Edit.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Edit.Location = new System.Drawing.Point(4, 33);
             this.Edit.Name = "Edit";
-            this.Edit.Size = new System.Drawing.Size(1000, 598);
+            this.Edit.Size = new System.Drawing.Size(1000, 613);
             this.Edit.TabIndex = 2;
             this.Edit.Text = "Edit Database";
             // 
@@ -803,7 +830,7 @@
             this.lvModelMaster.HideSelection = false;
             this.lvModelMaster.Location = new System.Drawing.Point(0, 0);
             this.lvModelMaster.Name = "lvModelMaster";
-            this.lvModelMaster.Size = new System.Drawing.Size(1000, 330);
+            this.lvModelMaster.Size = new System.Drawing.Size(1000, 344);
             this.lvModelMaster.TabIndex = 2;
             this.lvModelMaster.UseCompatibleStateImageBehavior = false;
             this.lvModelMaster.View = System.Windows.Forms.View.Details;
@@ -861,12 +888,6 @@
             this.columnHeader9.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.columnHeader9.Width = 147;
             // 
-            // imageList1
-            // 
-            this.imageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
-            this.imageList1.ImageSize = new System.Drawing.Size(32, 32);
-            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-            // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(33)))), ((int)(((byte)(62)))));
@@ -877,8 +898,32 @@
             this.panel1.Font = new System.Drawing.Font("Consolas", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1008, 100);
+            this.panel1.Size = new System.Drawing.Size(1008, 86);
             this.panel1.TabIndex = 4;
+            // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.Color.Transparent;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Font = new System.Drawing.Font("Consolas", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.Location = new System.Drawing.Point(423, 94);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(61, 36);
+            this.button1.TabIndex = 27;
+            this.button1.Text = "-1";
+            this.button1.UseVisualStyleBackColor = false;
+            // 
+            // button4
+            // 
+            this.button4.BackColor = System.Drawing.Color.Transparent;
+            this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button4.Font = new System.Drawing.Font("Consolas", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button4.Location = new System.Drawing.Point(420, 94);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(64, 36);
+            this.button4.TabIndex = 27;
+            this.button4.Text = "-1";
+            this.button4.UseVisualStyleBackColor = false;
             // 
             // Form1
             // 
@@ -940,7 +985,6 @@
         private System.Windows.Forms.Button btnSavePorts;
         private System.Windows.Forms.Label lNeedExport;
         private System.Windows.Forms.Label lNeedCarton;
-        private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox4;
@@ -989,6 +1033,8 @@
         private System.Windows.Forms.ColumnHeader columnHeader8;
         private System.Windows.Forms.ColumnHeader columnHeader9;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button button1;
     }
 }
 

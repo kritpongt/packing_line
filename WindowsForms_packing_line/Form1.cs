@@ -26,7 +26,7 @@ namespace WindowsForms_packing_line
         string connectStr = "server=" + WindowsForms_packing_line.Properties.Settings.Default.dbIPServer + ";port=3306;Database=packing_line_element;uid=root;pwd=;SslMode=none;";
         int qty, innerbox_max, cartonbox_max;   //get from db
         int cartonbox_rem, inner_scanned = 0, carton_scanned = 0;  //remaining carton box in export box
-        int inner_count = 0 , carton_count = 0, carton_need = 0, export_need = 0; //counter +1 the larger box
+        int inner_count = 0, carton_count = 0, carton_need = 0, export_need = 0; //counter +1 the larger box
         string inner_a_master;  //No. inner master
         string inner_b_master;  //No. inner master
         string carton_master;   //No. carton master
@@ -210,12 +210,13 @@ namespace WindowsForms_packing_line
                     {
                         inner_count--;
                         Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Need: " + inner_count; });
-                    }else if (inner_count == 0)
+                    }
+                    else if (inner_count == 0)
                     {
                         MessageBox.Show("alarm when Carton Box = 0");
                     }
                     carton_count++; //increase carton box when carton box is scanned นับจำนวนกล่อง carton เมื่อถูกแสกน
-                    if ( carton_count == cartonbox_max )
+                    if (carton_count == cartonbox_max)
                     {
                         carton_count = 0;
                         export_need++;
@@ -283,11 +284,113 @@ namespace WindowsForms_packing_line
             queryCarton();
             queryExport();
         }
+        //Close and Open port 1-4
+        private void lIsPort1Open_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if(port1 != null)
+                {
+                    if (port1.IsOpen)
+                    {
+                        port1.Close();
+                    }
+                    else if (port1.IsOpen == false)
+                    {
+                        port1.Open();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Port1 wasn't selected!", "Ports Setting");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private void lIsPort2Open_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (port2 != null)
+                {
+                    if (port2.IsOpen)
+                    {
+                        port2.Close();
+                    }
+                    else if (port2.IsOpen == false)
+                    {
+                        port2.Open();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Port2 wasn't selected!", "Ports Setting");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private void lIsPort3Open_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (port3 != null)
+                {
+                    if (port3.IsOpen)
+                    {
+                        port3.Close();
+                    }
+                    else if (port3.IsOpen == false)
+                    {
+                        port3.Open();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Port3 wasn't selected!", "Ports Setting");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private void lIsPort4Open_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (port4 != null)
+                {
+                    if (port4.IsOpen)
+                    {
+                        port4.Close();
+                    }
+                    else if (port4.IsOpen == false)
+                    {
+                        port4.Open();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Port4 wasn't selected!", "Ports Setting");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         //Create button
         private void btnCreateMaster_Click(object sender, EventArgs e)
         {
             DialogResult dialog_result = MessageBox.Show("Are you sure to insert new tool setting?", "Database: Create", MessageBoxButtons.YesNo);
-            if(dialog_result== DialogResult.Yes)
+            if (dialog_result == DialogResult.Yes)
             {
                 string TABLE = "test_model_master";
                 string INSERT_STR = " (Kanban, ModelNo, InnerA, InnerB, Carton, Export, InnerMax, CartonMax) VALUES('" + tbKBSearch.Text + "', '" + tbDBModel.Text + "', '" + tbDBInnerA.Text + "', '" + tbDBInnerB.Text + "', '" + tbDBCarton.Text + "', '" + tbDBExport.Text + "', '" + tbDBInnerMax.Text + "', '" + tbDBCartonMax.Text + "');";
@@ -317,7 +420,7 @@ namespace WindowsForms_packing_line
         //Kanban Textbox text is changed
         private void tbKBSearch_TextChanged(object sender, EventArgs e)
         {
-            if(tbKBSearch.Text == "")
+            if (tbKBSearch.Text == "")
             {
                 refreshListView();
             }
@@ -393,7 +496,7 @@ namespace WindowsForms_packing_line
                     tbModel.Text = reader.GetString(2);
                     innerbox_max = reader.GetInt32("InnerMax");
                     cartonbox_max = reader.GetInt32("CartonMax");
-                    cartonbox_rem  = qty / innerbox_max;
+                    cartonbox_rem = qty / innerbox_max;
                     lRemainingInner.Text = "InnerMax(db): " + innerbox_max.ToString() + " Remaining: " + qty.ToString();  //InnerMax(db) Remaining:
                     lRemainingCarton.Text = "CartonMax(db): " + cartonbox_max.ToString() + " Remaining: " + cartonbox_rem.ToString();    //CartonMax(db) Remaining:
                     lNeedCarton.Text = "Need: " + inner_count;   //Display - (Carton)Need: 0
