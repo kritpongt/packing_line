@@ -31,6 +31,7 @@ namespace WindowsForms_packing_line
         string inner_b_master;  //No. inner master
         string carton_master;   //No. carton master
         string export_master;   //No. export master
+        int port1_interval, port2_interval, port3_interval, port4_interval; //Interval
         public Form1()
         {
             InitializeComponent();
@@ -134,12 +135,13 @@ namespace WindowsForms_packing_line
             {
                 string input_value = port1.ReadExisting();
                 Thread.Sleep(60);
-                Invoke((MethodInvoker)delegate { tbInnerBoxA.Text = input_value; lbLog.Items.Add(input_value + "\t\t\tInner Box A"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
+                Invoke((MethodInvoker)delegate { tbInnerBoxA.Text = input_value; });
                 inner_a_master = WindowsForms_packing_line.Properties.Settings.Default.InnerAMaster;
                 if (input_value.Equals(inner_a_master))
                 {
                     //log
-                    //Invoke((MethodInvoker)delegate { lbLog.Items.Add(input_value); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
+                    lbLog.ForeColor = Color.Green;
+                    Invoke((MethodInvoker)delegate { lbLog.Items.Add(input_value + "\t\t\tInner Box A"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
 
                     qty -= 1;
                     if (qty < 0) { qty = 0; }
@@ -158,6 +160,11 @@ namespace WindowsForms_packing_line
                         Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Need: " + carton_need.ToString(); });
                     }
                 }
+                else
+                {
+                    lbLog.ForeColor = Color.Red;
+                    Invoke((MethodInvoker)delegate { lbLog.Items.Add(input_value + "\t\t\tInner Box A"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
+                }
             }
             catch (Exception ex)
             {
@@ -170,13 +177,16 @@ namespace WindowsForms_packing_line
             {
                 string input_value = port2.ReadExisting();
                 Thread.Sleep(60);
-                Invoke((MethodInvoker)delegate { tbInnerBoxB.Text = input_value; lbLog.Items.Add(input_value + "\t\t\tInner Box B"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
+                Invoke((MethodInvoker)delegate { tbInnerBoxB.Text = input_value; });
                 inner_b_master = WindowsForms_packing_line.Properties.Settings.Default.InnerAMaster;
                 if (input_value.Equals(inner_b_master))
                 {
+                    //Log
+                    lbLog.ForeColor = Color.Green;
+                    Invoke((MethodInvoker)delegate { lbLog.Items.Add(input_value + "\t\t\tInner Box B"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
+                    
                     qty -= 1;
                     if (qty < 0) { qty = 0; }
-                    //Invoke((MethodInvoker)delegate { lRemainingInner.Text = "Remaining: " + qty.ToString(); });
 
                     //inner scanned test
                     inner_scanned++;
@@ -190,6 +200,11 @@ namespace WindowsForms_packing_line
                         carton_need++;
                         Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Need: " + carton_need.ToString(); });
                     }
+                }
+                else
+                {
+                    lbLog.ForeColor = Color.Red;
+                    Invoke((MethodInvoker)delegate { lbLog.Items.Add(input_value + "\t\t\tInner Box B"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
                 }
             }
             catch (Exception ex)
@@ -228,6 +243,10 @@ namespace WindowsForms_packing_line
                         Invoke((MethodInvoker)delegate { lNeedExport.Text = "Need: " + export_need; });
                     }
                 }
+                else
+                {
+                    //red text log
+                }
             }
             catch (Exception ex)
             {
@@ -254,6 +273,10 @@ namespace WindowsForms_packing_line
                         MessageBox.Show("alarm when Export Box = 0 then Close port4 and Reset Kanban");
                     }
                 }
+                else
+                {
+                    //red text log
+                }
             }
             catch (Exception ex)
             {
@@ -266,6 +289,7 @@ namespace WindowsForms_packing_line
             if (inner_count>0)
             {
                 inner_count--;
+                lbLog.ForeColor = Color.Red;
                 Invoke((MethodInvoker)delegate { lbLog.Items.Add("Delete 1 Item!\t\tInner Box A"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
             }
         }
@@ -274,6 +298,7 @@ namespace WindowsForms_packing_line
             if (inner_count > 0)
             {
                 inner_count--;
+                lbLog.ForeColor= Color.Red;
                 Invoke((MethodInvoker)delegate { lbLog.Items.Add("Delete 1 Item!\t\tInner Box B"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
             }
         }
@@ -310,10 +335,14 @@ namespace WindowsForms_packing_line
                     if (port1.IsOpen)
                     {
                         port1.Close();
+                        lIsPort1Open.Text = "Port1: Offine";
+                        lIsPort1Open.BackColor = System.Drawing.Color.Crimson;
                     }
                     else if (port1.IsOpen == false)
                     {
                         port1.Open();
+                        lIsPort1Open.Text = "Port1: Online";
+                        lIsPort1Open.BackColor = System.Drawing.Color.Green;
                     }
                 }
                 else

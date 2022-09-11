@@ -457,10 +457,10 @@
             // 
             // tbModel
             // 
+            this.tbModel.Enabled = false;
             this.tbModel.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbModel.Location = new System.Drawing.Point(431, 13);
             this.tbModel.Name = "tbModel";
-            this.tbModel.ReadOnly = true;
             this.tbModel.Size = new System.Drawing.Size(220, 39);
             this.tbModel.TabIndex = 8;
             // 
