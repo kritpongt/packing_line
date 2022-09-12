@@ -974,6 +974,7 @@
             this.columnHeader12});
             this.lvAccount.Dock = System.Windows.Forms.DockStyle.Top;
             this.lvAccount.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lvAccount.FullRowSelect = true;
             this.lvAccount.GridLines = true;
             this.lvAccount.HideSelection = false;
             this.lvAccount.Location = new System.Drawing.Point(0, 0);
@@ -1014,11 +1015,12 @@
             this.tbDBId.Name = "tbDBId";
             this.tbDBId.Size = new System.Drawing.Size(200, 39);
             this.tbDBId.TabIndex = 2;
+            this.tbDBId.TextChanged += new System.EventHandler(this.tbDBId_TextChanged);
             // 
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label21.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label21.Location = new System.Drawing.Point(17, 419);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(89, 32);
@@ -1032,6 +1034,7 @@
             this.tbDBName.Name = "tbDBName";
             this.tbDBName.Size = new System.Drawing.Size(200, 39);
             this.tbDBName.TabIndex = 4;
+            this.tbDBName.TextChanged += new System.EventHandler(this.tbDBName_TextChanged);
             // 
             // label22
             // 

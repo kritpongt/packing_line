@@ -525,11 +525,114 @@ namespace WindowsForms_packing_line
             tbDBInnerMax.Text = selected_item.SubItems[7].Text;
             tbDBCartonMax.Text = selected_item.SubItems[8].Text;
         }
-
         //Create Account button
         private void btnCreateAccount_Click(object sender, EventArgs e)
         {
-
+            DialogResult dialog_result = MessageBox.Show("Are you sure to insert new Account?", "Database", MessageBoxButtons.YesNo);
+            if (dialog_result == DialogResult.Yes)
+            {
+                string TABLE = "test_account";
+                string INSERT_STR = " (ID, Name, Position) VALUES('" + tbDBId.Text + "', '" + tbDBName.Text + "', '" + tbDBPosition.Text + "');";
+                string queryList = "INSERT INTO " + TABLE + INSERT_STR;
+                MySqlConnection dbconnect = new MySqlConnection(connectStr);
+                MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
+                MySqlDataReader reader;
+                dbcommand.CommandTimeout = 60;
+                try
+                {
+                    dbconnect.Open();
+                    reader = dbcommand.ExecuteReader();
+                    MessageBox.Show("Insert Success", "Dababase");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    dbconnect.Close();
+                }
+            }
+        }
+        //Account ID texbex
+        private void tbDBId_TextChanged(object sender, EventArgs e)
+        {
+            if (tbDBId.Text == "")
+            {
+                refreshListViewAccount();
+            }
+            else
+            {
+                lvAccount.Items.Clear();
+                string TABLE = "test_account";
+                string queryList = "SELECT * FROM " + TABLE + " WHERE ID LIKE '%" + tbDBId.Text + "%' ORDER BY CAST(ID AS UNSIGNED);";
+                MySqlConnection dbconnect = new MySqlConnection(connectStr);
+                MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
+                MySqlDataAdapter da = new MySqlDataAdapter(dbcommand);
+                DataTable dt = new DataTable();
+                dbcommand.CommandTimeout = 60;
+                try
+                {
+                    dbconnect.Open();
+                    da.Fill(dt);
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        DataRow dr = dt.Rows[i];    //dr["Column Name from db"]
+                        ListViewItem list = new ListViewItem(dr["ID"].ToString());
+                        list.SubItems.Add(dr["Name"].ToString());
+                        list.SubItems.Add(dr["Position"].ToString());
+                        lvAccount.Items.Add(list);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    dbconnect.Close();
+                }
+            }
+        }
+        //Acount Name textbox
+        private void tbDBName_TextChanged(object sender, EventArgs e)
+        {
+            if (tbDBName.Text == "")
+            {
+                refreshListViewAccount();
+            }
+            else
+            {
+                lvAccount.Items.Clear();
+                string TABLE = "test_account";
+                string queryList = "SELECT * FROM " + TABLE + " WHERE Name LIKE '%" + tbDBName.Text + "%' ORDER BY CAST(Name AS UNSIGNED);";
+                MySqlConnection dbconnect = new MySqlConnection(connectStr);
+                MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
+                MySqlDataAdapter da = new MySqlDataAdapter(dbcommand);
+                DataTable dt = new DataTable();
+                dbcommand.CommandTimeout = 60;
+                try
+                {
+                    dbconnect.Open();
+                    da.Fill(dt);
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        DataRow dr = dt.Rows[i];    //dr["Column Name from db"]
+                        ListViewItem list = new ListViewItem(dr["ID"].ToString());
+                        list.SubItems.Add(dr["Name"].ToString());
+                        list.SubItems.Add(dr["Position"].ToString());
+                        lvAccount.Items.Add(list);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    dbconnect.Close();
+                }
+            }
         }
 
         //K/B* Textbox text is changed(Search)
@@ -543,6 +646,7 @@ namespace WindowsForms_packing_line
             else
             {
                 lvModelMaster.Items.Clear();
+                //Database display Search data from table
                 string TABLE = "test_model_master";
                 string queryList = "SELECT * FROM " + TABLE + " WHERE Kanban LIKE '%" + tbKBSearch.Text + "%' ORDER BY CAST(Kanban AS UNSIGNED);";
                 MySqlConnection dbconnect = new MySqlConnection(connectStr);
@@ -739,6 +843,7 @@ namespace WindowsForms_packing_line
         public void refreshListViewMaster()
         {
             lvModelMaster.Items.Clear();
+            //Database display all data from table
             string TABLE = "test_model_master";
             string queryList = "SELECT * FROM " + TABLE + " ORDER BY CAST(Kanban AS UNSIGNED);";
             MySqlConnection dbconnect = new MySqlConnection(connectStr);
