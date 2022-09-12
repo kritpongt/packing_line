@@ -39,7 +39,8 @@ namespace WindowsForms_packing_line
             InitializeComponent();
             //this.WindowState = FormWindowState.Maximized;
             //this.FormBorderStyle = FormBorderStyle.None;
-            refreshListView();
+            refreshListViewMaster();
+            refreshListViewAccount();
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -53,9 +54,9 @@ namespace WindowsForms_packing_line
         //IF ports are selected then settings
         private void cbPort1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            port1 = new SerialPort(cbPort1.Text, 115200, System.IO.Ports.Parity.None, 8, System.IO.Ports.StopBits.One);
             try
             {
+                port1 = new SerialPort(cbPort1.Text, 115200, System.IO.Ports.Parity.None, 8, System.IO.Ports.StopBits.One);
                 port1.Open();
                 port1.DataReceived += new SerialDataReceivedEventHandler(dataReceiver1);
                 if (port1.IsOpen)
@@ -69,7 +70,6 @@ namespace WindowsForms_packing_line
             {
                 MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
         private void cbPort2_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -362,7 +362,7 @@ namespace WindowsForms_packing_line
                 }
                 else
                 {
-                    MessageBox.Show("Port1 wasn't selected!", "Ports Setting");
+                    MessageBox.Show("Port1 hasn't been selected!", "Ports Setting");
                 }
             }
             catch (Exception ex)
@@ -387,7 +387,7 @@ namespace WindowsForms_packing_line
                 }
                 else
                 {
-                    MessageBox.Show("Port2 wasn't selected!", "Ports Setting");
+                    MessageBox.Show("Port2 hasn't been selected!", "Ports Setting");
                 }
             }
             catch (Exception ex)
@@ -412,7 +412,7 @@ namespace WindowsForms_packing_line
                 }
                 else
                 {
-                    MessageBox.Show("Port3 wasn't selected!", "Ports Setting");
+                    MessageBox.Show("Port3 hasn't been selected!", "Ports Setting");
                 }
             }
             catch (Exception ex)
@@ -420,7 +420,6 @@ namespace WindowsForms_packing_line
                 MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         private void lIsPort4Open_Click(object sender, EventArgs e)
         {
             try
@@ -438,7 +437,7 @@ namespace WindowsForms_packing_line
                 }
                 else
                 {
-                    MessageBox.Show("Port4 wasn't selected!", "Ports Setting");
+                    MessageBox.Show("Port4 hasn't been selected!", "Ports Setting");
                 }
             }
             catch (Exception ex)
@@ -464,8 +463,7 @@ namespace WindowsForms_packing_line
                     dbconnect.Open();
                     reader = dbcommand.ExecuteReader();
                     MessageBox.Show("Insert Success", "Dababase");
-                    tbDatabaseClear();
-                    refreshListView();
+                    tbEditClear();
                 }
                 catch (Exception ex)
                 {
@@ -495,6 +493,23 @@ namespace WindowsForms_packing_line
                 }
             }
         }
+        //Delete kanban button
+        private void btnDeleteMaster_Click(object sender, EventArgs e)
+        {
+            DialogResult dialog_result = MessageBox.Show("Update databasse", "Database", MessageBoxButtons.YesNo);
+            if (dialog_result == DialogResult.Yes)
+            {
+                if (selected_kanban_id == "")
+                {
+                    MessageBox.Show("Error: Please select Kanban before delete database!", "Database");
+                }
+                else
+                {
+                    dbDelete("DELETE FROM `test_model_master` WHERE ID = '" + selected_kanban_id + "';");
+                    tbEditClear();
+                }
+            }
+        }
         //Listview click to select a item
         private void lvModelMaster_Click(object sender, EventArgs e)
         {
@@ -510,13 +525,20 @@ namespace WindowsForms_packing_line
             tbDBInnerMax.Text = selected_item.SubItems[7].Text;
             tbDBCartonMax.Text = selected_item.SubItems[8].Text;
         }
+
+        //Create Account button
+        private void btnCreateAccount_Click(object sender, EventArgs e)
+        {
+
+        }
+
         //K/B* Textbox text is changed(Search)
         private void tbKBSearch_TextChanged(object sender, EventArgs e)
         {
             if (tbKBSearch.Text == "")
             {
-                refreshListView();
-                tbDatabaseClear();
+                refreshListViewMaster();
+                tbEditClear();
             }
             else
             {
@@ -562,7 +584,7 @@ namespace WindowsForms_packing_line
 
         }
         //Clear Textbox Edit Database page
-        public void tbDatabaseClear()
+        public void tbEditClear()
         {
             tbKBSearch.Clear();
             tbDBModel.Clear();
@@ -714,7 +736,7 @@ namespace WindowsForms_packing_line
                 dbconnect.Close();
             }
         }
-        public void refreshListView()   //refreash list view
+        public void refreshListViewMaster()
         {
             lvModelMaster.Items.Clear();
             string TABLE = "test_model_master";
@@ -792,6 +814,41 @@ namespace WindowsForms_packing_line
                 dbconnect.Close();
             }
         }
+        public void refreshListViewAccount()
+        {
+            lvAccount.Items.Clear();
+            string TABLE = "test_account";
+            string queryList = "SELECT * FROM " + TABLE + " ORDER BY CAST(ID AS UNSIGNED);";
+            MySqlConnection dbconnect = new MySqlConnection(connectStr);
+            MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
+            MySqlDataAdapter da = new MySqlDataAdapter(dbcommand);
+            DataTable dt = new DataTable();
+            dbcommand.CommandTimeout = 60;
+            try
+            {
+                dbconnect.Open();
+                da.Fill(dt);
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    DataRow dr = dt.Rows[i];    //dr["Column Name from db"]
+                    ListViewItem list = new ListViewItem(dr["ID"].ToString());
+                    list.SubItems.Add(dr["Name"].ToString());
+                    list.SubItems.Add(dr["Position"].ToString());
+                    lvAccount.Items.Add(list);
+                }
+                lvAccount.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                lvAccount.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                dbconnect.Close();
+            }
+        }
+        //SQL connect, Edit
         public void dbUpdate(string query_s)
         {
             string queryList = query_s;
@@ -804,6 +861,28 @@ namespace WindowsForms_packing_line
                 dbconnect.Open();
                 reader = dbcommand.ExecuteReader();
                 MessageBox.Show("Update Success!", "Database");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                dbconnect.Close();
+            }
+        }
+        public void dbDelete(string query_s)
+        {
+            string queryList = query_s;
+            MySqlConnection dbconnect = new MySqlConnection(connectStr);
+            MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
+            MySqlDataReader reader;
+            dbcommand.CommandTimeout = 60;
+            try
+            {
+                dbconnect.Open();
+                reader = dbcommand.ExecuteReader();
+                MessageBox.Show("Delete Success!", "Database");
             }
             catch (Exception ex)
             {

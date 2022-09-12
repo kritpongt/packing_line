@@ -75,8 +75,8 @@
             this.cbPort1 = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
             this.Edit = new System.Windows.Forms.TabPage();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btnDeleteMaster = new System.Windows.Forms.Button();
+            this.btnUpdateMaster = new System.Windows.Forms.Button();
             this.btnCreateMaster = new System.Windows.Forms.Button();
             this.tbDBCartonMax = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
@@ -106,6 +106,19 @@
             this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Account = new System.Windows.Forms.TabPage();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lvAccount = new System.Windows.Forms.ListView();
+            this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader11 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader12 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.label20 = new System.Windows.Forms.Label();
+            this.tbDBId = new System.Windows.Forms.TextBox();
+            this.label21 = new System.Windows.Forms.Label();
+            this.tbDBName = new System.Windows.Forms.TextBox();
+            this.label22 = new System.Windows.Forms.Label();
+            this.tbDBPosition = new System.Windows.Forms.TextBox();
+            this.btnCreateAccount = new System.Windows.Forms.Button();
+            this.btnUpdateAccount = new System.Windows.Forms.Button();
+            this.btnDeleteAccount = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.Checker.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -114,6 +127,7 @@
             this.groupBox1.SuspendLayout();
             this.Settings.SuspendLayout();
             this.Edit.SuspendLayout();
+            this.Account.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -640,8 +654,8 @@
             // Edit
             // 
             this.Edit.BackColor = System.Drawing.Color.Transparent;
-            this.Edit.Controls.Add(this.button3);
-            this.Edit.Controls.Add(this.button2);
+            this.Edit.Controls.Add(this.btnDeleteMaster);
+            this.Edit.Controls.Add(this.btnUpdateMaster);
             this.Edit.Controls.Add(this.btnCreateMaster);
             this.Edit.Controls.Add(this.tbDBCartonMax);
             this.Edit.Controls.Add(this.label16);
@@ -665,26 +679,27 @@
             this.Edit.Name = "Edit";
             this.Edit.Size = new System.Drawing.Size(1000, 613);
             this.Edit.TabIndex = 2;
-            this.Edit.Text = "Edit Database";
+            this.Edit.Text = "Edit Master";
             // 
-            // button3
+            // btnDeleteMaster
             // 
-            this.button3.Location = new System.Drawing.Point(828, 529);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(120, 50);
-            this.button3.TabIndex = 5;
-            this.button3.Text = "Delete";
-            this.button3.UseVisualStyleBackColor = true;
+            this.btnDeleteMaster.Location = new System.Drawing.Point(828, 529);
+            this.btnDeleteMaster.Name = "btnDeleteMaster";
+            this.btnDeleteMaster.Size = new System.Drawing.Size(120, 50);
+            this.btnDeleteMaster.TabIndex = 5;
+            this.btnDeleteMaster.Text = "Delete";
+            this.btnDeleteMaster.UseVisualStyleBackColor = true;
+            this.btnDeleteMaster.Click += new System.EventHandler(this.btnDeleteMaster_Click);
             // 
-            // button2
+            // btnUpdateMaster
             // 
-            this.button2.Location = new System.Drawing.Point(828, 430);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(120, 50);
-            this.button2.TabIndex = 5;
-            this.button2.Text = "Update";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.btnUpdateMaster_Click);
+            this.btnUpdateMaster.Location = new System.Drawing.Point(828, 430);
+            this.btnUpdateMaster.Name = "btnUpdateMaster";
+            this.btnUpdateMaster.Size = new System.Drawing.Size(120, 50);
+            this.btnUpdateMaster.TabIndex = 5;
+            this.btnUpdateMaster.Text = "Update";
+            this.btnUpdateMaster.UseVisualStyleBackColor = true;
+            this.btnUpdateMaster.Click += new System.EventHandler(this.btnUpdateMaster_Click);
             // 
             // btnCreateMaster
             // 
@@ -793,7 +808,7 @@
             this.tbDBModel.Location = new System.Drawing.Point(128, 419);
             this.tbDBModel.Name = "tbDBModel";
             this.tbDBModel.Size = new System.Drawing.Size(244, 39);
-            this.tbDBModel.TabIndex = 4;
+            this.tbDBModel.TabIndex = 6;
             // 
             // tbDBInnerA
             // 
@@ -810,7 +825,7 @@
             this.label9.Location = new System.Drawing.Point(8, 422);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(104, 32);
-            this.label9.TabIndex = 3;
+            this.label9.TabIndex = 5;
             this.label9.Text = "Model:";
             // 
             // label10
@@ -921,11 +936,21 @@
             // 
             // Account
             // 
+            this.Account.Controls.Add(this.btnDeleteAccount);
+            this.Account.Controls.Add(this.btnUpdateAccount);
+            this.Account.Controls.Add(this.btnCreateAccount);
+            this.Account.Controls.Add(this.tbDBPosition);
+            this.Account.Controls.Add(this.label22);
+            this.Account.Controls.Add(this.tbDBName);
+            this.Account.Controls.Add(this.label21);
+            this.Account.Controls.Add(this.tbDBId);
+            this.Account.Controls.Add(this.label20);
+            this.Account.Controls.Add(this.lvAccount);
             this.Account.Location = new System.Drawing.Point(4, 33);
             this.Account.Name = "Account";
             this.Account.Size = new System.Drawing.Size(1000, 613);
             this.Account.TabIndex = 3;
-            this.Account.Text = "Account Setting";
+            this.Account.Text = "Edit Account";
             this.Account.UseVisualStyleBackColor = true;
             // 
             // panel1
@@ -940,6 +965,122 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1008, 86);
             this.panel1.TabIndex = 4;
+            // 
+            // lvAccount
+            // 
+            this.lvAccount.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader10,
+            this.columnHeader11,
+            this.columnHeader12});
+            this.lvAccount.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lvAccount.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lvAccount.GridLines = true;
+            this.lvAccount.HideSelection = false;
+            this.lvAccount.Location = new System.Drawing.Point(0, 0);
+            this.lvAccount.Name = "lvAccount";
+            this.lvAccount.Size = new System.Drawing.Size(1000, 332);
+            this.lvAccount.TabIndex = 0;
+            this.lvAccount.UseCompatibleStateImageBehavior = false;
+            this.lvAccount.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader10
+            // 
+            this.columnHeader10.Text = "ID";
+            // 
+            // columnHeader11
+            // 
+            this.columnHeader11.Text = "Name";
+            this.columnHeader11.Width = 249;
+            // 
+            // columnHeader12
+            // 
+            this.columnHeader12.Text = "Position";
+            this.columnHeader12.Width = 162;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label20.Location = new System.Drawing.Point(17, 372);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(59, 32);
+            this.label20.TabIndex = 1;
+            this.label20.Text = "ID:";
+            // 
+            // tbDBId
+            // 
+            this.tbDBId.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbDBId.Location = new System.Drawing.Point(172, 369);
+            this.tbDBId.Name = "tbDBId";
+            this.tbDBId.Size = new System.Drawing.Size(200, 39);
+            this.tbDBId.TabIndex = 2;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label21.Location = new System.Drawing.Point(17, 419);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(89, 32);
+            this.label21.TabIndex = 3;
+            this.label21.Text = "Name:";
+            // 
+            // tbDBName
+            // 
+            this.tbDBName.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbDBName.Location = new System.Drawing.Point(172, 416);
+            this.tbDBName.Name = "tbDBName";
+            this.tbDBName.Size = new System.Drawing.Size(200, 39);
+            this.tbDBName.TabIndex = 4;
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label22.Location = new System.Drawing.Point(17, 466);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(149, 32);
+            this.label22.TabIndex = 5;
+            this.label22.Text = "Position:";
+            // 
+            // tbDBPosition
+            // 
+            this.tbDBPosition.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbDBPosition.Location = new System.Drawing.Point(172, 463);
+            this.tbDBPosition.Name = "tbDBPosition";
+            this.tbDBPosition.Size = new System.Drawing.Size(200, 39);
+            this.tbDBPosition.TabIndex = 6;
+            // 
+            // btnCreateAccount
+            // 
+            this.btnCreateAccount.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCreateAccount.Location = new System.Drawing.Point(384, 369);
+            this.btnCreateAccount.Name = "btnCreateAccount";
+            this.btnCreateAccount.Size = new System.Drawing.Size(120, 39);
+            this.btnCreateAccount.TabIndex = 7;
+            this.btnCreateAccount.Text = "Create";
+            this.btnCreateAccount.UseVisualStyleBackColor = true;
+            this.btnCreateAccount.Click += new System.EventHandler(this.btnCreateAccount_Click);
+            // 
+            // btnUpdateAccount
+            // 
+            this.btnUpdateAccount.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnUpdateAccount.Location = new System.Drawing.Point(384, 418);
+            this.btnUpdateAccount.Name = "btnUpdateAccount";
+            this.btnUpdateAccount.Size = new System.Drawing.Size(120, 39);
+            this.btnUpdateAccount.TabIndex = 8;
+            this.btnUpdateAccount.Text = "Update";
+            this.btnUpdateAccount.UseVisualStyleBackColor = true;
+            // 
+            // btnDeleteAccount
+            // 
+            this.btnDeleteAccount.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDeleteAccount.Location = new System.Drawing.Point(384, 463);
+            this.btnDeleteAccount.Name = "btnDeleteAccount";
+            this.btnDeleteAccount.Size = new System.Drawing.Size(120, 39);
+            this.btnDeleteAccount.TabIndex = 9;
+            this.btnDeleteAccount.Text = "Delete";
+            this.btnDeleteAccount.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -966,6 +1107,8 @@
             this.Settings.PerformLayout();
             this.Edit.ResumeLayout(false);
             this.Edit.PerformLayout();
+            this.Account.ResumeLayout(false);
+            this.Account.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
@@ -1037,7 +1180,7 @@
         private System.Windows.Forms.TextBox tbDBInnerMax;
         private System.Windows.Forms.TextBox tbDBExport;
         private System.Windows.Forms.TextBox tbDBCarton;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnUpdateMaster;
         private System.Windows.Forms.Button btnCreateMaster;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
@@ -1048,10 +1191,23 @@
         private System.Windows.Forms.ColumnHeader columnHeader7;
         private System.Windows.Forms.ColumnHeader columnHeader8;
         private System.Windows.Forms.ColumnHeader columnHeader9;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button btnDeleteMaster;
         private System.Windows.Forms.Button btnDecreaseInnerB;
         private System.Windows.Forms.Button btnDecreaseInnerA;
         private System.Windows.Forms.TabPage Account;
+        private System.Windows.Forms.Button btnDeleteAccount;
+        private System.Windows.Forms.Button btnUpdateAccount;
+        private System.Windows.Forms.Button btnCreateAccount;
+        private System.Windows.Forms.TextBox tbDBPosition;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.TextBox tbDBName;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.TextBox tbDBId;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.ListView lvAccount;
+        private System.Windows.Forms.ColumnHeader columnHeader10;
+        private System.Windows.Forms.ColumnHeader columnHeader11;
+        private System.Windows.Forms.ColumnHeader columnHeader12;
     }
 }
 
