@@ -17,6 +17,7 @@ using Org.BouncyCastle.Asn1.Mozilla;
 using System.Windows.Documents;
 using Org.BouncyCastle.Utilities.Collections;
 using System.Security.Cryptography;
+using System.Data.Common;
 
 namespace WindowsForms_packing_line
 {
@@ -31,6 +32,7 @@ namespace WindowsForms_packing_line
         string inner_b_master;  //No. inner master
         string carton_master;   //No. carton master
         string export_master;   //No. export master
+        string selected_kanban_id = ""; //temp_str kanban for update database
         int port1_interval, port2_interval, port3_interval, port4_interval; //Interval
         public Form1()
         {
@@ -162,7 +164,7 @@ namespace WindowsForms_packing_line
                 }
                 else
                 {
-                    lbLog.ForeColor = Color.Red;
+                    lbLog.ForeColor = Color.Black;
                     Invoke((MethodInvoker)delegate { lbLog.Items.Add(input_value + "\t\t\tInner Box A"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
                 }
             }
@@ -203,7 +205,7 @@ namespace WindowsForms_packing_line
                 }
                 else
                 {
-                    lbLog.ForeColor = Color.Red;
+                    lbLog.ForeColor = Color.Black;
                     Invoke((MethodInvoker)delegate { lbLog.Items.Add(input_value + "\t\t\tInner Box B"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
                 }
             }
@@ -218,10 +220,15 @@ namespace WindowsForms_packing_line
             {
                 string input_value = port3.ReadExisting();
                 Thread.Sleep(60);
-                Invoke((MethodInvoker)delegate { tbCartonBox.Text = input_value; lbLog.Items.Add(input_value + "\t\t\tCarton Box"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
+                Invoke((MethodInvoker)delegate { tbCartonBox.Text = input_value; });
                 carton_master = WindowsForms_packing_line.Properties.Settings.Default.CartonMaster;
                 if (input_value.Equals(carton_master))
                 {
+                    //Log
+                    lbLog.ForeColor = Color.Green;
+                    Invoke((MethodInvoker)delegate { lbLog.Items.Add(input_value + "\t\t\tCarton Box"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
+                    
+
                     carton_scanned++;
                     Invoke((MethodInvoker)delegate { lRemainingCarton.Text = "carton scanned: " + carton_scanned; });
                     //end test
@@ -245,7 +252,9 @@ namespace WindowsForms_packing_line
                 }
                 else
                 {
-                    //red text log
+                    //Log
+                    lbLog.ForeColor = Color.Black;
+                    Invoke((MethodInvoker)delegate { lbLog.Items.Add(input_value + "\t\t\tCarton Box"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
                 }
             }
             catch (Exception ex)
@@ -263,6 +272,10 @@ namespace WindowsForms_packing_line
                 export_master = WindowsForms_packing_line.Properties.Settings.Default.ExportMaster;
                 if (input_value.Equals(export_master))
                 {
+                    //Log
+                    lbLog.ForeColor = Color.Green;
+                    Invoke((MethodInvoker)delegate { lbLog.Items.Add(input_value + "\t\t\tExport Box"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
+
                     if (carton_count > 0)    //decrease export box(Need: ) when export box is scanned
                     {
                         carton_count--;
@@ -275,7 +288,9 @@ namespace WindowsForms_packing_line
                 }
                 else
                 {
-                    //red text log
+                    //Log
+                    lbLog.ForeColor = Color.Black;
+                    Invoke((MethodInvoker)delegate { lbLog.Items.Add(input_value + "\t\t\tExport Box"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
                 }
             }
             catch (Exception ex)
@@ -405,6 +420,7 @@ namespace WindowsForms_packing_line
                 MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void lIsPort4Open_Click(object sender, EventArgs e)
         {
             try
@@ -430,11 +446,10 @@ namespace WindowsForms_packing_line
                 MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        //Create button
+        //Create kanban button
         private void btnCreateMaster_Click(object sender, EventArgs e)
         {
-            DialogResult dialog_result = MessageBox.Show("Are you sure to insert new tool setting?", "Database: Create", MessageBoxButtons.YesNo);
+            DialogResult dialog_result = MessageBox.Show("Are you sure to insert new tool setting?", "Database", MessageBoxButtons.YesNo);
             if (dialog_result == DialogResult.Yes)
             {
                 string TABLE = "test_model_master";
@@ -448,7 +463,7 @@ namespace WindowsForms_packing_line
                 {
                     dbconnect.Open();
                     reader = dbcommand.ExecuteReader();
-                    MessageBox.Show("Insert Success", "Dababase: Insert");
+                    MessageBox.Show("Insert Success", "Dababase");
                     tbDatabaseClear();
                     refreshListView();
                 }
@@ -462,12 +477,46 @@ namespace WindowsForms_packing_line
                 }
             }
         }
-        //Kanban Textbox text is changed
+        //Update kanban button
+        private void btnUpdateMaster_Click(object sender, EventArgs e)
+        {
+            DialogResult dialog_result = MessageBox.Show("Update databasse", "Database", MessageBoxButtons.YesNo);
+            if (dialog_result == DialogResult.Yes)
+            {
+                if (selected_kanban_id == "")
+                {
+                    MessageBox.Show("Error: Please select Kanban before update database!", "Database");
+                }
+                else
+                {
+                    dbUpdate("UPDATE test_model_master SET Kanban = '" + tbKBSearch.Text + "', ModelNo = '" + tbDBModel.Text + "', InnerA = '" + tbDBInnerA.Text + "', InnerB = '" + tbDBInnerB.Text + "', Carton = '" + tbDBCarton.Text + "', Export = '" + tbDBExport.Text + "', InnerMax = '" + tbDBInnerMax.Text + "', CartonMax = '" + tbDBCartonMax.Text + "' WHERE ID = '" + selected_kanban_id + "';");
+                    dbSearchKanban();
+                    selected_kanban_id = "";
+                }
+            }
+        }
+        //Listview click to select a item
+        private void lvModelMaster_Click(object sender, EventArgs e)
+        {
+            var selected_item = lvModelMaster.SelectedItems[0];
+            selected_kanban_id = selected_item.SubItems[0].Text;
+
+            tbKBSearch.Text = selected_item.SubItems[1].Text;
+            tbDBModel.Text = selected_item.SubItems[2].Text;
+            tbDBInnerA.Text = selected_item.SubItems[3].Text;
+            tbDBInnerB.Text = selected_item.SubItems[4].Text;
+            tbDBCarton.Text = selected_item.SubItems[5].Text;
+            tbDBExport.Text = selected_item.SubItems[6].Text;
+            tbDBInnerMax.Text = selected_item.SubItems[7].Text;
+            tbDBCartonMax.Text = selected_item.SubItems[8].Text;
+        }
+        //K/B* Textbox text is changed(Search)
         private void tbKBSearch_TextChanged(object sender, EventArgs e)
         {
             if (tbKBSearch.Text == "")
             {
                 refreshListView();
+                tbDatabaseClear();
             }
             else
             {
@@ -695,6 +744,66 @@ namespace WindowsForms_packing_line
                 }
                 lvModelMaster.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
                 lvModelMaster.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                dbconnect.Close();
+            }
+        }
+        public void dbSearchKanban()
+        {
+            lvModelMaster.Items.Clear();
+            string TABLE = "test_model_master";
+            string queryList = "SELECT * FROM " + TABLE + " WHERE Kanban = '" + tbKBSearch.Text + "';";
+            MySqlConnection dbconnect = new MySqlConnection(connectStr);
+            MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
+            MySqlDataAdapter da = new MySqlDataAdapter(dbcommand);
+            DataTable dt = new DataTable();
+            dbcommand.CommandTimeout = 60;
+            try
+            {
+                dbconnect.Open();
+                da.Fill(dt);
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    DataRow dr = dt.Rows[i];    //dr["Column Name from db"]
+                    ListViewItem list = new ListViewItem(dr["ID"].ToString());
+                    list.SubItems.Add(dr["Kanban"].ToString());
+                    list.SubItems.Add(dr["ModelNo"].ToString());
+                    list.SubItems.Add(dr["InnerA"].ToString());
+                    list.SubItems.Add(dr["InnerB"].ToString());
+                    list.SubItems.Add(dr["Carton"].ToString());
+                    list.SubItems.Add(dr["Export"].ToString());
+                    list.SubItems.Add(dr["InnerMax"].ToString());
+                    list.SubItems.Add(dr["CartonMax"].ToString());
+                    lvModelMaster.Items.Add(list);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                dbconnect.Close();
+            }
+        }
+        public void dbUpdate(string query_s)
+        {
+            string queryList = query_s;
+            MySqlConnection dbconnect = new MySqlConnection(connectStr);
+            MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
+            MySqlDataReader reader;
+            dbcommand.CommandTimeout = 60;
+            try
+            {
+                dbconnect.Open();
+                reader = dbcommand.ExecuteReader();
+                MessageBox.Show("Update Success!", "Database");
             }
             catch (Exception ex)
             {

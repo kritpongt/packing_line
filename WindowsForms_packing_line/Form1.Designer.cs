@@ -45,10 +45,12 @@
             this.tbCartonBox = new System.Windows.Forms.TextBox();
             this.lNeedCarton = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.btnDecreaseInnerB = new System.Windows.Forms.Button();
             this.lMasterB = new System.Windows.Forms.Label();
             this.lIsPort2Open = new System.Windows.Forms.Label();
             this.tbInnerBoxB = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnDecreaseInnerA = new System.Windows.Forms.Button();
             this.lMasterA = new System.Windows.Forms.Label();
             this.lIsPort1Open = new System.Windows.Forms.Label();
             this.tbInnerBoxA = new System.Windows.Forms.TextBox();
@@ -102,9 +104,8 @@
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Account = new System.Windows.Forms.TabPage();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.btnDecreaseInnerA = new System.Windows.Forms.Button();
-            this.btnDecreaseInnerB = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.Checker.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -154,6 +155,7 @@
             this.tabControl1.Controls.Add(this.Checker);
             this.tabControl1.Controls.Add(this.Settings);
             this.tabControl1.Controls.Add(this.Edit);
+            this.tabControl1.Controls.Add(this.Account);
             this.tabControl1.Cursor = System.Windows.Forms.Cursors.Default;
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.tabControl1.Font = new System.Drawing.Font("Consolas", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -328,6 +330,19 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Inner Box B";
             // 
+            // btnDecreaseInnerB
+            // 
+            this.btnDecreaseInnerB.BackColor = System.Drawing.Color.Transparent;
+            this.btnDecreaseInnerB.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDecreaseInnerB.Font = new System.Drawing.Font("Consolas", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDecreaseInnerB.Location = new System.Drawing.Point(420, 94);
+            this.btnDecreaseInnerB.Name = "btnDecreaseInnerB";
+            this.btnDecreaseInnerB.Size = new System.Drawing.Size(64, 39);
+            this.btnDecreaseInnerB.TabIndex = 27;
+            this.btnDecreaseInnerB.Text = "-1";
+            this.btnDecreaseInnerB.UseVisualStyleBackColor = false;
+            this.btnDecreaseInnerB.Click += new System.EventHandler(this.btnDecreaseInnerB_Click);
+            // 
             // lMasterB
             // 
             this.lMasterB.AutoSize = true;
@@ -374,6 +389,19 @@
             this.groupBox1.TabIndex = 21;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Inner Box A";
+            // 
+            // btnDecreaseInnerA
+            // 
+            this.btnDecreaseInnerA.BackColor = System.Drawing.Color.Transparent;
+            this.btnDecreaseInnerA.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDecreaseInnerA.Font = new System.Drawing.Font("Consolas", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDecreaseInnerA.Location = new System.Drawing.Point(423, 94);
+            this.btnDecreaseInnerA.Name = "btnDecreaseInnerA";
+            this.btnDecreaseInnerA.Size = new System.Drawing.Size(61, 39);
+            this.btnDecreaseInnerA.TabIndex = 27;
+            this.btnDecreaseInnerA.Text = "-1";
+            this.btnDecreaseInnerA.UseVisualStyleBackColor = false;
+            this.btnDecreaseInnerA.Click += new System.EventHandler(this.btnDecreaseInnerA_Click);
             // 
             // lMasterA
             // 
@@ -656,6 +684,7 @@
             this.button2.TabIndex = 5;
             this.button2.Text = "Update";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.btnUpdateMaster_Click);
             // 
             // btnCreateMaster
             // 
@@ -826,6 +855,7 @@
             this.columnHeader8,
             this.columnHeader9});
             this.lvModelMaster.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lvModelMaster.FullRowSelect = true;
             this.lvModelMaster.GridLines = true;
             this.lvModelMaster.HideSelection = false;
             this.lvModelMaster.Location = new System.Drawing.Point(0, 0);
@@ -834,6 +864,7 @@
             this.lvModelMaster.TabIndex = 2;
             this.lvModelMaster.UseCompatibleStateImageBehavior = false;
             this.lvModelMaster.View = System.Windows.Forms.View.Details;
+            this.lvModelMaster.Click += new System.EventHandler(this.lvModelMaster_Click);
             // 
             // columnHeader1
             // 
@@ -888,6 +919,15 @@
             this.columnHeader9.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.columnHeader9.Width = 147;
             // 
+            // Account
+            // 
+            this.Account.Location = new System.Drawing.Point(4, 33);
+            this.Account.Name = "Account";
+            this.Account.Size = new System.Drawing.Size(1000, 613);
+            this.Account.TabIndex = 3;
+            this.Account.Text = "Account Setting";
+            this.Account.UseVisualStyleBackColor = true;
+            // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(33)))), ((int)(((byte)(62)))));
@@ -900,32 +940,6 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1008, 86);
             this.panel1.TabIndex = 4;
-            // 
-            // btnDecreaseInnerA
-            // 
-            this.btnDecreaseInnerA.BackColor = System.Drawing.Color.Transparent;
-            this.btnDecreaseInnerA.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDecreaseInnerA.Font = new System.Drawing.Font("Consolas", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDecreaseInnerA.Location = new System.Drawing.Point(423, 94);
-            this.btnDecreaseInnerA.Name = "btnDecreaseInnerA";
-            this.btnDecreaseInnerA.Size = new System.Drawing.Size(61, 39);
-            this.btnDecreaseInnerA.TabIndex = 27;
-            this.btnDecreaseInnerA.Text = "-1";
-            this.btnDecreaseInnerA.UseVisualStyleBackColor = false;
-            this.btnDecreaseInnerA.Click += new System.EventHandler(this.btnDecreaseInnerA_Click);
-            // 
-            // btnDecreaseInnerB
-            // 
-            this.btnDecreaseInnerB.BackColor = System.Drawing.Color.Transparent;
-            this.btnDecreaseInnerB.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDecreaseInnerB.Font = new System.Drawing.Font("Consolas", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDecreaseInnerB.Location = new System.Drawing.Point(420, 94);
-            this.btnDecreaseInnerB.Name = "btnDecreaseInnerB";
-            this.btnDecreaseInnerB.Size = new System.Drawing.Size(64, 39);
-            this.btnDecreaseInnerB.TabIndex = 27;
-            this.btnDecreaseInnerB.Text = "-1";
-            this.btnDecreaseInnerB.UseVisualStyleBackColor = false;
-            this.btnDecreaseInnerB.Click += new System.EventHandler(this.btnDecreaseInnerB_Click);
             // 
             // Form1
             // 
@@ -1037,6 +1051,7 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button btnDecreaseInnerB;
         private System.Windows.Forms.Button btnDecreaseInnerA;
+        private System.Windows.Forms.TabPage Account;
     }
 }
 
