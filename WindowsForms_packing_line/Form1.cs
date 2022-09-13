@@ -23,7 +23,10 @@ namespace WindowsForms_packing_line
 {
     public partial class Form1 : Form
     {
-        private SerialPort port1, port2, port3, port4;
+        private SerialPort port1;
+        private SerialPort port2;
+        private SerialPort port3;
+        private SerialPort port4;
         string connectStr = "server=" + WindowsForms_packing_line.Properties.Settings.Default.dbIPServer + ";port=3306;Database=packing_line_element;uid=root;pwd=;SslMode=none;";
         int qty, innerbox_max, cartonbox_max;   //get from db
         int cartonbox_rem, inner_scanned = 0, carton_scanned = 0;  //remaining carton box in export box
@@ -33,7 +36,6 @@ namespace WindowsForms_packing_line
         string carton_master;   //No. carton master
         string export_master;   //No. export master
         string selected_kanban_id = ""; //temp_str kanban for update database
-        int port1_interval, port2_interval, port3_interval, port4_interval; //Interval
         public Form1()
         {
             InitializeComponent();
@@ -54,80 +56,306 @@ namespace WindowsForms_packing_line
         //IF ports are selected then settings
         private void cbPort1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            try
+            if (cbPort1.Text!=cbPort2.Text && cbPort1.Text!=cbPort3.Text && cbPort1.Text!=cbPort4.Text)
             {
-                port1 = new SerialPort(cbPort1.Text, 115200, System.IO.Ports.Parity.None, 8, System.IO.Ports.StopBits.One);
-                port1.Open();
-                port1.DataReceived += new SerialDataReceivedEventHandler(dataReceiver1);
-                if (port1.IsOpen)
-                {
-                    //set port1 Status: Online
-                    lIsPort1Open.Text = "Port1: Online";
-                    lIsPort1Open.BackColor = System.Drawing.Color.Green;
-                }
+                WindowsForms_packing_line.Properties.Settings.Default.Port1 = cbPort1.Text;
+                WindowsForms_packing_line.Properties.Settings.Default.Save();
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error: the port already existing", "Port Setting");
             }
+            //try
+            //{
+            //    port1 = new SerialPort(cbPort1.Text, 115200, System.IO.Ports.Parity.None, 8, System.IO.Ports.StopBits.One);
+            //    port1.Open();
+            //    port1.DataReceived += new SerialDataReceivedEventHandler(dataReceiver1);
+            //    if (port1.IsOpen)
+            //    {
+            //        //set port1 Status: Online
+            //        lIsPort1Open.Text = "Port1: Online";
+            //        lIsPort1Open.BackColor = System.Drawing.Color.Green;
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //}
         }
         private void cbPort2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            port2 = new SerialPort(cbPort2.Text, 115200, System.IO.Ports.Parity.None, 8, System.IO.Ports.StopBits.One);
-            try
+            if (cbPort2.Text != cbPort1.Text && cbPort2.Text != cbPort3.Text && cbPort2.Text != cbPort4.Text)
             {
-                port2.Open();
-                port2.DataReceived += new SerialDataReceivedEventHandler(dataReceiver2);
-                if (port2.IsOpen)
-                {
-                    //set port2 Status: Online
-                    lIsPort2Open.Text = "Port2: Online";
-                    lIsPort2Open.BackColor = System.Drawing.Color.Green;
-                }
+                WindowsForms_packing_line.Properties.Settings.Default.Port2 = cbPort2.Text;
+                WindowsForms_packing_line.Properties.Settings.Default.Save();
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error: the port already existing", "Port Setting");
             }
+            //port2 = new SerialPort(cbPort2.Text, 115200, System.IO.Ports.Parity.None, 8, System.IO.Ports.StopBits.One);
+            //try
+            //{
+            //    port2.Open();
+            //    port2.DataReceived += new SerialDataReceivedEventHandler(dataReceiver2);
+            //    if (port2.IsOpen)
+            //    {
+            //        //set port2 Status: Online
+            //        lIsPort2Open.Text = "Port2: Online";
+            //        lIsPort2Open.BackColor = System.Drawing.Color.Green;
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //}
         }
         private void cbPort3_SelectedIndexChanged(object sender, EventArgs e)
         {
-            port3 = new SerialPort(cbPort3.Text, 115200, System.IO.Ports.Parity.None, 8, System.IO.Ports.StopBits.One);
-            try
+            if (cbPort3.Text != cbPort1.Text && cbPort3.Text != cbPort2.Text && cbPort3.Text != cbPort4.Text)
             {
-                port3.Open();
-                port3.DataReceived += new SerialDataReceivedEventHandler(dataReceiver3);
-                if (port3.IsOpen)
-                {
-                    //set port3 Status: Online
-                    lIsPort3Open.Text = "Port3: Online";
-                    lIsPort3Open.BackColor = System.Drawing.Color.Green;
-                }
+                WindowsForms_packing_line.Properties.Settings.Default.Port3 = cbPort3.Text;
+                WindowsForms_packing_line.Properties.Settings.Default.Save();
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error: the port already existing", "Port Setting");
             }
+            //port3 = new SerialPort(cbPort3.Text, 115200, System.IO.Ports.Parity.None, 8, System.IO.Ports.StopBits.One);
+            //try
+            //{
+            //    port3.Open();
+            //    port3.DataReceived += new SerialDataReceivedEventHandler(dataReceiver3);
+            //    if (port3.IsOpen)
+            //    {
+            //        //set port3 Status: Online
+            //        lIsPort3Open.Text = "Port3: Online";
+            //        lIsPort3Open.BackColor = System.Drawing.Color.Green;
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //}
         }
         private void cbPort4_SelectedIndexChanged(object sender, EventArgs e)
         {
-            port4 = new SerialPort(cbPort4.Text, 115200, System.IO.Ports.Parity.None, 8, System.IO.Ports.StopBits.One);
-            try
+            if (cbPort4.Text != cbPort1.Text && cbPort4.Text != cbPort2.Text && cbPort4.Text != cbPort3.Text)
             {
-                port4.Open();
-                port4.DataReceived += new SerialDataReceivedEventHandler(dataReceiver4);
-                if (port4.IsOpen)
-                {
-                    //set port4 Status: Online
-                    lIsPort4Open.Text = "Port4: Online";
-                    lIsPort4Open.BackColor = System.Drawing.Color.Green;
-                }
+                WindowsForms_packing_line.Properties.Settings.Default.Port4 = cbPort4.Text;
+                WindowsForms_packing_line.Properties.Settings.Default.Save();
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+            else
+            {
+                MessageBox.Show("Error: the port already existing", "Port Setting");
+            }
+            //port4 = new SerialPort(cbPort4.Text, 115200, System.IO.Ports.Parity.None, 8, System.IO.Ports.StopBits.One);
+            //try
+            //{
+            //    port4.Open();
+            //    port4.DataReceived += new SerialDataReceivedEventHandler(dataReceiver4);
+            //    if (port4.IsOpen)
+            //    {
+            //        //set port4 Status: Online
+            //        lIsPort4Open.Text = "Port4: Online";
+            //        lIsPort4Open.BackColor = System.Drawing.Color.Green;
+            //    }
+            //}
+            //catch (Exception ex) 
+            //{
+            //    MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //}
+        }
+        //Set Baud rate
+        private void cbBaudrate1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(cbBaudrate1.Text != "")
+            {
+                WindowsForms_packing_line.Properties.Settings.Default.Baudrate1 = int.Parse(cbBaudrate1.Text);
+                WindowsForms_packing_line.Properties.Settings.Default.Save();
+            }
+        }
+        private void cbBaudrate2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbBaudrate2.Text != "")
+            {
+                WindowsForms_packing_line.Properties.Settings.Default.Baudrate2 = int.Parse(cbBaudrate2.Text);
+                WindowsForms_packing_line.Properties.Settings.Default.Save();
+            }
+        }
+        private void cbBaudrate3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbBaudrate3.Text != "")
+            {
+                WindowsForms_packing_line.Properties.Settings.Default.Baudrate3 = int.Parse(cbBaudrate3.Text);
+                WindowsForms_packing_line.Properties.Settings.Default.Save();
+            }
+        }
+        private void cbBaudrate4_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbBaudrate4.Text != "")
+            {
+                WindowsForms_packing_line.Properties.Settings.Default.Baudrate4 = int.Parse(cbBaudrate4.Text);
+                WindowsForms_packing_line.Properties.Settings.Default.Save();
+            }
+        }
+        //Set Parity bit
+        private void cbParitybit1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbParitybit1.Text != "")
+            {
+                WindowsForms_packing_line.Properties.Settings.Default.Paritybit1 = (Parity)Enum.Parse(typeof(Parity), cbParitybit1.Text);
+                WindowsForms_packing_line.Properties.Settings.Default.Save();
+            }
+        }
+        private void cbParitybit2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbParitybit2.Text != "")
+            {
+                WindowsForms_packing_line.Properties.Settings.Default.Paritybit2 = (Parity)Enum.Parse(typeof(Parity), cbParitybit2.Text);
+                WindowsForms_packing_line.Properties.Settings.Default.Save();
+            }
+        }
+        private void cbParitybit3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbParitybit3.Text != "")
+            {
+                WindowsForms_packing_line.Properties.Settings.Default.Paritybit3 = (Parity)Enum.Parse(typeof(Parity), cbParitybit3.Text);
+                WindowsForms_packing_line.Properties.Settings.Default.Save();
+            }
+        }
+        private void cbParitybit4_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbParitybit4.Text != "")
+            {
+                WindowsForms_packing_line.Properties.Settings.Default.Paritybit4 = (Parity)Enum.Parse(typeof(Parity), cbParitybit4.Text);
+                WindowsForms_packing_line.Properties.Settings.Default.Save();
+            }
+        }
+        //Set Data size
+        private void cbDatasize1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbDatasize1.Text != "")
+            {
+                WindowsForms_packing_line.Properties.Settings.Default.Datasize1 = int.Parse(cbDatasize1.Text);
+                WindowsForms_packing_line.Properties.Settings.Default.Save();
+            }
+        }
+        private void cbDatasize2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbDatasize2.Text != "")
+            {
+                WindowsForms_packing_line.Properties.Settings.Default.Datasize2 = int.Parse(cbDatasize2.Text);
+                WindowsForms_packing_line.Properties.Settings.Default.Save();
+            }
+        }
+        private void cbDatasize3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbDatasize3.Text != "")
+            {
+                WindowsForms_packing_line.Properties.Settings.Default.Datasize3 = int.Parse(cbDatasize3.Text);
+                WindowsForms_packing_line.Properties.Settings.Default.Save();
+            }
+        }
+        private void cbDatasize4_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbDatasize4.Text != "")
+            {
+                WindowsForms_packing_line.Properties.Settings.Default.Datasize4 = int.Parse(cbDatasize4.Text);
+                WindowsForms_packing_line.Properties.Settings.Default.Save();
+            }
+        }
+        //Set Stop bits
+        private void cbStopbits1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if( cbStopbits1.Text != "")
+            {
+                WindowsForms_packing_line.Properties.Settings.Default.Stopbits1 = (StopBits)Enum.Parse(typeof(StopBits), cbStopbits1.Text);
+                WindowsForms_packing_line.Properties.Settings.Default.Save();
+            }
+        }
+        private void cbStopbits2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbStopbits2.Text != "")
+            {
+                WindowsForms_packing_line.Properties.Settings.Default.Stopbits2 = (StopBits)Enum.Parse(typeof(StopBits), cbStopbits2.Text);
+                WindowsForms_packing_line.Properties.Settings.Default.Save();
+            }
+        }
+        private void cbStopbits3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbStopbits3.Text != "")
+            {
+                WindowsForms_packing_line.Properties.Settings.Default.Stopbits3 = (StopBits)Enum.Parse(typeof(StopBits), cbStopbits3.Text);
+                WindowsForms_packing_line.Properties.Settings.Default.Save();
+            }
+        }
+        private void cbStopbits4_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbStopbits4.Text != "")
+            {
+                WindowsForms_packing_line.Properties.Settings.Default.Stopbits4 = (StopBits)Enum.Parse(typeof(StopBits), cbStopbits4.Text);
+                WindowsForms_packing_line.Properties.Settings.Default.Save();
+            }
         }
         //Button Save Ports
         private void btnSavePorts_Click(object sender, EventArgs e)
         {
+            try
+            {
+                if (cbPort1.Text != "")
+                {
+                    port1 = new SerialPort(WindowsForms_packing_line.Properties.Settings.Default.Port1, WindowsForms_packing_line.Properties.Settings.Default.Baudrate1, WindowsForms_packing_line.Properties.Settings.Default.Paritybit1, WindowsForms_packing_line.Properties.Settings.Default.Datasize1, WindowsForms_packing_line.Properties.Settings.Default.Stopbits1);
+                    port1.Open();
+                    port1.DataReceived += new SerialDataReceivedEventHandler(dataReceiver1);
+                    if (port1.IsOpen)
+                    {
+                        //set port1 Status: Online
+                        lIsPort1Open.Text = "Port1: Online";
+                        lIsPort1Open.BackColor = System.Drawing.Color.Green;
+                    }
+                }
+                if (cbPort2.Text != "")
+                {
+                    port2 = new SerialPort(WindowsForms_packing_line.Properties.Settings.Default.Port2, WindowsForms_packing_line.Properties.Settings.Default.Baudrate2, WindowsForms_packing_line.Properties.Settings.Default.Paritybit2, WindowsForms_packing_line.Properties.Settings.Default.Datasize2, WindowsForms_packing_line.Properties.Settings.Default.Stopbits2);
+                    port2.Open();
+                    port2.DataReceived += new SerialDataReceivedEventHandler(dataReceiver1);
+                    if (port2.IsOpen)
+                    {
+                        //set port1 Status: Online
+                        lIsPort2Open.Text = "Port2: Online";
+                        lIsPort2Open.BackColor = System.Drawing.Color.Green;
+                    }
+                }
+                if (cbPort3.Text != "")
+                {
+                    port3 = new SerialPort(WindowsForms_packing_line.Properties.Settings.Default.Port3, WindowsForms_packing_line.Properties.Settings.Default.Baudrate3, WindowsForms_packing_line.Properties.Settings.Default.Paritybit3, WindowsForms_packing_line.Properties.Settings.Default.Datasize3, WindowsForms_packing_line.Properties.Settings.Default.Stopbits3);
+                    port3.Open();
+                    port3.DataReceived += new SerialDataReceivedEventHandler(dataReceiver1);
+                    if (port3.IsOpen)
+                    {
+                        //set port1 Status: Online
+                        lIsPort3Open.Text = "Port3: Online";
+                        lIsPort3Open.BackColor = System.Drawing.Color.Green;
+                    }
+                }
+                if (cbPort4.Text != "")
+                {
+                    port4 = new SerialPort(WindowsForms_packing_line.Properties.Settings.Default.Port4, WindowsForms_packing_line.Properties.Settings.Default.Baudrate4, WindowsForms_packing_line.Properties.Settings.Default.Paritybit4, WindowsForms_packing_line.Properties.Settings.Default.Datasize4, WindowsForms_packing_line.Properties.Settings.Default.Stopbits4);
+                    port4.Open();
+                    port4.DataReceived += new SerialDataReceivedEventHandler(dataReceiver1);
+                    if (port4.IsOpen)
+                    {
+                        //set port1 Status: Online
+                        lIsPort4Open.Text = "Port4: Online";
+                        lIsPort4Open.BackColor = System.Drawing.Color.Green;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
         }
         //Data Receiver and Output
@@ -327,7 +555,7 @@ namespace WindowsForms_packing_line
                 isInteger = int.TryParse(tbQTY.Text, out qty);
                 if (!isInteger)
                 {
-                    MessageBox.Show("Error: K/B is empty or QTY is incorrect!");
+                    MessageBox.Show("Error: K/B is empty or QTY is incorrect!", "Checker");
                 }
             }
             catch (Exception ex)
@@ -379,10 +607,14 @@ namespace WindowsForms_packing_line
                     if (port2.IsOpen)
                     {
                         port2.Close();
+                        lIsPort2Open.Text = "Port2: Offine";
+                        lIsPort2Open.BackColor = System.Drawing.Color.Crimson;
                     }
                     else if (port2.IsOpen == false)
                     {
                         port2.Open();
+                        lIsPort2Open.Text = "Port2: Online";
+                        lIsPort2Open.BackColor = System.Drawing.Color.Green;
                     }
                 }
                 else
@@ -404,10 +636,14 @@ namespace WindowsForms_packing_line
                     if (port3.IsOpen)
                     {
                         port3.Close();
+                        lIsPort3Open.Text = "Port3: Offine";
+                        lIsPort3Open.BackColor = System.Drawing.Color.Crimson;
                     }
                     else if (port3.IsOpen == false)
                     {
                         port3.Open();
+                        lIsPort3Open.Text = "Port3: Online";
+                        lIsPort3Open.BackColor = System.Drawing.Color.Green;
                     }
                 }
                 else
@@ -429,10 +665,14 @@ namespace WindowsForms_packing_line
                     if (port4.IsOpen)
                     {
                         port4.Close();
+                        lIsPort4Open.Text = "Port4: Offine";
+                        lIsPort4Open.BackColor = System.Drawing.Color.Crimson;
                     }
                     else if (port4.IsOpen == false)
                     {
                         port4.Open();
+                        lIsPort4Open.Text = "Port4: Online";
+                        lIsPort4Open.BackColor = System.Drawing.Color.Green;
                     }
                 }
                 else
@@ -543,6 +783,7 @@ namespace WindowsForms_packing_line
                     dbconnect.Open();
                     reader = dbcommand.ExecuteReader();
                     MessageBox.Show("Insert Success", "Dababase");
+                    //clear text box
                 }
                 catch (Exception ex)
                 {
@@ -634,7 +875,6 @@ namespace WindowsForms_packing_line
                 }
             }
         }
-
         //K/B* Textbox text is changed(Search)
         private void tbKBSearch_TextChanged(object sender, EventArgs e)
         {
@@ -645,6 +885,7 @@ namespace WindowsForms_packing_line
             }
             else
             {
+                //need to create function
                 lvModelMaster.Items.Clear();
                 //Database display Search data from table
                 string TABLE = "test_model_master";
@@ -786,6 +1027,9 @@ namespace WindowsForms_packing_line
                 dbconnect.Close();
             }
         }
+
+        
+
         public void queryCarton()
         {
             string queryList = "SELECT * FROM test_model_master WHERE Kanban = '" + tbKanban.Text + "';";

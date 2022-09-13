@@ -82,5 +82,245 @@ namespace WindowsForms_packing_line.Properties {
                 this["ExportMaster"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Port1 {
+            get {
+                return ((string)(this["Port1"]));
+            }
+            set {
+                this["Port1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Port2 {
+            get {
+                return ((string)(this["Port2"]));
+            }
+            set {
+                this["Port2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Port3 {
+            get {
+                return ((string)(this["Port3"]));
+            }
+            set {
+                this["Port3"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Port4 {
+            get {
+                return ((string)(this["Port4"]));
+            }
+            set {
+                this["Port4"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Baudrate1 {
+            get {
+                return ((int)(this["Baudrate1"]));
+            }
+            set {
+                this["Baudrate1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Baudrate2 {
+            get {
+                return ((int)(this["Baudrate2"]));
+            }
+            set {
+                this["Baudrate2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Baudrate3 {
+            get {
+                return ((int)(this["Baudrate3"]));
+            }
+            set {
+                this["Baudrate3"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Baudrate4 {
+            get {
+                return ((int)(this["Baudrate4"]));
+            }
+            set {
+                this["Baudrate4"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("None")]
+        public global::System.IO.Ports.Parity Paritybit1 {
+            get {
+                return ((global::System.IO.Ports.Parity)(this["Paritybit1"]));
+            }
+            set {
+                this["Paritybit1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("None")]
+        public global::System.IO.Ports.Parity Paritybit2 {
+            get {
+                return ((global::System.IO.Ports.Parity)(this["Paritybit2"]));
+            }
+            set {
+                this["Paritybit2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("None")]
+        public global::System.IO.Ports.Parity Paritybit3 {
+            get {
+                return ((global::System.IO.Ports.Parity)(this["Paritybit3"]));
+            }
+            set {
+                this["Paritybit3"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("None")]
+        public global::System.IO.Ports.Parity Paritybit4 {
+            get {
+                return ((global::System.IO.Ports.Parity)(this["Paritybit4"]));
+            }
+            set {
+                this["Paritybit4"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("8")]
+        public int Datasize1 {
+            get {
+                return ((int)(this["Datasize1"]));
+            }
+            set {
+                this["Datasize1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("8")]
+        public int Datasize2 {
+            get {
+                return ((int)(this["Datasize2"]));
+            }
+            set {
+                this["Datasize2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("8")]
+        public int Datasize3 {
+            get {
+                return ((int)(this["Datasize3"]));
+            }
+            set {
+                this["Datasize3"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("8")]
+        public int Datasize4 {
+            get {
+                return ((int)(this["Datasize4"]));
+            }
+            set {
+                this["Datasize4"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("One")]
+        public global::System.IO.Ports.StopBits Stopbits1 {
+            get {
+                return ((global::System.IO.Ports.StopBits)(this["Stopbits1"]));
+            }
+            set {
+                this["Stopbits1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("One")]
+        public global::System.IO.Ports.StopBits Stopbits2 {
+            get {
+                return ((global::System.IO.Ports.StopBits)(this["Stopbits2"]));
+            }
+            set {
+                this["Stopbits2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("One")]
+        public global::System.IO.Ports.StopBits Stopbits3 {
+            get {
+                return ((global::System.IO.Ports.StopBits)(this["Stopbits3"]));
+            }
+            set {
+                this["Stopbits3"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("One")]
+        public global::System.IO.Ports.StopBits Stopbits4 {
+            get {
+                return ((global::System.IO.Ports.StopBits)(this["Stopbits4"]));
+            }
+            set {
+                this["Stopbits4"] = value;
+            }
+        }
     }
 }

@@ -65,6 +65,27 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.Settings = new System.Windows.Forms.TabPage();
+            this.cbPort1 = new System.Windows.Forms.ComboBox();
+            this.label26 = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
+            this.label24 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
+            this.cbStopbits4 = new System.Windows.Forms.ComboBox();
+            this.cbStopbits3 = new System.Windows.Forms.ComboBox();
+            this.cbStopbits2 = new System.Windows.Forms.ComboBox();
+            this.cbStopbits1 = new System.Windows.Forms.ComboBox();
+            this.cbDatasize4 = new System.Windows.Forms.ComboBox();
+            this.cbDatasize3 = new System.Windows.Forms.ComboBox();
+            this.cbDatasize2 = new System.Windows.Forms.ComboBox();
+            this.cbDatasize1 = new System.Windows.Forms.ComboBox();
+            this.cbParitybit4 = new System.Windows.Forms.ComboBox();
+            this.cbParitybit3 = new System.Windows.Forms.ComboBox();
+            this.cbParitybit2 = new System.Windows.Forms.ComboBox();
+            this.cbParitybit1 = new System.Windows.Forms.ComboBox();
+            this.cbBaudrate4 = new System.Windows.Forms.ComboBox();
+            this.cbBaudrate3 = new System.Windows.Forms.ComboBox();
+            this.cbBaudrate2 = new System.Windows.Forms.ComboBox();
+            this.cbBaudrate1 = new System.Windows.Forms.ComboBox();
             this.btnSavePorts = new System.Windows.Forms.Button();
             this.cbPort4 = new System.Windows.Forms.ComboBox();
             this.label19 = new System.Windows.Forms.Label();
@@ -72,7 +93,6 @@
             this.label18 = new System.Windows.Forms.Label();
             this.cbPort2 = new System.Windows.Forms.ComboBox();
             this.label17 = new System.Windows.Forms.Label();
-            this.cbPort1 = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
             this.Edit = new System.Windows.Forms.TabPage();
             this.btnDeleteMaster = new System.Windows.Forms.Button();
@@ -105,20 +125,20 @@
             this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Account = new System.Windows.Forms.TabPage();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.btnDeleteAccount = new System.Windows.Forms.Button();
+            this.btnUpdateAccount = new System.Windows.Forms.Button();
+            this.btnCreateAccount = new System.Windows.Forms.Button();
+            this.tbDBPosition = new System.Windows.Forms.TextBox();
+            this.label22 = new System.Windows.Forms.Label();
+            this.tbDBName = new System.Windows.Forms.TextBox();
+            this.label21 = new System.Windows.Forms.Label();
+            this.tbDBId = new System.Windows.Forms.TextBox();
+            this.label20 = new System.Windows.Forms.Label();
             this.lvAccount = new System.Windows.Forms.ListView();
             this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader11 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader12 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.label20 = new System.Windows.Forms.Label();
-            this.tbDBId = new System.Windows.Forms.TextBox();
-            this.label21 = new System.Windows.Forms.Label();
-            this.tbDBName = new System.Windows.Forms.TextBox();
-            this.label22 = new System.Windows.Forms.Label();
-            this.tbDBPosition = new System.Windows.Forms.TextBox();
-            this.btnCreateAccount = new System.Windows.Forms.Button();
-            this.btnUpdateAccount = new System.Windows.Forms.Button();
-            this.btnDeleteAccount = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.tabControl1.SuspendLayout();
             this.Checker.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -549,6 +569,27 @@
             // 
             // Settings
             // 
+            this.Settings.Controls.Add(this.cbPort1);
+            this.Settings.Controls.Add(this.label26);
+            this.Settings.Controls.Add(this.label25);
+            this.Settings.Controls.Add(this.label24);
+            this.Settings.Controls.Add(this.label23);
+            this.Settings.Controls.Add(this.cbStopbits4);
+            this.Settings.Controls.Add(this.cbStopbits3);
+            this.Settings.Controls.Add(this.cbStopbits2);
+            this.Settings.Controls.Add(this.cbStopbits1);
+            this.Settings.Controls.Add(this.cbDatasize4);
+            this.Settings.Controls.Add(this.cbDatasize3);
+            this.Settings.Controls.Add(this.cbDatasize2);
+            this.Settings.Controls.Add(this.cbDatasize1);
+            this.Settings.Controls.Add(this.cbParitybit4);
+            this.Settings.Controls.Add(this.cbParitybit3);
+            this.Settings.Controls.Add(this.cbParitybit2);
+            this.Settings.Controls.Add(this.cbParitybit1);
+            this.Settings.Controls.Add(this.cbBaudrate4);
+            this.Settings.Controls.Add(this.cbBaudrate3);
+            this.Settings.Controls.Add(this.cbBaudrate2);
+            this.Settings.Controls.Add(this.cbBaudrate1);
             this.Settings.Controls.Add(this.btnSavePorts);
             this.Settings.Controls.Add(this.cbPort4);
             this.Settings.Controls.Add(this.label19);
@@ -556,7 +597,6 @@
             this.Settings.Controls.Add(this.label18);
             this.Settings.Controls.Add(this.cbPort2);
             this.Settings.Controls.Add(this.label17);
-            this.Settings.Controls.Add(this.cbPort1);
             this.Settings.Controls.Add(this.label7);
             this.Settings.Location = new System.Drawing.Point(4, 33);
             this.Settings.Name = "Settings";
@@ -566,9 +606,343 @@
             this.Settings.Text = "Settings";
             this.Settings.UseVisualStyleBackColor = true;
             // 
+            // cbPort1
+            // 
+            this.cbPort1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbPort1.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbPort1.Location = new System.Drawing.Point(125, 64);
+            this.cbPort1.Name = "cbPort1";
+            this.cbPort1.Size = new System.Drawing.Size(120, 40);
+            this.cbPort1.TabIndex = 1;
+            this.cbPort1.SelectedIndexChanged += new System.EventHandler(this.cbPort1_SelectedIndexChanged);
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Font = new System.Drawing.Font("Consolas", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label26.Location = new System.Drawing.Point(742, 33);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(129, 28);
+            this.label26.TabIndex = 4;
+            this.label26.Text = "Stop Bits";
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Font = new System.Drawing.Font("Consolas", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label25.Location = new System.Drawing.Point(599, 33);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(129, 28);
+            this.label25.TabIndex = 4;
+            this.label25.Text = "Data size";
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Font = new System.Drawing.Font("Consolas", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label24.Location = new System.Drawing.Point(436, 33);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(142, 28);
+            this.label24.TabIndex = 4;
+            this.label24.Text = "Parity bit";
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Font = new System.Drawing.Font("Consolas", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label23.Location = new System.Drawing.Point(263, 33);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(129, 28);
+            this.label23.TabIndex = 4;
+            this.label23.Text = "Baud rate";
+            // 
+            // cbStopbits4
+            // 
+            this.cbStopbits4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbStopbits4.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbStopbits4.FormattingEnabled = true;
+            this.cbStopbits4.Items.AddRange(new object[] {
+            "None",
+            "One",
+            "Two",
+            "OnePointFive"});
+            this.cbStopbits4.Location = new System.Drawing.Point(747, 202);
+            this.cbStopbits4.Name = "cbStopbits4";
+            this.cbStopbits4.Size = new System.Drawing.Size(210, 40);
+            this.cbStopbits4.TabIndex = 3;
+            this.cbStopbits4.SelectedIndexChanged += new System.EventHandler(this.cbStopbits4_SelectedIndexChanged);
+            // 
+            // cbStopbits3
+            // 
+            this.cbStopbits3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbStopbits3.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbStopbits3.FormattingEnabled = true;
+            this.cbStopbits3.Items.AddRange(new object[] {
+            "None",
+            "One",
+            "Two",
+            "OnePointFive"});
+            this.cbStopbits3.Location = new System.Drawing.Point(747, 156);
+            this.cbStopbits3.Name = "cbStopbits3";
+            this.cbStopbits3.Size = new System.Drawing.Size(210, 40);
+            this.cbStopbits3.TabIndex = 3;
+            this.cbStopbits3.SelectedIndexChanged += new System.EventHandler(this.cbStopbits3_SelectedIndexChanged);
+            // 
+            // cbStopbits2
+            // 
+            this.cbStopbits2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbStopbits2.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbStopbits2.FormattingEnabled = true;
+            this.cbStopbits2.Items.AddRange(new object[] {
+            "None",
+            "One",
+            "Two",
+            "OnePointFive"});
+            this.cbStopbits2.Location = new System.Drawing.Point(747, 110);
+            this.cbStopbits2.Name = "cbStopbits2";
+            this.cbStopbits2.Size = new System.Drawing.Size(210, 40);
+            this.cbStopbits2.TabIndex = 3;
+            this.cbStopbits2.SelectedIndexChanged += new System.EventHandler(this.cbStopbits2_SelectedIndexChanged);
+            // 
+            // cbStopbits1
+            // 
+            this.cbStopbits1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbStopbits1.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbStopbits1.FormattingEnabled = true;
+            this.cbStopbits1.Items.AddRange(new object[] {
+            "None",
+            "One",
+            "Two",
+            "OnePointFive"});
+            this.cbStopbits1.Location = new System.Drawing.Point(747, 64);
+            this.cbStopbits1.Margin = new System.Windows.Forms.Padding(20, 3, 3, 3);
+            this.cbStopbits1.Name = "cbStopbits1";
+            this.cbStopbits1.Size = new System.Drawing.Size(210, 40);
+            this.cbStopbits1.TabIndex = 3;
+            this.cbStopbits1.SelectedIndexChanged += new System.EventHandler(this.cbStopbits1_SelectedIndexChanged);
+            // 
+            // cbDatasize4
+            // 
+            this.cbDatasize4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbDatasize4.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbDatasize4.FormattingEnabled = true;
+            this.cbDatasize4.Items.AddRange(new object[] {
+            "7",
+            "8"});
+            this.cbDatasize4.Location = new System.Drawing.Point(604, 202);
+            this.cbDatasize4.Name = "cbDatasize4";
+            this.cbDatasize4.Size = new System.Drawing.Size(120, 40);
+            this.cbDatasize4.TabIndex = 3;
+            this.cbDatasize4.SelectedIndexChanged += new System.EventHandler(this.cbDatasize4_SelectedIndexChanged);
+            // 
+            // cbDatasize3
+            // 
+            this.cbDatasize3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbDatasize3.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbDatasize3.FormattingEnabled = true;
+            this.cbDatasize3.Items.AddRange(new object[] {
+            "7",
+            "8"});
+            this.cbDatasize3.Location = new System.Drawing.Point(604, 156);
+            this.cbDatasize3.Name = "cbDatasize3";
+            this.cbDatasize3.Size = new System.Drawing.Size(120, 40);
+            this.cbDatasize3.TabIndex = 3;
+            this.cbDatasize3.SelectedIndexChanged += new System.EventHandler(this.cbDatasize3_SelectedIndexChanged);
+            // 
+            // cbDatasize2
+            // 
+            this.cbDatasize2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbDatasize2.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbDatasize2.FormattingEnabled = true;
+            this.cbDatasize2.Items.AddRange(new object[] {
+            "7",
+            "8"});
+            this.cbDatasize2.Location = new System.Drawing.Point(604, 110);
+            this.cbDatasize2.Name = "cbDatasize2";
+            this.cbDatasize2.Size = new System.Drawing.Size(120, 40);
+            this.cbDatasize2.TabIndex = 3;
+            this.cbDatasize2.SelectedIndexChanged += new System.EventHandler(this.cbDatasize2_SelectedIndexChanged);
+            // 
+            // cbDatasize1
+            // 
+            this.cbDatasize1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbDatasize1.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbDatasize1.FormattingEnabled = true;
+            this.cbDatasize1.Items.AddRange(new object[] {
+            "7",
+            "8"});
+            this.cbDatasize1.Location = new System.Drawing.Point(604, 64);
+            this.cbDatasize1.Margin = new System.Windows.Forms.Padding(20, 3, 3, 3);
+            this.cbDatasize1.Name = "cbDatasize1";
+            this.cbDatasize1.Size = new System.Drawing.Size(120, 40);
+            this.cbDatasize1.TabIndex = 3;
+            this.cbDatasize1.SelectedIndexChanged += new System.EventHandler(this.cbDatasize1_SelectedIndexChanged);
+            // 
+            // cbParitybit4
+            // 
+            this.cbParitybit4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbParitybit4.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbParitybit4.FormattingEnabled = true;
+            this.cbParitybit4.Items.AddRange(new object[] {
+            "None",
+            "Odd",
+            "Even",
+            "Mark",
+            "Space"});
+            this.cbParitybit4.Location = new System.Drawing.Point(441, 202);
+            this.cbParitybit4.Name = "cbParitybit4";
+            this.cbParitybit4.Size = new System.Drawing.Size(140, 40);
+            this.cbParitybit4.TabIndex = 3;
+            this.cbParitybit4.SelectedIndexChanged += new System.EventHandler(this.cbParitybit4_SelectedIndexChanged);
+            // 
+            // cbParitybit3
+            // 
+            this.cbParitybit3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbParitybit3.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbParitybit3.FormattingEnabled = true;
+            this.cbParitybit3.Items.AddRange(new object[] {
+            "None",
+            "Odd",
+            "Even",
+            "Mark",
+            "Space"});
+            this.cbParitybit3.Location = new System.Drawing.Point(441, 156);
+            this.cbParitybit3.Name = "cbParitybit3";
+            this.cbParitybit3.Size = new System.Drawing.Size(140, 40);
+            this.cbParitybit3.TabIndex = 3;
+            this.cbParitybit3.SelectedIndexChanged += new System.EventHandler(this.cbParitybit3_SelectedIndexChanged);
+            // 
+            // cbParitybit2
+            // 
+            this.cbParitybit2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbParitybit2.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbParitybit2.FormattingEnabled = true;
+            this.cbParitybit2.Items.AddRange(new object[] {
+            "None",
+            "Odd",
+            "Even",
+            "Mark",
+            "Space"});
+            this.cbParitybit2.Location = new System.Drawing.Point(441, 110);
+            this.cbParitybit2.Name = "cbParitybit2";
+            this.cbParitybit2.Size = new System.Drawing.Size(140, 40);
+            this.cbParitybit2.TabIndex = 3;
+            this.cbParitybit2.SelectedIndexChanged += new System.EventHandler(this.cbParitybit2_SelectedIndexChanged);
+            // 
+            // cbParitybit1
+            // 
+            this.cbParitybit1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbParitybit1.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbParitybit1.FormattingEnabled = true;
+            this.cbParitybit1.Items.AddRange(new object[] {
+            "None",
+            "Odd",
+            "Even",
+            "Mark",
+            "Space"});
+            this.cbParitybit1.Location = new System.Drawing.Point(441, 64);
+            this.cbParitybit1.Margin = new System.Windows.Forms.Padding(20, 3, 3, 3);
+            this.cbParitybit1.Name = "cbParitybit1";
+            this.cbParitybit1.Size = new System.Drawing.Size(140, 40);
+            this.cbParitybit1.TabIndex = 3;
+            this.cbParitybit1.SelectedIndexChanged += new System.EventHandler(this.cbParitybit1_SelectedIndexChanged);
+            // 
+            // cbBaudrate4
+            // 
+            this.cbBaudrate4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbBaudrate4.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbBaudrate4.FormattingEnabled = true;
+            this.cbBaudrate4.Items.AddRange(new object[] {
+            "9600",
+            "14400",
+            "19200",
+            "31250",
+            "38400",
+            "56000",
+            "57600",
+            "115200",
+            "128000",
+            "230400",
+            "256000"});
+            this.cbBaudrate4.Location = new System.Drawing.Point(268, 202);
+            this.cbBaudrate4.Name = "cbBaudrate4";
+            this.cbBaudrate4.Size = new System.Drawing.Size(150, 40);
+            this.cbBaudrate4.TabIndex = 3;
+            this.cbBaudrate4.SelectedIndexChanged += new System.EventHandler(this.cbBaudrate4_SelectedIndexChanged);
+            // 
+            // cbBaudrate3
+            // 
+            this.cbBaudrate3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbBaudrate3.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbBaudrate3.FormattingEnabled = true;
+            this.cbBaudrate3.Items.AddRange(new object[] {
+            "9600",
+            "14400",
+            "19200",
+            "31250",
+            "38400",
+            "56000",
+            "57600",
+            "115200",
+            "128000",
+            "230400",
+            "256000"});
+            this.cbBaudrate3.Location = new System.Drawing.Point(268, 156);
+            this.cbBaudrate3.Name = "cbBaudrate3";
+            this.cbBaudrate3.Size = new System.Drawing.Size(150, 40);
+            this.cbBaudrate3.TabIndex = 3;
+            this.cbBaudrate3.SelectedIndexChanged += new System.EventHandler(this.cbBaudrate3_SelectedIndexChanged);
+            // 
+            // cbBaudrate2
+            // 
+            this.cbBaudrate2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbBaudrate2.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbBaudrate2.FormattingEnabled = true;
+            this.cbBaudrate2.Items.AddRange(new object[] {
+            "9600",
+            "14400",
+            "19200",
+            "31250",
+            "38400",
+            "56000",
+            "57600",
+            "115200",
+            "128000",
+            "230400",
+            "256000"});
+            this.cbBaudrate2.Location = new System.Drawing.Point(268, 110);
+            this.cbBaudrate2.Name = "cbBaudrate2";
+            this.cbBaudrate2.Size = new System.Drawing.Size(150, 40);
+            this.cbBaudrate2.TabIndex = 3;
+            this.cbBaudrate2.SelectedIndexChanged += new System.EventHandler(this.cbBaudrate2_SelectedIndexChanged);
+            // 
+            // cbBaudrate1
+            // 
+            this.cbBaudrate1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbBaudrate1.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbBaudrate1.FormattingEnabled = true;
+            this.cbBaudrate1.Items.AddRange(new object[] {
+            "9600",
+            "14400",
+            "19200",
+            "31250",
+            "38400",
+            "56000",
+            "57600",
+            "115200",
+            "128000",
+            "230400",
+            "256000"});
+            this.cbBaudrate1.Location = new System.Drawing.Point(268, 64);
+            this.cbBaudrate1.Margin = new System.Windows.Forms.Padding(20, 3, 3, 3);
+            this.cbBaudrate1.Name = "cbBaudrate1";
+            this.cbBaudrate1.Size = new System.Drawing.Size(150, 40);
+            this.cbBaudrate1.TabIndex = 3;
+            this.cbBaudrate1.SelectedIndexChanged += new System.EventHandler(this.cbBaudrate1_SelectedIndexChanged);
+            // 
             // btnSavePorts
             // 
-            this.btnSavePorts.Location = new System.Drawing.Point(176, 185);
+            this.btnSavePorts.Location = new System.Drawing.Point(836, 248);
             this.btnSavePorts.Name = "btnSavePorts";
             this.btnSavePorts.Size = new System.Drawing.Size(121, 44);
             this.btnSavePorts.TabIndex = 2;
@@ -579,75 +953,73 @@
             // cbPort4
             // 
             this.cbPort4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbPort4.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbPort4.FormattingEnabled = true;
-            this.cbPort4.Location = new System.Drawing.Point(103, 147);
+            this.cbPort4.Location = new System.Drawing.Point(125, 202);
             this.cbPort4.Name = "cbPort4";
-            this.cbPort4.Size = new System.Drawing.Size(194, 32);
+            this.cbPort4.Size = new System.Drawing.Size(120, 40);
             this.cbPort4.TabIndex = 1;
             this.cbPort4.SelectedIndexChanged += new System.EventHandler(this.cbPort4_SelectedIndexChanged);
             // 
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(15, 150);
+            this.label19.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label19.Location = new System.Drawing.Point(15, 205);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(82, 24);
+            this.label19.Size = new System.Drawing.Size(104, 32);
             this.label19.TabIndex = 0;
             this.label19.Text = "Port4:";
             // 
             // cbPort3
             // 
             this.cbPort3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbPort3.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbPort3.FormattingEnabled = true;
-            this.cbPort3.Location = new System.Drawing.Point(103, 109);
+            this.cbPort3.Location = new System.Drawing.Point(125, 156);
             this.cbPort3.Name = "cbPort3";
-            this.cbPort3.Size = new System.Drawing.Size(194, 32);
+            this.cbPort3.Size = new System.Drawing.Size(120, 40);
             this.cbPort3.TabIndex = 1;
             this.cbPort3.SelectedIndexChanged += new System.EventHandler(this.cbPort3_SelectedIndexChanged);
             // 
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(15, 112);
+            this.label18.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label18.Location = new System.Drawing.Point(15, 159);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(82, 24);
+            this.label18.Size = new System.Drawing.Size(104, 32);
             this.label18.TabIndex = 0;
             this.label18.Text = "Port3:";
             // 
             // cbPort2
             // 
             this.cbPort2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbPort2.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbPort2.FormattingEnabled = true;
-            this.cbPort2.Location = new System.Drawing.Point(103, 71);
+            this.cbPort2.Location = new System.Drawing.Point(125, 110);
             this.cbPort2.Name = "cbPort2";
-            this.cbPort2.Size = new System.Drawing.Size(194, 32);
+            this.cbPort2.Size = new System.Drawing.Size(120, 40);
             this.cbPort2.TabIndex = 1;
             this.cbPort2.SelectedIndexChanged += new System.EventHandler(this.cbPort2_SelectedIndexChanged);
             // 
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(15, 74);
+            this.label17.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label17.Location = new System.Drawing.Point(15, 113);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(82, 24);
+            this.label17.Size = new System.Drawing.Size(104, 32);
             this.label17.TabIndex = 0;
             this.label17.Text = "Port2:";
-            // 
-            // cbPort1
-            // 
-            this.cbPort1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbPort1.Location = new System.Drawing.Point(103, 33);
-            this.cbPort1.Name = "cbPort1";
-            this.cbPort1.Size = new System.Drawing.Size(194, 32);
-            this.cbPort1.TabIndex = 1;
-            this.cbPort1.SelectedIndexChanged += new System.EventHandler(this.cbPort1_SelectedIndexChanged);
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(15, 33);
+            this.label7.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(15, 67);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(82, 24);
+            this.label7.Size = new System.Drawing.Size(104, 32);
             this.label7.TabIndex = 0;
             this.label7.Text = "Port1:";
             // 
@@ -953,18 +1325,92 @@
             this.Account.Text = "Edit Account";
             this.Account.UseVisualStyleBackColor = true;
             // 
-            // panel1
+            // btnDeleteAccount
             // 
-            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(33)))), ((int)(((byte)(62)))));
-            this.panel1.Controls.Add(this.label3);
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.Controls.Add(this.label2);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Font = new System.Drawing.Font("Consolas", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1008, 86);
-            this.panel1.TabIndex = 4;
+            this.btnDeleteAccount.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDeleteAccount.Location = new System.Drawing.Point(384, 463);
+            this.btnDeleteAccount.Name = "btnDeleteAccount";
+            this.btnDeleteAccount.Size = new System.Drawing.Size(120, 39);
+            this.btnDeleteAccount.TabIndex = 9;
+            this.btnDeleteAccount.Text = "Delete";
+            this.btnDeleteAccount.UseVisualStyleBackColor = true;
+            // 
+            // btnUpdateAccount
+            // 
+            this.btnUpdateAccount.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnUpdateAccount.Location = new System.Drawing.Point(384, 418);
+            this.btnUpdateAccount.Name = "btnUpdateAccount";
+            this.btnUpdateAccount.Size = new System.Drawing.Size(120, 39);
+            this.btnUpdateAccount.TabIndex = 8;
+            this.btnUpdateAccount.Text = "Update";
+            this.btnUpdateAccount.UseVisualStyleBackColor = true;
+            // 
+            // btnCreateAccount
+            // 
+            this.btnCreateAccount.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCreateAccount.Location = new System.Drawing.Point(384, 369);
+            this.btnCreateAccount.Name = "btnCreateAccount";
+            this.btnCreateAccount.Size = new System.Drawing.Size(120, 39);
+            this.btnCreateAccount.TabIndex = 7;
+            this.btnCreateAccount.Text = "Create";
+            this.btnCreateAccount.UseVisualStyleBackColor = true;
+            this.btnCreateAccount.Click += new System.EventHandler(this.btnCreateAccount_Click);
+            // 
+            // tbDBPosition
+            // 
+            this.tbDBPosition.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbDBPosition.Location = new System.Drawing.Point(172, 463);
+            this.tbDBPosition.Name = "tbDBPosition";
+            this.tbDBPosition.Size = new System.Drawing.Size(200, 39);
+            this.tbDBPosition.TabIndex = 6;
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label22.Location = new System.Drawing.Point(17, 466);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(149, 32);
+            this.label22.TabIndex = 5;
+            this.label22.Text = "Position:";
+            // 
+            // tbDBName
+            // 
+            this.tbDBName.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbDBName.Location = new System.Drawing.Point(172, 416);
+            this.tbDBName.Name = "tbDBName";
+            this.tbDBName.Size = new System.Drawing.Size(200, 39);
+            this.tbDBName.TabIndex = 4;
+            this.tbDBName.TextChanged += new System.EventHandler(this.tbDBName_TextChanged);
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label21.Location = new System.Drawing.Point(17, 419);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(89, 32);
+            this.label21.TabIndex = 3;
+            this.label21.Text = "Name:";
+            // 
+            // tbDBId
+            // 
+            this.tbDBId.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbDBId.Location = new System.Drawing.Point(172, 369);
+            this.tbDBId.Name = "tbDBId";
+            this.tbDBId.Size = new System.Drawing.Size(200, 39);
+            this.tbDBId.TabIndex = 2;
+            this.tbDBId.TextChanged += new System.EventHandler(this.tbDBId_TextChanged);
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label20.Location = new System.Drawing.Point(17, 372);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(59, 32);
+            this.label20.TabIndex = 1;
+            this.label20.Text = "ID:";
             // 
             // lvAccount
             // 
@@ -998,92 +1444,18 @@
             this.columnHeader12.Text = "Position";
             this.columnHeader12.Width = 162;
             // 
-            // label20
+            // panel1
             // 
-            this.label20.AutoSize = true;
-            this.label20.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label20.Location = new System.Drawing.Point(17, 372);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(59, 32);
-            this.label20.TabIndex = 1;
-            this.label20.Text = "ID:";
-            // 
-            // tbDBId
-            // 
-            this.tbDBId.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbDBId.Location = new System.Drawing.Point(172, 369);
-            this.tbDBId.Name = "tbDBId";
-            this.tbDBId.Size = new System.Drawing.Size(200, 39);
-            this.tbDBId.TabIndex = 2;
-            this.tbDBId.TextChanged += new System.EventHandler(this.tbDBId_TextChanged);
-            // 
-            // label21
-            // 
-            this.label21.AutoSize = true;
-            this.label21.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label21.Location = new System.Drawing.Point(17, 419);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(89, 32);
-            this.label21.TabIndex = 3;
-            this.label21.Text = "Name:";
-            // 
-            // tbDBName
-            // 
-            this.tbDBName.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbDBName.Location = new System.Drawing.Point(172, 416);
-            this.tbDBName.Name = "tbDBName";
-            this.tbDBName.Size = new System.Drawing.Size(200, 39);
-            this.tbDBName.TabIndex = 4;
-            this.tbDBName.TextChanged += new System.EventHandler(this.tbDBName_TextChanged);
-            // 
-            // label22
-            // 
-            this.label22.AutoSize = true;
-            this.label22.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label22.Location = new System.Drawing.Point(17, 466);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(149, 32);
-            this.label22.TabIndex = 5;
-            this.label22.Text = "Position:";
-            // 
-            // tbDBPosition
-            // 
-            this.tbDBPosition.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbDBPosition.Location = new System.Drawing.Point(172, 463);
-            this.tbDBPosition.Name = "tbDBPosition";
-            this.tbDBPosition.Size = new System.Drawing.Size(200, 39);
-            this.tbDBPosition.TabIndex = 6;
-            // 
-            // btnCreateAccount
-            // 
-            this.btnCreateAccount.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCreateAccount.Location = new System.Drawing.Point(384, 369);
-            this.btnCreateAccount.Name = "btnCreateAccount";
-            this.btnCreateAccount.Size = new System.Drawing.Size(120, 39);
-            this.btnCreateAccount.TabIndex = 7;
-            this.btnCreateAccount.Text = "Create";
-            this.btnCreateAccount.UseVisualStyleBackColor = true;
-            this.btnCreateAccount.Click += new System.EventHandler(this.btnCreateAccount_Click);
-            // 
-            // btnUpdateAccount
-            // 
-            this.btnUpdateAccount.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnUpdateAccount.Location = new System.Drawing.Point(384, 418);
-            this.btnUpdateAccount.Name = "btnUpdateAccount";
-            this.btnUpdateAccount.Size = new System.Drawing.Size(120, 39);
-            this.btnUpdateAccount.TabIndex = 8;
-            this.btnUpdateAccount.Text = "Update";
-            this.btnUpdateAccount.UseVisualStyleBackColor = true;
-            // 
-            // btnDeleteAccount
-            // 
-            this.btnDeleteAccount.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDeleteAccount.Location = new System.Drawing.Point(384, 463);
-            this.btnDeleteAccount.Name = "btnDeleteAccount";
-            this.btnDeleteAccount.Size = new System.Drawing.Size(120, 39);
-            this.btnDeleteAccount.TabIndex = 9;
-            this.btnDeleteAccount.Text = "Delete";
-            this.btnDeleteAccount.UseVisualStyleBackColor = true;
+            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(33)))), ((int)(((byte)(62)))));
+            this.panel1.Controls.Add(this.label3);
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.label2);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Font = new System.Drawing.Font("Consolas", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(1008, 86);
+            this.panel1.TabIndex = 4;
             // 
             // Form1
             // 
@@ -1211,6 +1583,26 @@
         private System.Windows.Forms.ColumnHeader columnHeader10;
         private System.Windows.Forms.ColumnHeader columnHeader11;
         private System.Windows.Forms.ColumnHeader columnHeader12;
+        private System.Windows.Forms.ComboBox cbBaudrate2;
+        private System.Windows.Forms.ComboBox cbBaudrate1;
+        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.ComboBox cbStopbits4;
+        private System.Windows.Forms.ComboBox cbStopbits3;
+        private System.Windows.Forms.ComboBox cbStopbits2;
+        private System.Windows.Forms.ComboBox cbStopbits1;
+        private System.Windows.Forms.ComboBox cbDatasize4;
+        private System.Windows.Forms.ComboBox cbDatasize3;
+        private System.Windows.Forms.ComboBox cbDatasize2;
+        private System.Windows.Forms.ComboBox cbDatasize1;
+        private System.Windows.Forms.ComboBox cbParitybit4;
+        private System.Windows.Forms.ComboBox cbParitybit3;
+        private System.Windows.Forms.ComboBox cbParitybit2;
+        private System.Windows.Forms.ComboBox cbParitybit1;
+        private System.Windows.Forms.ComboBox cbBaudrate4;
+        private System.Windows.Forms.ComboBox cbBaudrate3;
     }
 }
 
