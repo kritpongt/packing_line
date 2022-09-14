@@ -18,6 +18,7 @@ using System.Windows.Documents;
 using Org.BouncyCastle.Utilities.Collections;
 using System.Security.Cryptography;
 using System.Data.Common;
+using System.Diagnostics.Eventing.Reader;
 
 namespace WindowsForms_packing_line
 {
@@ -36,6 +37,9 @@ namespace WindowsForms_packing_line
         string carton_master;   //No. carton master
         string export_master;   //No. export master
         string selected_kanban_id = ""; //temp_str kanban for update database
+        string selected_account_tagpass = ""; //temp_str account for update database
+        string port1_str, port2_str, port3_str, port4_str;
+
         public Form1()
         {
             InitializeComponent();
@@ -43,6 +47,7 @@ namespace WindowsForms_packing_line
             //this.FormBorderStyle = FormBorderStyle.None;
             refreshListViewMaster();
             refreshListViewAccount();
+            initialPorts();
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -53,118 +58,108 @@ namespace WindowsForms_packing_line
             cbPort3.Items.AddRange(getPorts);
             cbPort4.Items.AddRange(getPorts);
         }
+        //Login
+        private void btnLogin_Click(object sender, EventArgs e)
+        {
+            string TABLE = "test_account";
+            string queryList = "SELECT * FROM " + TABLE + " WHERE Tagpass = '" + tbLogin.Text + "';";
+            MySqlConnection dbconnect = new MySqlConnection(connectStr);
+            MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
+            MySqlDataReader reader;
+            dbcommand.CommandTimeout = 100;
+            try
+            {
+                dbconnect.Open();
+                reader = dbcommand.ExecuteReader();
+                while (reader.Read())
+                {
+                    lOperatorID.Text = "Operator ID: " + reader.GetString("OperatorID");
+                    lOperatorName.Text = "Operator Name: " + reader.GetString("Name") + " " + reader.GetString("Surname");
+                    lPosition.Text = "Position: " + reader.GetString("Position");
+                    pLogin.Hide();
+                    roleChecker(reader.GetString("Position"));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                dbconnect.Close();
+            }
+        }
+        private void pIcon_Click(object sender, EventArgs e)
+        {
+            if (this.FormBorderStyle == FormBorderStyle.Sizable)
+            {
+                this.FormBorderStyle = FormBorderStyle.None;
+            }
+            else
+            {
+                this.FormBorderStyle = FormBorderStyle.Sizable;
+            }
+        }
         //IF ports are selected then settings
         private void cbPort1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cbPort1.Text!=cbPort2.Text && cbPort1.Text!=cbPort3.Text && cbPort1.Text!=cbPort4.Text)
+            if (cbPort1.Text == cbPort2.Text)
             {
-                WindowsForms_packing_line.Properties.Settings.Default.Port1 = cbPort1.Text;
-                WindowsForms_packing_line.Properties.Settings.Default.Save();
+                cbPort2.SelectedIndex = -1;
             }
-            else
+            else if (cbPort1.Text == cbPort3.Text)
             {
-                MessageBox.Show("Error: the port already existing", "Port Setting");
+                cbPort3.SelectedIndex = -1;
             }
-            //try
-            //{
-            //    port1 = new SerialPort(cbPort1.Text, 115200, System.IO.Ports.Parity.None, 8, System.IO.Ports.StopBits.One);
-            //    port1.Open();
-            //    port1.DataReceived += new SerialDataReceivedEventHandler(dataReceiver1);
-            //    if (port1.IsOpen)
-            //    {
-            //        //set port1 Status: Online
-            //        lIsPort1Open.Text = "Port1: Online";
-            //        lIsPort1Open.BackColor = System.Drawing.Color.Green;
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //}
+            else if (cbPort1.Text == cbPort4.Text)
+            {
+                cbPort4.SelectedIndex = -1;
+            }
         }
         private void cbPort2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cbPort2.Text != cbPort1.Text && cbPort2.Text != cbPort3.Text && cbPort2.Text != cbPort4.Text)
+            if (cbPort2.Text == cbPort1.Text)
             {
-                WindowsForms_packing_line.Properties.Settings.Default.Port2 = cbPort2.Text;
-                WindowsForms_packing_line.Properties.Settings.Default.Save();
+                cbPort1.SelectedIndex = -1;
             }
-            else
+            else if (cbPort2.Text == cbPort3.Text)
             {
-                MessageBox.Show("Error: the port already existing", "Port Setting");
+                cbPort3.SelectedIndex = -1;
             }
-            //port2 = new SerialPort(cbPort2.Text, 115200, System.IO.Ports.Parity.None, 8, System.IO.Ports.StopBits.One);
-            //try
-            //{
-            //    port2.Open();
-            //    port2.DataReceived += new SerialDataReceivedEventHandler(dataReceiver2);
-            //    if (port2.IsOpen)
-            //    {
-            //        //set port2 Status: Online
-            //        lIsPort2Open.Text = "Port2: Online";
-            //        lIsPort2Open.BackColor = System.Drawing.Color.Green;
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //}
+            else if (cbPort2.Text == cbPort4.Text)
+            {
+                cbPort4.SelectedIndex = -1;
+            }
         }
         private void cbPort3_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cbPort3.Text != cbPort1.Text && cbPort3.Text != cbPort2.Text && cbPort3.Text != cbPort4.Text)
+            if (cbPort3.Text == cbPort1.Text)
             {
-                WindowsForms_packing_line.Properties.Settings.Default.Port3 = cbPort3.Text;
-                WindowsForms_packing_line.Properties.Settings.Default.Save();
+                cbPort1.SelectedIndex = -1;
             }
-            else
+            else if (cbPort3.Text == cbPort2.Text)
             {
-                MessageBox.Show("Error: the port already existing", "Port Setting");
+                cbPort2.SelectedIndex = -1;
             }
-            //port3 = new SerialPort(cbPort3.Text, 115200, System.IO.Ports.Parity.None, 8, System.IO.Ports.StopBits.One);
-            //try
-            //{
-            //    port3.Open();
-            //    port3.DataReceived += new SerialDataReceivedEventHandler(dataReceiver3);
-            //    if (port3.IsOpen)
-            //    {
-            //        //set port3 Status: Online
-            //        lIsPort3Open.Text = "Port3: Online";
-            //        lIsPort3Open.BackColor = System.Drawing.Color.Green;
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //}
+            else if (cbPort3.Text == cbPort4.Text)
+            {
+                cbPort4.SelectedIndex = -1;
+            }
         }
         private void cbPort4_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cbPort4.Text != cbPort1.Text && cbPort4.Text != cbPort2.Text && cbPort4.Text != cbPort3.Text)
+            if (cbPort4.Text == cbPort1.Text)
             {
-                WindowsForms_packing_line.Properties.Settings.Default.Port4 = cbPort4.Text;
-                WindowsForms_packing_line.Properties.Settings.Default.Save();
+                cbPort1.SelectedIndex = -1;
             }
-            else
+            else if (cbPort4.Text == cbPort2.Text)
             {
-                MessageBox.Show("Error: the port already existing", "Port Setting");
+                cbPort2.SelectedIndex = -1;
             }
-            //port4 = new SerialPort(cbPort4.Text, 115200, System.IO.Ports.Parity.None, 8, System.IO.Ports.StopBits.One);
-            //try
-            //{
-            //    port4.Open();
-            //    port4.DataReceived += new SerialDataReceivedEventHandler(dataReceiver4);
-            //    if (port4.IsOpen)
-            //    {
-            //        //set port4 Status: Online
-            //        lIsPort4Open.Text = "Port4: Online";
-            //        lIsPort4Open.BackColor = System.Drawing.Color.Green;
-            //    }
-            //}
-            //catch (Exception ex) 
-            //{
-            //    MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //}
+            else if (cbPort4.Text == cbPort3.Text)
+            {
+                cbPort3.SelectedIndex = -1;
+            }
         }
         //Set Baud rate
         private void cbBaudrate1_SelectedIndexChanged(object sender, EventArgs e)
@@ -301,62 +296,17 @@ namespace WindowsForms_packing_line
         //Button Save Ports
         private void btnSavePorts_Click(object sender, EventArgs e)
         {
-            try
-            {
-                if (cbPort1.Text != "")
-                {
-                    port1 = new SerialPort(WindowsForms_packing_line.Properties.Settings.Default.Port1, WindowsForms_packing_line.Properties.Settings.Default.Baudrate1, WindowsForms_packing_line.Properties.Settings.Default.Paritybit1, WindowsForms_packing_line.Properties.Settings.Default.Datasize1, WindowsForms_packing_line.Properties.Settings.Default.Stopbits1);
-                    port1.Open();
-                    port1.DataReceived += new SerialDataReceivedEventHandler(dataReceiver1);
-                    if (port1.IsOpen)
-                    {
-                        //set port1 Status: Online
-                        lIsPort1Open.Text = "Port1: Online";
-                        lIsPort1Open.BackColor = System.Drawing.Color.Green;
-                    }
-                }
-                if (cbPort2.Text != "")
-                {
-                    port2 = new SerialPort(WindowsForms_packing_line.Properties.Settings.Default.Port2, WindowsForms_packing_line.Properties.Settings.Default.Baudrate2, WindowsForms_packing_line.Properties.Settings.Default.Paritybit2, WindowsForms_packing_line.Properties.Settings.Default.Datasize2, WindowsForms_packing_line.Properties.Settings.Default.Stopbits2);
-                    port2.Open();
-                    port2.DataReceived += new SerialDataReceivedEventHandler(dataReceiver1);
-                    if (port2.IsOpen)
-                    {
-                        //set port1 Status: Online
-                        lIsPort2Open.Text = "Port2: Online";
-                        lIsPort2Open.BackColor = System.Drawing.Color.Green;
-                    }
-                }
-                if (cbPort3.Text != "")
-                {
-                    port3 = new SerialPort(WindowsForms_packing_line.Properties.Settings.Default.Port3, WindowsForms_packing_line.Properties.Settings.Default.Baudrate3, WindowsForms_packing_line.Properties.Settings.Default.Paritybit3, WindowsForms_packing_line.Properties.Settings.Default.Datasize3, WindowsForms_packing_line.Properties.Settings.Default.Stopbits3);
-                    port3.Open();
-                    port3.DataReceived += new SerialDataReceivedEventHandler(dataReceiver1);
-                    if (port3.IsOpen)
-                    {
-                        //set port1 Status: Online
-                        lIsPort3Open.Text = "Port3: Online";
-                        lIsPort3Open.BackColor = System.Drawing.Color.Green;
-                    }
-                }
-                if (cbPort4.Text != "")
-                {
-                    port4 = new SerialPort(WindowsForms_packing_line.Properties.Settings.Default.Port4, WindowsForms_packing_line.Properties.Settings.Default.Baudrate4, WindowsForms_packing_line.Properties.Settings.Default.Paritybit4, WindowsForms_packing_line.Properties.Settings.Default.Datasize4, WindowsForms_packing_line.Properties.Settings.Default.Stopbits4);
-                    port4.Open();
-                    port4.DataReceived += new SerialDataReceivedEventHandler(dataReceiver1);
-                    if (port4.IsOpen)
-                    {
-                        //set port1 Status: Online
-                        lIsPort4Open.Text = "Port4: Online";
-                        lIsPort4Open.BackColor = System.Drawing.Color.Green;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
+            WindowsForms_packing_line.Properties.Settings.Default.Port1 = "";
+            WindowsForms_packing_line.Properties.Settings.Default.Port2 = "";
+            WindowsForms_packing_line.Properties.Settings.Default.Port3 = "";
+            WindowsForms_packing_line.Properties.Settings.Default.Port4 = "";
+            WindowsForms_packing_line.Properties.Settings.Default.Port1 = cbPort1.Text;
+            WindowsForms_packing_line.Properties.Settings.Default.Port2 = cbPort2.Text;
+            WindowsForms_packing_line.Properties.Settings.Default.Port3 = cbPort3.Text;
+            WindowsForms_packing_line.Properties.Settings.Default.Port4 = cbPort4.Text;
+            WindowsForms_packing_line.Properties.Settings.Default.Save();
+            portsCloser();
+            portsOpener();
         }
         //Data Receiver and Output
         private void dataReceiver1(object sender, SerialDataReceivedEventArgs e)    //Receiver Inner Box A
@@ -408,7 +358,7 @@ namespace WindowsForms_packing_line
                 string input_value = port2.ReadExisting();
                 Thread.Sleep(60);
                 Invoke((MethodInvoker)delegate { tbInnerBoxB.Text = input_value; });
-                inner_b_master = WindowsForms_packing_line.Properties.Settings.Default.InnerAMaster;
+                inner_b_master = WindowsForms_packing_line.Properties.Settings.Default.InnerBMaster;
                 if (input_value.Equals(inner_b_master))
                 {
                     //Log
@@ -525,48 +475,6 @@ namespace WindowsForms_packing_line
             {
                 MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-        //Decrease a counter -1 at a time
-        private void btnDecreaseInnerA_Click(object sender, EventArgs e)
-        {
-            if (inner_count>0)
-            {
-                inner_count--;
-                lbLog.ForeColor = Color.Red;
-                Invoke((MethodInvoker)delegate { lbLog.Items.Add("Delete 1 Item!\t\tInner Box A"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
-            }
-        }
-        private void btnDecreaseInnerB_Click(object sender, EventArgs e)
-        {
-            if (inner_count > 0)
-            {
-                inner_count--;
-                lbLog.ForeColor= Color.Red;
-                Invoke((MethodInvoker)delegate { lbLog.Items.Add("Delete 1 Item!\t\tInner Box B"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
-            }
-        }
-        //Start Button
-        private void btnStart_Click(object sender, EventArgs e)
-        {
-            //input qty(Integer)
-            bool isInteger = false;
-            try
-            {
-                isInteger = int.TryParse(tbQTY.Text, out qty);
-                if (!isInteger)
-                {
-                    MessageBox.Show("Error: K/B is empty or QTY is incorrect!", "Checker");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            queryQTY(); //Display
-            queryInnerA();
-            queryInnerB();
-            queryCarton();
-            queryExport();
         }
         //Close and Open port 1-4
         private void lIsPort1Open_Click(object sender, EventArgs e)
@@ -685,6 +593,48 @@ namespace WindowsForms_packing_line
                 MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        //Start Button
+        private void btnStart_Click(object sender, EventArgs e)
+        {
+            //input qty(Integer)
+            bool isInteger = false;
+            try
+            {
+                isInteger = int.TryParse(tbQTY.Text, out qty);
+                if (!isInteger)
+                {
+                    MessageBox.Show("Error: K/B is empty or QTY is incorrect!", "Checker");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            queryQTY(); //Display
+            queryInnerA();
+            queryInnerB();
+            queryCarton();
+            queryExport();
+        }
+        //Decrease a counter -1 at a time
+        private void btnDecreaseInnerA_Click(object sender, EventArgs e)
+        {
+            if (inner_count>0)
+            {
+                inner_count--;
+                lbLog.ForeColor = Color.Red;
+                Invoke((MethodInvoker)delegate { lbLog.Items.Add("Delete 1 Item!\t\tInner Box A"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
+            }
+        }
+        private void btnDecreaseInnerB_Click(object sender, EventArgs e)
+        {
+            if (inner_count > 0)
+            {
+                inner_count--;
+                lbLog.ForeColor= Color.Red;
+                Invoke((MethodInvoker)delegate { lbLog.Items.Add("Delete 1 Item!\t\tInner Box B"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
+            }
+        }
         //Create kanban button
         private void btnCreateMaster_Click(object sender, EventArgs e)
         {
@@ -703,7 +653,7 @@ namespace WindowsForms_packing_line
                     dbconnect.Open();
                     reader = dbcommand.ExecuteReader();
                     MessageBox.Show("Insert Success", "Dababase");
-                    tbEditClear();
+                    tbEditMasterClear();
                 }
                 catch (Exception ex)
                 {
@@ -736,7 +686,7 @@ namespace WindowsForms_packing_line
         //Delete kanban button
         private void btnDeleteMaster_Click(object sender, EventArgs e)
         {
-            DialogResult dialog_result = MessageBox.Show("Update databasse", "Database", MessageBoxButtons.YesNo);
+            DialogResult dialog_result = MessageBox.Show("Delete databasse", "Database", MessageBoxButtons.YesNo);
             if (dialog_result == DialogResult.Yes)
             {
                 if (selected_kanban_id == "")
@@ -746,7 +696,7 @@ namespace WindowsForms_packing_line
                 else
                 {
                     dbDelete("DELETE FROM `test_model_master` WHERE ID = '" + selected_kanban_id + "';");
-                    tbEditClear();
+                    tbEditMasterClear();
                 }
             }
         }
@@ -765,48 +715,76 @@ namespace WindowsForms_packing_line
             tbDBInnerMax.Text = selected_item.SubItems[7].Text;
             tbDBCartonMax.Text = selected_item.SubItems[8].Text;
         }
-        //Create Account button
+        private void lvAccount_Click(object sender, EventArgs e)
+        {
+            var selected_item = lvAccount.SelectedItems[0];
+            selected_account_tagpass = selected_item.SubItems[0].Text;
+
+            tbDBTagpass.Text = selected_item.SubItems[0].Text;
+            tbDBOperatorID.Text = selected_item.SubItems[1].Text;
+            tbDBName.Text = selected_item.SubItems[2].Text;
+            tbDBSurname.Text = selected_item.SubItems[3].Text;
+            tbDBPosition.Text = selected_item.SubItems[4].Text;
+        }
+        //Edit Account button
         private void btnCreateAccount_Click(object sender, EventArgs e)
         {
-            DialogResult dialog_result = MessageBox.Show("Are you sure to insert new Account?", "Database", MessageBoxButtons.YesNo);
+            if(tbDBTagpass.Text != "")
+            {
+                DialogResult dialog_result = MessageBox.Show("Are you sure to insert new Account?", "Database", MessageBoxButtons.YesNo);
+                if (dialog_result == DialogResult.Yes)
+                {
+                    dbCreate("INSERT INTO test_account (Tagpass, OperatorID, Name, Surname, Position) VALUES('" + tbDBTagpass.Text + "', '" + tbDBOperatorID.Text + "', '" + tbDBName.Text + "', '" + tbDBSurname.Text + "', '" + tbDBPosition.Text + "');");
+                    tbEditAccountClear();
+                }
+            }
+        }
+        private void btnUpdateAccount_Click(object sender, EventArgs e)
+        {
+            DialogResult dialog_result = MessageBox.Show("Update databasse", "Database", MessageBoxButtons.YesNo);
             if (dialog_result == DialogResult.Yes)
             {
-                string TABLE = "test_account";
-                string INSERT_STR = " (ID, Name, Position) VALUES('" + tbDBId.Text + "', '" + tbDBName.Text + "', '" + tbDBPosition.Text + "');";
-                string queryList = "INSERT INTO " + TABLE + INSERT_STR;
-                MySqlConnection dbconnect = new MySqlConnection(connectStr);
-                MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
-                MySqlDataReader reader;
-                dbcommand.CommandTimeout = 60;
-                try
+                if (selected_account_tagpass == "")
                 {
-                    dbconnect.Open();
-                    reader = dbcommand.ExecuteReader();
-                    MessageBox.Show("Insert Success", "Dababase");
-                    //clear text box
+                    MessageBox.Show("Error: Please select Tagpass before update database!", "Database");
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                finally
-                {
-                    dbconnect.Close();
+                    dbUpdate("UPDATE test_account SET Tagpass = '" + tbDBTagpass.Text + "', OperatorID = '" + tbDBOperatorID.Text + "', Name = '" + tbDBName.Text + "', Surname = '" + tbDBSurname.Text + "', Position = '" + tbDBPosition.Text + "' WHERE Tagpass = '" + selected_account_tagpass + "';");
+                    dbSearchTagpass();
+                    selected_account_tagpass = "";
                 }
             }
         }
-        //Account ID texbex
-        private void tbDBId_TextChanged(object sender, EventArgs e)
+        private void btnDeleteAccount_Click(object sender, EventArgs e)
         {
-            if (tbDBId.Text == "")
+            DialogResult dialog_result = MessageBox.Show("Delete databasse", "Database", MessageBoxButtons.YesNo);
+            if (dialog_result == DialogResult.Yes)
+            {
+                if (selected_account_tagpass == "")
+                {
+                    MessageBox.Show("Error: Please select Kanban before delete database!", "Database");
+                }
+                else
+                {
+                    dbDelete("DELETE FROM `test_account` WHERE Tagpass = '" + selected_account_tagpass + "';");
+                    tbEditAccountClear();
+                }
+            }
+        }
+        //Account Tagpass textbox
+        private void tbDBTagpass_TextChanged(object sender, EventArgs e)
+        {
+            if (tbDBTagpass.Text == "")
             {
                 refreshListViewAccount();
+                tbEditAccountClear();
             }
             else
             {
                 lvAccount.Items.Clear();
                 string TABLE = "test_account";
-                string queryList = "SELECT * FROM " + TABLE + " WHERE ID LIKE '%" + tbDBId.Text + "%' ORDER BY CAST(ID AS UNSIGNED);";
+                string queryList = "SELECT * FROM " + TABLE + " WHERE Tagpass LIKE '%" + tbDBTagpass.Text + "%' ORDER BY CAST(Tagpass AS UNSIGNED);";
                 MySqlConnection dbconnect = new MySqlConnection(connectStr);
                 MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
                 MySqlDataAdapter da = new MySqlDataAdapter(dbcommand);
@@ -819,48 +797,10 @@ namespace WindowsForms_packing_line
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
                         DataRow dr = dt.Rows[i];    //dr["Column Name from db"]
-                        ListViewItem list = new ListViewItem(dr["ID"].ToString());
+                        ListViewItem list = new ListViewItem(dr["Tagpass"].ToString());
+                        list.SubItems.Add(dr["OperatorID"].ToString());
                         list.SubItems.Add(dr["Name"].ToString());
-                        list.SubItems.Add(dr["Position"].ToString());
-                        lvAccount.Items.Add(list);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                finally
-                {
-                    dbconnect.Close();
-                }
-            }
-        }
-        //Acount Name textbox
-        private void tbDBName_TextChanged(object sender, EventArgs e)
-        {
-            if (tbDBName.Text == "")
-            {
-                refreshListViewAccount();
-            }
-            else
-            {
-                lvAccount.Items.Clear();
-                string TABLE = "test_account";
-                string queryList = "SELECT * FROM " + TABLE + " WHERE Name LIKE '%" + tbDBName.Text + "%' ORDER BY CAST(Name AS UNSIGNED);";
-                MySqlConnection dbconnect = new MySqlConnection(connectStr);
-                MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
-                MySqlDataAdapter da = new MySqlDataAdapter(dbcommand);
-                DataTable dt = new DataTable();
-                dbcommand.CommandTimeout = 60;
-                try
-                {
-                    dbconnect.Open();
-                    da.Fill(dt);
-                    for (int i = 0; i < dt.Rows.Count; i++)
-                    {
-                        DataRow dr = dt.Rows[i];    //dr["Column Name from db"]
-                        ListViewItem list = new ListViewItem(dr["ID"].ToString());
-                        list.SubItems.Add(dr["Name"].ToString());
+                        list.SubItems.Add(dr["Surname"].ToString());
                         list.SubItems.Add(dr["Position"].ToString());
                         lvAccount.Items.Add(list);
                     }
@@ -881,7 +821,7 @@ namespace WindowsForms_packing_line
             if (tbKBSearch.Text == "")
             {
                 refreshListViewMaster();
-                tbEditClear();
+                tbEditMasterClear();
             }
             else
             {
@@ -924,21 +864,123 @@ namespace WindowsForms_packing_line
                 }
             }
         }
-        public void login()
+        public void portsCloser()
         {
-
+            try
+            {
+                if (port1 != null)
+                {
+                    port1.Close();
+                    lIsPort1Open.Text = "Port1: Offine";
+                    lIsPort1Open.BackColor = System.Drawing.Color.Crimson;
+                }
+                if (port2 != null)
+                {
+                    port2.Close();
+                    lIsPort2Open.Text = "Port2: Offine";
+                    lIsPort2Open.BackColor = System.Drawing.Color.Crimson;
+                }
+                if (port3 != null)
+                {
+                    port3.Close();
+                    lIsPort3Open.Text = "Port3: Offine";
+                    lIsPort3Open.BackColor = System.Drawing.Color.Crimson;
+                }
+                if (port4 != null)
+                {
+                    port4.Close();
+                    lIsPort4Open.Text = "Port4: Offine";
+                    lIsPort4Open.BackColor = System.Drawing.Color.Crimson;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
-        //Clear Textbox Edit Database page
-        public void tbEditClear()
+        public void portsOpener()
         {
-            tbKBSearch.Clear();
-            tbDBModel.Clear();
-            tbDBInnerA.Clear();
-            tbDBInnerB.Clear();
-            tbDBCarton.Clear();
-            tbDBExport.Clear();
-            tbDBInnerMax.Clear();
-            tbDBCartonMax.Clear();
+            try
+            {
+                if (cbPort1.Text != "")
+                {
+                    port1 = new SerialPort(WindowsForms_packing_line.Properties.Settings.Default.Port1, WindowsForms_packing_line.Properties.Settings.Default.Baudrate1, WindowsForms_packing_line.Properties.Settings.Default.Paritybit1, WindowsForms_packing_line.Properties.Settings.Default.Datasize1, WindowsForms_packing_line.Properties.Settings.Default.Stopbits1);
+                    port1.Open();
+                    port1.DataReceived += new SerialDataReceivedEventHandler(dataReceiver1);
+                    if (port1.IsOpen)
+                    {
+                        //set port1 Status: Online
+                        lIsPort1Open.Text = "Port1: Online";
+                        lIsPort1Open.BackColor = System.Drawing.Color.Green;
+                    }
+                }
+                if (cbPort2.Text != "")
+                {
+                    port2 = new SerialPort(WindowsForms_packing_line.Properties.Settings.Default.Port2, WindowsForms_packing_line.Properties.Settings.Default.Baudrate2, WindowsForms_packing_line.Properties.Settings.Default.Paritybit2, WindowsForms_packing_line.Properties.Settings.Default.Datasize2, WindowsForms_packing_line.Properties.Settings.Default.Stopbits2);
+                    port2.Open();
+                    port2.DataReceived += new SerialDataReceivedEventHandler(dataReceiver2);
+                    if (port2.IsOpen)
+                    {
+                        //set port1 Status: Online
+                        lIsPort2Open.Text = "Port2: Online";
+                        lIsPort2Open.BackColor = System.Drawing.Color.Green;
+                    }
+                }
+                if (cbPort3.Text != "")
+                {
+                    port3 = new SerialPort(WindowsForms_packing_line.Properties.Settings.Default.Port3, WindowsForms_packing_line.Properties.Settings.Default.Baudrate3, WindowsForms_packing_line.Properties.Settings.Default.Paritybit3, WindowsForms_packing_line.Properties.Settings.Default.Datasize3, WindowsForms_packing_line.Properties.Settings.Default.Stopbits3);
+                    port3.Open();
+                    port3.DataReceived += new SerialDataReceivedEventHandler(dataReceiver3);
+                    if (port3.IsOpen)
+                    {
+                        //set port1 Status: Online
+                        lIsPort3Open.Text = "Port3: Online";
+                        lIsPort3Open.BackColor = System.Drawing.Color.Green;
+                    }
+                }
+                if (cbPort4.Text != "")
+                {
+                    port4 = new SerialPort(WindowsForms_packing_line.Properties.Settings.Default.Port4, WindowsForms_packing_line.Properties.Settings.Default.Baudrate4, WindowsForms_packing_line.Properties.Settings.Default.Paritybit4, WindowsForms_packing_line.Properties.Settings.Default.Datasize4, WindowsForms_packing_line.Properties.Settings.Default.Stopbits4);
+                    port4.Open();
+                    port4.DataReceived += new SerialDataReceivedEventHandler(dataReceiver4);
+                    if (port4.IsOpen)
+                    {
+                        //set port1 Status: Online
+                        lIsPort4Open.Text = "Port4: Online";
+                        lIsPort4Open.BackColor = System.Drawing.Color.Green;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        public void initialPorts()
+        {
+            cbPort1.Text = WindowsForms_packing_line.Properties.Settings.Default.Port1;
+            cbBaudrate1.Text = WindowsForms_packing_line.Properties.Settings.Default.Baudrate1.ToString();
+            cbParitybit1.Text = WindowsForms_packing_line.Properties.Settings.Default.Paritybit1.ToString();
+            cbDatasize1.Text = WindowsForms_packing_line.Properties.Settings.Default.Datasize1.ToString();
+            cbStopbits1.Text = WindowsForms_packing_line.Properties.Settings.Default.Stopbits1.ToString();
+
+            cbPort2.Text = WindowsForms_packing_line.Properties.Settings.Default.Port2;
+            cbBaudrate2.Text = WindowsForms_packing_line.Properties.Settings.Default.Baudrate2.ToString();
+            cbParitybit2.Text = WindowsForms_packing_line.Properties.Settings.Default.Paritybit2.ToString();
+            cbDatasize2.Text = WindowsForms_packing_line.Properties.Settings.Default.Datasize2.ToString();
+            cbStopbits2.Text = WindowsForms_packing_line.Properties.Settings.Default.Stopbits2.ToString();
+            
+            cbPort3.Text = WindowsForms_packing_line.Properties.Settings.Default.Port3;
+            cbBaudrate3.Text = WindowsForms_packing_line.Properties.Settings.Default.Baudrate3.ToString();
+            cbParitybit3.Text = WindowsForms_packing_line.Properties.Settings.Default.Paritybit3.ToString();
+            cbDatasize3.Text = WindowsForms_packing_line.Properties.Settings.Default.Datasize3.ToString();
+            cbStopbits3.Text = WindowsForms_packing_line.Properties.Settings.Default.Stopbits3.ToString();
+
+            cbPort4.Text = WindowsForms_packing_line.Properties.Settings.Default.Port4;
+            cbBaudrate4.Text = WindowsForms_packing_line.Properties.Settings.Default.Baudrate4.ToString();
+            cbParitybit4.Text = WindowsForms_packing_line.Properties.Settings.Default.Paritybit4.ToString();
+            cbDatasize4.Text = WindowsForms_packing_line.Properties.Settings.Default.Datasize4.ToString();
+            cbStopbits4.Text = WindowsForms_packing_line.Properties.Settings.Default.Stopbits4.ToString();
         }
         //SQL Connect, Get
         public void queryQTY()
@@ -1027,9 +1069,6 @@ namespace WindowsForms_packing_line
                 dbconnect.Close();
             }
         }
-
-        
-
         public void queryCarton()
         {
             string queryList = "SELECT * FROM test_model_master WHERE Kanban = '" + tbKanban.Text + "';";
@@ -1167,7 +1206,7 @@ namespace WindowsForms_packing_line
         {
             lvAccount.Items.Clear();
             string TABLE = "test_account";
-            string queryList = "SELECT * FROM " + TABLE + " ORDER BY CAST(ID AS UNSIGNED);";
+            string queryList = "SELECT * FROM " + TABLE + " ORDER BY CAST(Tagpass AS UNSIGNED);";
             MySqlConnection dbconnect = new MySqlConnection(connectStr);
             MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
             MySqlDataAdapter da = new MySqlDataAdapter(dbcommand);
@@ -1180,8 +1219,10 @@ namespace WindowsForms_packing_line
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     DataRow dr = dt.Rows[i];    //dr["Column Name from db"]
-                    ListViewItem list = new ListViewItem(dr["ID"].ToString());
+                    ListViewItem list = new ListViewItem(dr["Tagpass"].ToString());
+                    list.SubItems.Add(dr["OperatorID"].ToString());
                     list.SubItems.Add(dr["Name"].ToString());
+                    list.SubItems.Add(dr["Surname"].ToString());
                     list.SubItems.Add(dr["Position"].ToString());
                     lvAccount.Items.Add(list);
                 }
@@ -1197,7 +1238,63 @@ namespace WindowsForms_packing_line
                 dbconnect.Close();
             }
         }
+        public void dbSearchTagpass()
+        {
+            lvAccount.Items.Clear();
+            string TABLE = "test_account";
+            string queryList = "SELECT * FROM " + TABLE + " WHERE Tagpass = '" + tbDBTagpass.Text + "';";
+            MySqlConnection dbconnect = new MySqlConnection(connectStr);
+            MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
+            MySqlDataAdapter da = new MySqlDataAdapter(dbcommand);
+            DataTable dt = new DataTable();
+            dbcommand.CommandTimeout = 60;
+            try
+            {
+                dbconnect.Open();
+                da.Fill(dt);
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    DataRow dr = dt.Rows[i];    //dr["Column Name from db"]
+                    ListViewItem list = new ListViewItem(dr["Tagpass"].ToString());
+                    list.SubItems.Add(dr["OperatorID"].ToString());
+                    list.SubItems.Add(dr["Name"].ToString());
+                    list.SubItems.Add(dr["Surname"].ToString());
+                    list.SubItems.Add(dr["Position"].ToString());
+                    lvAccount.Items.Add(list);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                dbconnect.Close();
+            }
+        }
         //SQL connect, Edit
+        public void dbCreate(string qeury_s)
+        {
+            string queryList = qeury_s;
+            MySqlConnection dbconnect = new MySqlConnection(connectStr);
+            MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
+            MySqlDataReader reader;
+            dbcommand.CommandTimeout = 60;
+            try
+            {
+                dbconnect.Open();
+                reader = dbcommand.ExecuteReader();
+                MessageBox.Show("Insert Success", "Dababase");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                dbconnect.Close();
+            }
+        }
         public void dbUpdate(string query_s)
         {
             string queryList = query_s;
@@ -1240,6 +1337,69 @@ namespace WindowsForms_packing_line
             finally
             {
                 dbconnect.Close();
+            }
+        }
+        //Clear Textbox Edit Database page
+        public void tbEditMasterClear()
+        {
+            tbKBSearch.Clear();
+            tbDBModel.Clear();
+            tbDBInnerA.Clear();
+            tbDBInnerB.Clear();
+            tbDBCarton.Clear();
+            tbDBExport.Clear();
+            tbDBInnerMax.Clear();
+            tbDBCartonMax.Clear();
+        }
+        public void tbEditAccountClear()
+        {
+            tbDBTagpass.Clear();
+            tbDBOperatorID.Clear();
+            tbDBName.Clear();
+            tbDBSurname.Clear();
+            tbDBPosition.Clear();
+        }
+        public void roleChecker(string s)
+        {
+            if (s== "Operator")
+            {
+                enableTab(Settings, false);
+                tbDBModel.Enabled = false;
+                tbDBInnerA.Enabled = false;
+                tbDBInnerB.Enabled = false;
+                tbDBCarton.Enabled = false;
+                tbDBExport.Enabled = false;
+                tbDBInnerMax.Enabled = false;
+                tbDBCartonMax.Enabled = false;
+                btnCreateMaster.Hide();
+                btnUpdateMaster.Hide();
+                btnDeleteMaster.Hide();
+                hideTab(Account, true);
+            }
+            else if (s=="Supervisor")
+            {
+                tbDBOperatorID.Enabled = false;
+                tbDBName.Enabled = false;
+                tbDBSurname.Enabled = false;
+                tbDBPosition.Enabled = false;
+                btnCreateAccount.Hide();
+                btnUpdateAccount.Hide();
+                btnDeleteAccount.Hide();
+            }
+        }
+        public static void enableTab(TabPage page, bool enable)
+        {
+            foreach (Control ctl in page.Controls) ctl.Enabled = enable;
+        }
+        public static void hideTab(TabPage page, bool hide)
+        {
+            if (hide) //Hide = true
+            {
+                foreach (Control ctl in page.Controls) ctl.Hide();
+            }
+            else
+            {
+                foreach (Control ctl in page.Controls) ctl.Show();
             }
         }
     }
