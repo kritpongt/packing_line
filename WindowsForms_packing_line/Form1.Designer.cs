@@ -33,6 +33,7 @@
             this.lPosition = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.Checker = new System.Windows.Forms.TabPage();
+            this.lTotal = new System.Windows.Forms.Label();
             this.lRemainingCarton = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.lMasterExport = new System.Windows.Forms.Label();
@@ -57,6 +58,7 @@
             this.label12 = new System.Windows.Forms.Label();
             this.lbLog = new System.Windows.Forms.ListBox();
             this.lRemainingInner = new System.Windows.Forms.Label();
+            this.btnResetKB = new System.Windows.Forms.Button();
             this.btnStart = new System.Windows.Forms.Button();
             this.tbQTY = new System.Windows.Forms.TextBox();
             this.tbModel = new System.Windows.Forms.TextBox();
@@ -146,12 +148,10 @@
             this.columnHeader14 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel1 = new System.Windows.Forms.Panel();
             this.pIcon = new System.Windows.Forms.Panel();
-            this.btnResetKB = new System.Windows.Forms.Button();
             this.pLogin = new System.Windows.Forms.Panel();
-            this.label29 = new System.Windows.Forms.Label();
-            this.tbLogin = new System.Windows.Forms.TextBox();
             this.btnLogin = new System.Windows.Forms.Button();
-            this.lTotal = new System.Windows.Forms.Label();
+            this.tbLogin = new System.Windows.Forms.TextBox();
+            this.label29 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.Checker.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -242,6 +242,16 @@
             this.Checker.Size = new System.Drawing.Size(1021, 629);
             this.Checker.TabIndex = 0;
             this.Checker.Text = " Checker ";
+            // 
+            // lTotal
+            // 
+            this.lTotal.AutoSize = true;
+            this.lTotal.Font = new System.Drawing.Font("Consolas", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lTotal.Location = new System.Drawing.Point(520, 539);
+            this.lTotal.Name = "lTotal";
+            this.lTotal.Size = new System.Drawing.Size(139, 43);
+            this.lTotal.TabIndex = 25;
+            this.lTotal.Text = "Total:";
             // 
             // lRemainingCarton
             // 
@@ -533,6 +543,18 @@
             this.lRemainingInner.TabIndex = 15;
             this.lRemainingInner.Text = "Test:";
             // 
+            // btnResetKB
+            // 
+            this.btnResetKB.BackColor = System.Drawing.Color.Tan;
+            this.btnResetKB.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnResetKB.Location = new System.Drawing.Point(850, 512);
+            this.btnResetKB.Margin = new System.Windows.Forms.Padding(1);
+            this.btnResetKB.Name = "btnResetKB";
+            this.btnResetKB.Size = new System.Drawing.Size(160, 70);
+            this.btnResetKB.TabIndex = 10;
+            this.btnResetKB.Text = "Reset";
+            this.btnResetKB.UseVisualStyleBackColor = false;
+            // 
             // btnStart
             // 
             this.btnStart.BackColor = System.Drawing.Color.MediumAquamarine;
@@ -570,6 +592,7 @@
             this.tbKanban.Name = "tbKanban";
             this.tbKanban.Size = new System.Drawing.Size(220, 39);
             this.tbKanban.TabIndex = 7;
+            this.tbKanban.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbKanban_KeyDown);
             // 
             // label6
             // 
@@ -1560,18 +1583,6 @@
             this.pIcon.TabIndex = 3;
             this.pIcon.Click += new System.EventHandler(this.pIcon_Click);
             // 
-            // btnResetKB
-            // 
-            this.btnResetKB.BackColor = System.Drawing.Color.Tan;
-            this.btnResetKB.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnResetKB.Location = new System.Drawing.Point(850, 512);
-            this.btnResetKB.Margin = new System.Windows.Forms.Padding(1);
-            this.btnResetKB.Name = "btnResetKB";
-            this.btnResetKB.Size = new System.Drawing.Size(160, 70);
-            this.btnResetKB.TabIndex = 10;
-            this.btnResetKB.Text = "Reset";
-            this.btnResetKB.UseVisualStyleBackColor = false;
-            // 
             // pLogin
             // 
             this.pLogin.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(52)))), ((int)(((byte)(96)))));
@@ -1583,26 +1594,6 @@
             this.pLogin.Name = "pLogin";
             this.pLogin.Size = new System.Drawing.Size(1029, 10);
             this.pLogin.TabIndex = 4;
-            // 
-            // label29
-            // 
-            this.label29.AutoSize = true;
-            this.label29.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label29.ForeColor = System.Drawing.SystemColors.Control;
-            this.label29.Location = new System.Drawing.Point(376, 228);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(291, 29);
-            this.label29.TabIndex = 0;
-            this.label29.Text = "แสกนบัตร/ใส่รหัส เพื่อ Login";
-            // 
-            // tbLogin
-            // 
-            this.tbLogin.Font = new System.Drawing.Font("Consolas", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbLogin.Location = new System.Drawing.Point(381, 270);
-            this.tbLogin.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
-            this.tbLogin.Name = "tbLogin";
-            this.tbLogin.Size = new System.Drawing.Size(280, 41);
-            this.tbLogin.TabIndex = 1;
             // 
             // btnLogin
             // 
@@ -1618,15 +1609,26 @@
             this.btnLogin.UseVisualStyleBackColor = true;
             this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
             // 
-            // lTotal
+            // tbLogin
             // 
-            this.lTotal.AutoSize = true;
-            this.lTotal.Font = new System.Drawing.Font("Consolas", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lTotal.Location = new System.Drawing.Point(520, 539);
-            this.lTotal.Name = "lTotal";
-            this.lTotal.Size = new System.Drawing.Size(139, 43);
-            this.lTotal.TabIndex = 25;
-            this.lTotal.Text = "Total:";
+            this.tbLogin.Font = new System.Drawing.Font("Consolas", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbLogin.Location = new System.Drawing.Point(381, 270);
+            this.tbLogin.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
+            this.tbLogin.Name = "tbLogin";
+            this.tbLogin.Size = new System.Drawing.Size(280, 41);
+            this.tbLogin.TabIndex = 1;
+            this.tbLogin.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbLogin_KeyDown);
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label29.ForeColor = System.Drawing.SystemColors.Control;
+            this.label29.Location = new System.Drawing.Point(376, 228);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(291, 29);
+            this.label29.TabIndex = 0;
+            this.label29.Text = "แสกนบัตร/ใส่รหัส เพื่อ Login";
             // 
             // Form1
             // 

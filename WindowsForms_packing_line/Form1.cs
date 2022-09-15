@@ -28,26 +28,40 @@ namespace WindowsForms_packing_line
         private SerialPort port2;
         private SerialPort port3;
         private SerialPort port4;
+        private SerialPort portRFID = new SerialPort("COM7", 115200, System.IO.Ports.Parity.None, 8, System.IO.Ports.StopBits.One);
         string connectStr = "server=" + WindowsForms_packing_line.Properties.Settings.Default.dbIPServer + ";port=3306;Database=packing_line_element;uid=root;pwd=;SslMode=none;";
-        int qty, innerbox_max, cartonbox_max;   //get from db
-        int cartonbox_rem, inner_scanned = 0, carton_scanned = 0;  //remaining carton box in export box
-        int inner_count = 0, carton_count = 0, carton_need = 0, export_need = 0; //counter +1 the larger box
+        private int qty, innerbox_max, cartonbox_max;   //get from db
+        int inner_scanned = 0;  //if inner is scanned +1
+        int inner_count = 0, carton_count = 0, export_count, carton_need = 0, export_need = 0; //counter +1 the larger box
         string inner_a_master;  //No. inner master
         string inner_b_master;  //No. inner master
         string carton_master;   //No. carton master
         string export_master;   //No. export master
         string selected_kanban_id = ""; //temp_str kanban for update database
         string selected_account_tagpass = ""; //temp_str account for update database
-        string port1_str, port2_str, port3_str, port4_str;
-
         public Form1()
         {
             InitializeComponent();
-            //this.WindowState = FormWindowState.Maximized;
-            //this.FormBorderStyle = FormBorderStyle.None;
+            this.WindowState = FormWindowState.Maximized;
+            this.FormBorderStyle = FormBorderStyle.None;
             refreshListViewMaster();
             refreshListViewAccount();
             initialPorts();
+            this.ActiveControl = tbLogin;
+        }
+        void lbLog_SetColor(object sender, DrawItemEventArgs e)
+        {
+            try
+            {
+                e.DrawBackground();
+                Brush brush = Brushes.Red;
+                e.Graphics.DrawString(((ListBox)sender).Items[e.Index].ToString(), e.Font, brush, e.Bounds, StringFormat.GenericDefault);
+                e.DrawFocusRectangle();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -59,10 +73,44 @@ namespace WindowsForms_packing_line
             cbPort4.Items.AddRange(getPorts);
         }
         //Login
+        private void tbLogin_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                string TABLE = "test_account";
+                string queryList = "SELECT * FROM " + TABLE + " WHERE OperatorID = '" + tbLogin.Text + "';";
+                MySqlConnection dbconnect = new MySqlConnection(connectStr);
+                MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
+                MySqlDataReader reader;
+                dbcommand.CommandTimeout = 100;
+                try
+                {
+                    dbconnect.Open();
+                    reader = dbcommand.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        lOperatorID.Text = "Operator ID: " + reader.GetString("OperatorID");
+                        lOperatorName.Text = "Operator Name: " + reader.GetString("Name") + " " + reader.GetString("Surname");
+                        lPosition.Text = "Position: " + reader.GetString("Position");
+                        pLogin.Hide();
+                        roleChecker(reader.GetString("Position"));
+                        tbKanban.Focus();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    dbconnect.Close();
+                }
+            }
+        }
         private void btnLogin_Click(object sender, EventArgs e)
         {
             string TABLE = "test_account";
-            string queryList = "SELECT * FROM " + TABLE + " WHERE Tagpass = '" + tbLogin.Text + "';";
+            string queryList = "SELECT * FROM " + TABLE + " WHERE OperatorID = '" + tbLogin.Text + "';";
             MySqlConnection dbconnect = new MySqlConnection(connectStr);
             MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
             MySqlDataReader reader;
@@ -78,6 +126,7 @@ namespace WindowsForms_packing_line
                     lPosition.Text = "Position: " + reader.GetString("Position");
                     pLogin.Hide();
                     roleChecker(reader.GetString("Position"));
+                    tbKanban.Focus();
                 }
             }
             catch (Exception ex)
@@ -99,7 +148,7 @@ namespace WindowsForms_packing_line
             {
                 this.FormBorderStyle = FormBorderStyle.Sizable;
             }
-        }
+        }//OK
         //IF ports are selected then settings
         private void cbPort1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -115,7 +164,7 @@ namespace WindowsForms_packing_line
             {
                 cbPort4.SelectedIndex = -1;
             }
-        }
+        }//OK
         private void cbPort2_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbPort2.Text == cbPort1.Text)
@@ -130,7 +179,7 @@ namespace WindowsForms_packing_line
             {
                 cbPort4.SelectedIndex = -1;
             }
-        }
+        }//OK
         private void cbPort3_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbPort3.Text == cbPort1.Text)
@@ -145,7 +194,7 @@ namespace WindowsForms_packing_line
             {
                 cbPort4.SelectedIndex = -1;
             }
-        }
+        }//OK
         private void cbPort4_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbPort4.Text == cbPort1.Text)
@@ -160,32 +209,29 @@ namespace WindowsForms_packing_line
             {
                 cbPort3.SelectedIndex = -1;
             }
-        }
+        }//OK
         //Set Baud rate
         private void cbBaudrate1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if(cbBaudrate1.Text != "")
             {
                 WindowsForms_packing_line.Properties.Settings.Default.Baudrate1 = int.Parse(cbBaudrate1.Text);
-                WindowsForms_packing_line.Properties.Settings.Default.Save();
             }
-        }
+        }//OK
         private void cbBaudrate2_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbBaudrate2.Text != "")
             {
                 WindowsForms_packing_line.Properties.Settings.Default.Baudrate2 = int.Parse(cbBaudrate2.Text);
-                WindowsForms_packing_line.Properties.Settings.Default.Save();
             }
-        }
+        }//OK
         private void cbBaudrate3_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbBaudrate3.Text != "")
             {
                 WindowsForms_packing_line.Properties.Settings.Default.Baudrate3 = int.Parse(cbBaudrate3.Text);
-                WindowsForms_packing_line.Properties.Settings.Default.Save();
             }
-        }
+        }//OK
         private void cbBaudrate4_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbBaudrate4.Text != "")
@@ -193,106 +239,94 @@ namespace WindowsForms_packing_line
                 WindowsForms_packing_line.Properties.Settings.Default.Baudrate4 = int.Parse(cbBaudrate4.Text);
                 WindowsForms_packing_line.Properties.Settings.Default.Save();
             }
-        }
+        }//OK
         //Set Parity bit
         private void cbParitybit1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbParitybit1.Text != "")
             {
                 WindowsForms_packing_line.Properties.Settings.Default.Paritybit1 = (Parity)Enum.Parse(typeof(Parity), cbParitybit1.Text);
-                WindowsForms_packing_line.Properties.Settings.Default.Save();
             }
-        }
+        }//OK
         private void cbParitybit2_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbParitybit2.Text != "")
             {
                 WindowsForms_packing_line.Properties.Settings.Default.Paritybit2 = (Parity)Enum.Parse(typeof(Parity), cbParitybit2.Text);
-                WindowsForms_packing_line.Properties.Settings.Default.Save();
             }
-        }
+        }//OK
         private void cbParitybit3_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbParitybit3.Text != "")
             {
                 WindowsForms_packing_line.Properties.Settings.Default.Paritybit3 = (Parity)Enum.Parse(typeof(Parity), cbParitybit3.Text);
-                WindowsForms_packing_line.Properties.Settings.Default.Save();
             }
-        }
+        }//OK
         private void cbParitybit4_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbParitybit4.Text != "")
             {
                 WindowsForms_packing_line.Properties.Settings.Default.Paritybit4 = (Parity)Enum.Parse(typeof(Parity), cbParitybit4.Text);
-                WindowsForms_packing_line.Properties.Settings.Default.Save();
             }
-        }
+        }//OK
         //Set Data size
         private void cbDatasize1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbDatasize1.Text != "")
             {
                 WindowsForms_packing_line.Properties.Settings.Default.Datasize1 = int.Parse(cbDatasize1.Text);
-                WindowsForms_packing_line.Properties.Settings.Default.Save();
             }
-        }
+        }//OK
         private void cbDatasize2_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbDatasize2.Text != "")
             {
                 WindowsForms_packing_line.Properties.Settings.Default.Datasize2 = int.Parse(cbDatasize2.Text);
-                WindowsForms_packing_line.Properties.Settings.Default.Save();
             }
-        }
+        }//OK
         private void cbDatasize3_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbDatasize3.Text != "")
             {
                 WindowsForms_packing_line.Properties.Settings.Default.Datasize3 = int.Parse(cbDatasize3.Text);
-                WindowsForms_packing_line.Properties.Settings.Default.Save();
             }
-        }
+        }//OK
         private void cbDatasize4_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbDatasize4.Text != "")
             {
                 WindowsForms_packing_line.Properties.Settings.Default.Datasize4 = int.Parse(cbDatasize4.Text);
-                WindowsForms_packing_line.Properties.Settings.Default.Save();
             }
-        }
+        }//OK
         //Set Stop bits
         private void cbStopbits1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if( cbStopbits1.Text != "")
             {
                 WindowsForms_packing_line.Properties.Settings.Default.Stopbits1 = (StopBits)Enum.Parse(typeof(StopBits), cbStopbits1.Text);
-                WindowsForms_packing_line.Properties.Settings.Default.Save();
             }
-        }
+        }//OK
         private void cbStopbits2_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbStopbits2.Text != "")
             {
                 WindowsForms_packing_line.Properties.Settings.Default.Stopbits2 = (StopBits)Enum.Parse(typeof(StopBits), cbStopbits2.Text);
-                WindowsForms_packing_line.Properties.Settings.Default.Save();
             }
-        }
+        }//OK
         private void cbStopbits3_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbStopbits3.Text != "")
             {
                 WindowsForms_packing_line.Properties.Settings.Default.Stopbits3 = (StopBits)Enum.Parse(typeof(StopBits), cbStopbits3.Text);
-                WindowsForms_packing_line.Properties.Settings.Default.Save();
             }
-        }
+        }//OK
         private void cbStopbits4_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbStopbits4.Text != "")
             {
                 WindowsForms_packing_line.Properties.Settings.Default.Stopbits4 = (StopBits)Enum.Parse(typeof(StopBits), cbStopbits4.Text);
-                WindowsForms_packing_line.Properties.Settings.Default.Save();
             }
-        }
+        }//OK
         //Button Save Ports
         private void btnSavePorts_Click(object sender, EventArgs e)
         {
@@ -307,42 +341,102 @@ namespace WindowsForms_packing_line
             WindowsForms_packing_line.Properties.Settings.Default.Save();
             portsCloser();
             portsOpener();
-        }
+        }//OK
         //Data Receiver and Output
+        private void tbKanban_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                string TABLE = "test_model_master";
+                string queryList = "SELECT * FROM " + TABLE + " WHERE Kanban = '" + tbKanban.Text + "';";
+                MySqlConnection dbconnect = new MySqlConnection(connectStr);
+                MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
+                MySqlDataReader reader;
+                dbcommand.CommandTimeout = 60;
+                try
+                {
+                    dbconnect.Open();
+                    reader = dbcommand.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        tbModel.Text = reader.GetString("ModelNo"); //Get Model
+                    }
+                    string[] kanban_array = tbKanban.Text.Split('|');
+                    tbQTY.Text = kanban_array[1];
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    dbconnect.Close();
+                }
+            }
+        }//Waitfix
+        //Start Button
+        private void btnStart_Click(object sender, EventArgs e)
+        {
+            //input qty(Integer)
+            bool isInteger = false;
+            try
+            {
+                isInteger = int.TryParse(tbQTY.Text, out qty);
+                if (!isInteger)
+                {
+                    MessageBox.Show("Error: K/B is empty or QTY is incorrect!", "Checker");
+                }
+                else
+                {
+                    qeuryMax();
+                    queryInnerA();
+                    queryInnerB();
+                    queryCarton();
+                    queryExport();
+                    inner_scanned = 0;
+                    lTotal.Text = "Total: " + qty.ToString();
+                    inner_count = 0;
+                    carton_count = 0;
+                    carton_need = 0;
+                    export_need = 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }//Waittest
         private void dataReceiver1(object sender, SerialDataReceivedEventArgs e)    //Receiver Inner Box A
         {
             try
             {
                 string input_value = port1.ReadExisting();
-                Thread.Sleep(60);
+                Thread.Sleep(100);
                 Invoke((MethodInvoker)delegate { tbInnerBoxA.Text = input_value; });
                 inner_a_master = WindowsForms_packing_line.Properties.Settings.Default.InnerAMaster;
                 if (input_value.Equals(inner_a_master))
                 {
                     //log
-                    lbLog.ForeColor = Color.Green;
                     Invoke((MethodInvoker)delegate { lbLog.Items.Add(input_value + "\t\t\tInner Box A"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
-
-                    qty -= 1;
-                    if (qty < 0) { qty = 0; }
-                    //Invoke((MethodInvoker)delegate { lRemainingInner.Text = "Remaining: " + qty.ToString(); });
-
-                    //inner scanned test
-                    inner_scanned++;
-                    Invoke((MethodInvoker)delegate { lRemainingInner.Text = "inner scanneds: " + inner_scanned; });
-                    //end test
-
-                    inner_count++;
-                    if (inner_count == innerbox_max)
+                    //inner scenned
+                    if(qty - inner_scanned > 0)
                     {
-                        inner_count = 0;
-                        carton_need++;
-                        Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Need: " + carton_need.ToString(); });
+                        inner_scanned++;
+                        Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + (qty - inner_scanned).ToString(); });
+
+                        inner_count++;
+                        if (inner_count == innerbox_max)
+                        {
+                            inner_count = 0;
+                            carton_need++;
+                            Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Need: " + carton_need.ToString(); });
+                        }
                     }
                 }
                 else
                 {
-                    lbLog.ForeColor = Color.Black;
+                    MessageBox.Show("Alarm Scan error!");
                     Invoke((MethodInvoker)delegate { lbLog.Items.Add(input_value + "\t\t\tInner Box A"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
                 }
             }
@@ -356,34 +450,31 @@ namespace WindowsForms_packing_line
             try
             {
                 string input_value = port2.ReadExisting();
-                Thread.Sleep(60);
+                Thread.Sleep(100);
                 Invoke((MethodInvoker)delegate { tbInnerBoxB.Text = input_value; });
                 inner_b_master = WindowsForms_packing_line.Properties.Settings.Default.InnerBMaster;
                 if (input_value.Equals(inner_b_master))
                 {
                     //Log
-                    lbLog.ForeColor = Color.Green;
                     Invoke((MethodInvoker)delegate { lbLog.Items.Add(input_value + "\t\t\tInner Box B"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
-                    
-                    qty -= 1;
-                    if (qty < 0) { qty = 0; }
-
-                    //inner scanned test
-                    inner_scanned++;
-                    Invoke((MethodInvoker)delegate { lRemainingInner.Text = "inner scanned: " + inner_scanned; });
-                    //end test
-
-                    inner_count++;
-                    if (inner_count == innerbox_max)
+                    //inner scanned
+                    if (qty - inner_scanned > 0)
                     {
-                        inner_count = 0;
-                        carton_need++;
-                        Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Need: " + carton_need.ToString(); });
+                        inner_scanned++;
+                        Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + (qty - inner_scanned).ToString(); });
+
+                        inner_count++;
+                        if (inner_count == innerbox_max)
+                        {
+                            inner_count = 0;
+                            carton_need++;
+                            Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Need: " + carton_need.ToString(); });
+                        }
                     }
                 }
                 else
                 {
-                    lbLog.ForeColor = Color.Black;
+                    MessageBox.Show("Alarm Scan error!");
                     Invoke((MethodInvoker)delegate { lbLog.Items.Add(input_value + "\t\t\tInner Box B"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
                 }
             }
@@ -397,41 +488,35 @@ namespace WindowsForms_packing_line
             try
             {
                 string input_value = port3.ReadExisting();
-                Thread.Sleep(60);
+                Thread.Sleep(100);
                 Invoke((MethodInvoker)delegate { tbCartonBox.Text = input_value; });
                 carton_master = WindowsForms_packing_line.Properties.Settings.Default.CartonMaster;
                 if (input_value.Equals(carton_master))
                 {
                     //Log
-                    lbLog.ForeColor = Color.Green;
                     Invoke((MethodInvoker)delegate { lbLog.Items.Add(input_value + "\t\t\tCarton Box"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
                     
+                    if (carton_need > 0)
+                    {
+                        carton_need--;
+                        Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Need: " + carton_need; }); //Decrease carton Need:
 
-                    carton_scanned++;
-                    Invoke((MethodInvoker)delegate { lRemainingCarton.Text = "carton scanned: " + carton_scanned; });
-                    //end test
-
-                    if (inner_count > 0)    //decrease carton box(Need: ) when carton box is scanned
-                    {
-                        inner_count--;
-                        Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Need: " + inner_count; });
+                        carton_count++;
+                        if (carton_count == cartonbox_max)
+                        {
+                            carton_count = 0;
+                            export_need++;
+                            Invoke((MethodInvoker)delegate { lNeedExport.Text = "Need: " + export_need; });
+                        }
                     }
-                    else if (inner_count == 0)
+                    else if (carton_need == 0)
                     {
-                        MessageBox.Show("alarm when Carton Box = 0");
-                    }
-                    carton_count++; //increase carton box when carton box is scanned นับจำนวนกล่อง carton เมื่อถูกแสกน
-                    if (carton_count == cartonbox_max)
-                    {
-                        carton_count = 0;
-                        export_need++;
-                        Invoke((MethodInvoker)delegate { lNeedExport.Text = "Need: " + export_need; });
+                        MessageBox.Show("Alarm when Carton Box = 0");
                     }
                 }
                 else
                 {
-                    //Log
-                    lbLog.ForeColor = Color.Black;
+                    MessageBox.Show("Alarm Scan error!");
                     Invoke((MethodInvoker)delegate { lbLog.Items.Add(input_value + "\t\t\tCarton Box"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
                 }
             }
@@ -445,29 +530,24 @@ namespace WindowsForms_packing_line
             try
             {
                 string input_value = port4.ReadExisting();
-                Thread.Sleep(60);
+                Thread.Sleep(100);
                 Invoke((MethodInvoker)delegate { tbExportBox.Text = input_value; lbLog.Items.Add(input_value + "\t\t\tExport Box"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
                 export_master = WindowsForms_packing_line.Properties.Settings.Default.ExportMaster;
                 if (input_value.Equals(export_master))
                 {
                     //Log
-                    lbLog.ForeColor = Color.Green;
                     Invoke((MethodInvoker)delegate { lbLog.Items.Add(input_value + "\t\t\tExport Box"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
 
-                    if (carton_count > 0)    //decrease export box(Need: ) when export box is scanned
+                    export_need--;
+                    Invoke((MethodInvoker)delegate { lNeedExport.Text = "Need: " + export_need; }); //Decrease export Need:
+                    if (inner_scanned == 0)
                     {
-                        carton_count--;
-                        Invoke((MethodInvoker)delegate { lNeedExport.Text = "Need: " + carton_count; });
-                    }
-                    else if (carton_count == 0)
-                    {
-                        MessageBox.Show("alarm when Export Box = 0 then Close port4 and Reset Kanban");
+                        MessageBox.Show("Alarm reset kanban!");
                     }
                 }
                 else
                 {
-                    //Log
-                    lbLog.ForeColor = Color.Black;
+                    MessageBox.Show("Alarm Scan error!");
                     Invoke((MethodInvoker)delegate { lbLog.Items.Add(input_value + "\t\t\tExport Box"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
                 }
             }
@@ -476,7 +556,7 @@ namespace WindowsForms_packing_line
                 MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //Close and Open port 1-4
+        //Close and Open port 1-4 Checker page
         private void lIsPort1Open_Click(object sender, EventArgs e)
         {
             try
@@ -505,7 +585,7 @@ namespace WindowsForms_packing_line
             {
                 MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
+        }//OK
         private void lIsPort2Open_Click(object sender, EventArgs e)
         {
             try
@@ -534,7 +614,7 @@ namespace WindowsForms_packing_line
             {
                 MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
+        }//OK
         private void lIsPort3Open_Click(object sender, EventArgs e)
         {
             try
@@ -563,7 +643,7 @@ namespace WindowsForms_packing_line
             {
                 MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
+        }//OK
         private void lIsPort4Open_Click(object sender, EventArgs e)
         {
             try
@@ -592,30 +672,7 @@ namespace WindowsForms_packing_line
             {
                 MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-        //Start Button
-        private void btnStart_Click(object sender, EventArgs e)
-        {
-            //input qty(Integer)
-            bool isInteger = false;
-            try
-            {
-                isInteger = int.TryParse(tbQTY.Text, out qty);
-                if (!isInteger)
-                {
-                    MessageBox.Show("Error: K/B is empty or QTY is incorrect!", "Checker");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            queryQTY(); //Display
-            queryInnerA();
-            queryInnerB();
-            queryCarton();
-            queryExport();
-        }
+        }//OK
         //Decrease a counter -1 at a time
         private void btnDecreaseInnerA_Click(object sender, EventArgs e)
         {
@@ -635,6 +692,7 @@ namespace WindowsForms_packing_line
                 Invoke((MethodInvoker)delegate { lbLog.Items.Add("Delete 1 Item!\t\tInner Box B"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
             }
         }
+        //Edit Master page
         //Create kanban button
         private void btnCreateMaster_Click(object sender, EventArgs e)
         {
@@ -983,7 +1041,7 @@ namespace WindowsForms_packing_line
             cbStopbits4.Text = WindowsForms_packing_line.Properties.Settings.Default.Stopbits4.ToString();
         }
         //SQL Connect, Get
-        public void queryQTY()
+        public void qeuryMax()
         {
             string queryList = "SELECT * FROM test_model_master WHERE Kanban = '" + tbKanban.Text + "';";
             MySqlConnection dbconnect = new MySqlConnection(connectStr);
@@ -996,14 +1054,10 @@ namespace WindowsForms_packing_line
                 reader = dbcommand.ExecuteReader();
                 while (reader.Read())
                 {
-                    tbModel.Text = reader.GetString(2);
-                    innerbox_max = reader.GetInt32("InnerMax");
-                    cartonbox_max = reader.GetInt32("CartonMax");
-                    cartonbox_rem = qty / innerbox_max;
-                    lRemainingInner.Text = "InnerMax(db): " + innerbox_max.ToString() + " Remaining: " + qty.ToString();  //InnerMax(db) Remaining:
-                    lRemainingCarton.Text = "CartonMax(db): " + cartonbox_max.ToString() + " Remaining: " + cartonbox_rem.ToString();    //CartonMax(db) Remaining:
-                    lNeedCarton.Text = "Need: " + inner_count;   //Display - (Carton)Need: 0
-                    lNeedExport.Text = "Need: " + carton_count;   //Display - (Export)Need: 0
+                    innerbox_max = reader.GetInt32("InnerMax");     //Get InnerMax from db
+                    cartonbox_max = reader.GetInt32("CartonMax");   //Get CartonMax from db
+                    lNeedCarton.Text = "Need: " + carton_need.ToString();   //Display - (Carton)Need: 0
+                    lNeedExport.Text = "Need: " + export_need.ToString();   //Display - (Export)Need: 0
                 }
             }
             catch (Exception ex)
@@ -1317,6 +1371,9 @@ namespace WindowsForms_packing_line
                 dbconnect.Close();
             }
         }
+
+        
+
         public void dbDelete(string query_s)
         {
             string queryList = query_s;
@@ -1361,6 +1418,8 @@ namespace WindowsForms_packing_line
         }
         public void roleChecker(string s)
         {
+            //Admin
+
             if (s== "Operator")
             {
                 enableTab(Settings, false);
