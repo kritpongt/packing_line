@@ -45,15 +45,15 @@
             this.tbCartonBox = new System.Windows.Forms.TextBox();
             this.lNeedCarton = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.lIsPort2Open = new System.Windows.Forms.Label();
             this.btnDecreaseInnerB = new System.Windows.Forms.Button();
             this.lMasterB = new System.Windows.Forms.Label();
-            this.lIsPort2Open = new System.Windows.Forms.Label();
             this.tbInnerBoxB = new System.Windows.Forms.TextBox();
             this.btnResetKB = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lIsPort1Open = new System.Windows.Forms.Label();
             this.btnDecreaseInnerA = new System.Windows.Forms.Button();
             this.lMasterA = new System.Windows.Forms.Label();
-            this.lIsPort1Open = new System.Windows.Forms.Label();
             this.tbInnerBoxA = new System.Windows.Forms.TextBox();
             this.lbLog = new System.Windows.Forms.ListBox();
             this.btnStart = new System.Windows.Forms.Button();
@@ -147,9 +147,11 @@
             this.pIcon = new System.Windows.Forms.Panel();
             this.btnLogout = new System.Windows.Forms.Button();
             this.pLogin = new System.Windows.Forms.Panel();
+            this.btnRFID = new System.Windows.Forms.Button();
             this.btnLogin = new System.Windows.Forms.Button();
             this.tbLogin = new System.Windows.Forms.TextBox();
             this.label29 = new System.Windows.Forms.Label();
+            this.btnMasterClear = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.Checker.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -306,7 +308,7 @@
             this.lNeedExport.Name = "lNeedExport";
             this.lNeedExport.Size = new System.Drawing.Size(103, 28);
             this.lNeedExport.TabIndex = 20;
-            this.lNeedExport.Text = "Need: 0";
+            this.lNeedExport.Text = "Scan: 0";
             // 
             // groupBox3
             // 
@@ -366,7 +368,7 @@
             this.lNeedCarton.Name = "lNeedCarton";
             this.lNeedCarton.Size = new System.Drawing.Size(103, 28);
             this.lNeedCarton.TabIndex = 19;
-            this.lNeedCarton.Text = "Need: 0";
+            this.lNeedCarton.Text = "Scan: 0";
             // 
             // groupBox2
             // 
@@ -383,6 +385,21 @@
             this.groupBox2.TabIndex = 22;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Inner Box B";
+            // 
+            // lIsPort2Open
+            // 
+            this.lIsPort2Open.AutoSize = true;
+            this.lIsPort2Open.BackColor = System.Drawing.Color.Crimson;
+            this.lIsPort2Open.Dock = System.Windows.Forms.DockStyle.Right;
+            this.lIsPort2Open.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lIsPort2Open.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lIsPort2Open.Location = new System.Drawing.Point(377, 35);
+            this.lIsPort2Open.Name = "lIsPort2Open";
+            this.lIsPort2Open.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
+            this.lIsPort2Open.Size = new System.Drawing.Size(120, 28);
+            this.lIsPort2Open.TabIndex = 26;
+            this.lIsPort2Open.Text = "Port2: Offline";
+            this.lIsPort2Open.Click += new System.EventHandler(this.lIsPort2Open_Click);
             // 
             // btnDecreaseInnerB
             // 
@@ -406,21 +423,6 @@
             this.lMasterB.Size = new System.Drawing.Size(149, 32);
             this.lMasterB.TabIndex = 27;
             this.lMasterB.Text = "Master: -";
-            // 
-            // lIsPort2Open
-            // 
-            this.lIsPort2Open.AutoSize = true;
-            this.lIsPort2Open.BackColor = System.Drawing.Color.Crimson;
-            this.lIsPort2Open.Dock = System.Windows.Forms.DockStyle.Right;
-            this.lIsPort2Open.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lIsPort2Open.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.lIsPort2Open.Location = new System.Drawing.Point(377, 35);
-            this.lIsPort2Open.Name = "lIsPort2Open";
-            this.lIsPort2Open.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
-            this.lIsPort2Open.Size = new System.Drawing.Size(120, 28);
-            this.lIsPort2Open.TabIndex = 26;
-            this.lIsPort2Open.Text = "Port2: Offline";
-            this.lIsPort2Open.Click += new System.EventHandler(this.lIsPort2Open_Click);
             // 
             // tbInnerBoxB
             // 
@@ -461,6 +463,21 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Inner Box A";
             // 
+            // lIsPort1Open
+            // 
+            this.lIsPort1Open.AutoSize = true;
+            this.lIsPort1Open.BackColor = System.Drawing.Color.Crimson;
+            this.lIsPort1Open.Dock = System.Windows.Forms.DockStyle.Right;
+            this.lIsPort1Open.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lIsPort1Open.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lIsPort1Open.Location = new System.Drawing.Point(377, 35);
+            this.lIsPort1Open.Name = "lIsPort1Open";
+            this.lIsPort1Open.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
+            this.lIsPort1Open.Size = new System.Drawing.Size(120, 28);
+            this.lIsPort1Open.TabIndex = 25;
+            this.lIsPort1Open.Text = "Port1: Offline";
+            this.lIsPort1Open.Click += new System.EventHandler(this.lIsPort1Open_Click);
+            // 
             // btnDecreaseInnerA
             // 
             this.btnDecreaseInnerA.BackColor = System.Drawing.Color.Transparent;
@@ -483,21 +500,6 @@
             this.lMasterA.Size = new System.Drawing.Size(149, 32);
             this.lMasterA.TabIndex = 26;
             this.lMasterA.Text = "Master: -";
-            // 
-            // lIsPort1Open
-            // 
-            this.lIsPort1Open.AutoSize = true;
-            this.lIsPort1Open.BackColor = System.Drawing.Color.Crimson;
-            this.lIsPort1Open.Dock = System.Windows.Forms.DockStyle.Right;
-            this.lIsPort1Open.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lIsPort1Open.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.lIsPort1Open.Location = new System.Drawing.Point(377, 35);
-            this.lIsPort1Open.Name = "lIsPort1Open";
-            this.lIsPort1Open.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
-            this.lIsPort1Open.Size = new System.Drawing.Size(120, 28);
-            this.lIsPort1Open.TabIndex = 25;
-            this.lIsPort1Open.Text = "Port1: Offline";
-            this.lIsPort1Open.Click += new System.EventHandler(this.lIsPort1Open_Click);
             // 
             // tbInnerBoxA
             // 
@@ -1056,6 +1058,7 @@
             this.Edit.BackColor = System.Drawing.Color.Transparent;
             this.Edit.Controls.Add(this.btnDeleteMaster);
             this.Edit.Controls.Add(this.btnUpdateMaster);
+            this.Edit.Controls.Add(this.btnMasterClear);
             this.Edit.Controls.Add(this.btnCreateMaster);
             this.Edit.Controls.Add(this.tbDBCartonMax);
             this.Edit.Controls.Add(this.label16);
@@ -1083,9 +1086,9 @@
             // 
             // btnDeleteMaster
             // 
-            this.btnDeleteMaster.Location = new System.Drawing.Point(828, 529);
+            this.btnDeleteMaster.Location = new System.Drawing.Point(701, 454);
             this.btnDeleteMaster.Name = "btnDeleteMaster";
-            this.btnDeleteMaster.Size = new System.Drawing.Size(120, 50);
+            this.btnDeleteMaster.Size = new System.Drawing.Size(300, 50);
             this.btnDeleteMaster.TabIndex = 5;
             this.btnDeleteMaster.Text = "Delete";
             this.btnDeleteMaster.UseVisualStyleBackColor = true;
@@ -1093,9 +1096,9 @@
             // 
             // btnUpdateMaster
             // 
-            this.btnUpdateMaster.Location = new System.Drawing.Point(828, 430);
+            this.btnUpdateMaster.Location = new System.Drawing.Point(701, 398);
             this.btnUpdateMaster.Name = "btnUpdateMaster";
-            this.btnUpdateMaster.Size = new System.Drawing.Size(120, 50);
+            this.btnUpdateMaster.Size = new System.Drawing.Size(300, 50);
             this.btnUpdateMaster.TabIndex = 5;
             this.btnUpdateMaster.Text = "Update";
             this.btnUpdateMaster.UseVisualStyleBackColor = true;
@@ -1104,27 +1107,27 @@
             // btnCreateMaster
             // 
             this.btnCreateMaster.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCreateMaster.Location = new System.Drawing.Point(828, 374);
+            this.btnCreateMaster.Location = new System.Drawing.Point(811, 342);
             this.btnCreateMaster.Name = "btnCreateMaster";
-            this.btnCreateMaster.Size = new System.Drawing.Size(120, 50);
+            this.btnCreateMaster.Size = new System.Drawing.Size(190, 50);
             this.btnCreateMaster.TabIndex = 5;
-            this.btnCreateMaster.Text = "Create";
+            this.btnCreateMaster.Text = "Create New";
             this.btnCreateMaster.UseVisualStyleBackColor = true;
             this.btnCreateMaster.Click += new System.EventHandler(this.btnCreateMaster_Click);
             // 
             // tbDBCartonMax
             // 
             this.tbDBCartonMax.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbDBCartonMax.Location = new System.Drawing.Point(557, 535);
+            this.tbDBCartonMax.Location = new System.Drawing.Point(865, 567);
             this.tbDBCartonMax.Name = "tbDBCartonMax";
-            this.tbDBCartonMax.Size = new System.Drawing.Size(244, 39);
+            this.tbDBCartonMax.Size = new System.Drawing.Size(128, 39);
             this.tbDBCartonMax.TabIndex = 4;
             // 
             // label16
             // 
             this.label16.AutoSize = true;
             this.label16.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label16.Location = new System.Drawing.Point(387, 538);
+            this.label16.Location = new System.Drawing.Point(695, 569);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(164, 32);
             this.label16.TabIndex = 3;
@@ -1133,16 +1136,16 @@
             // tbDBInnerMax
             // 
             this.tbDBInnerMax.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbDBInnerMax.Location = new System.Drawing.Point(557, 490);
+            this.tbDBInnerMax.Location = new System.Drawing.Point(865, 522);
             this.tbDBInnerMax.Name = "tbDBInnerMax";
-            this.tbDBInnerMax.Size = new System.Drawing.Size(244, 39);
+            this.tbDBInnerMax.Size = new System.Drawing.Size(128, 39);
             this.tbDBInnerMax.TabIndex = 4;
             // 
             // label15
             // 
             this.label15.AutoSize = true;
             this.label15.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label15.Location = new System.Drawing.Point(387, 493);
+            this.label15.Location = new System.Drawing.Point(695, 525);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(149, 32);
             this.label15.TabIndex = 3;
@@ -1151,16 +1154,16 @@
             // tbDBExport
             // 
             this.tbDBExport.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbDBExport.Location = new System.Drawing.Point(557, 419);
+            this.tbDBExport.Location = new System.Drawing.Point(140, 567);
             this.tbDBExport.Name = "tbDBExport";
-            this.tbDBExport.Size = new System.Drawing.Size(244, 39);
+            this.tbDBExport.Size = new System.Drawing.Size(539, 39);
             this.tbDBExport.TabIndex = 4;
             // 
             // label14
             // 
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.Location = new System.Drawing.Point(387, 422);
+            this.label14.Location = new System.Drawing.Point(15, 570);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(119, 32);
             this.label14.TabIndex = 3;
@@ -1169,16 +1172,16 @@
             // tbDBCarton
             // 
             this.tbDBCarton.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbDBCarton.Location = new System.Drawing.Point(557, 374);
+            this.tbDBCarton.Location = new System.Drawing.Point(140, 522);
             this.tbDBCarton.Name = "tbDBCarton";
-            this.tbDBCarton.Size = new System.Drawing.Size(244, 39);
+            this.tbDBCarton.Size = new System.Drawing.Size(539, 39);
             this.tbDBCarton.TabIndex = 4;
             // 
             // label13
             // 
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(387, 377);
+            this.label13.Location = new System.Drawing.Point(15, 525);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(119, 32);
             this.label13.TabIndex = 3;
@@ -1187,16 +1190,16 @@
             // tbDBInnerB
             // 
             this.tbDBInnerB.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbDBInnerB.Location = new System.Drawing.Point(128, 535);
+            this.tbDBInnerB.Location = new System.Drawing.Point(140, 477);
             this.tbDBInnerB.Name = "tbDBInnerB";
-            this.tbDBInnerB.Size = new System.Drawing.Size(244, 39);
+            this.tbDBInnerB.Size = new System.Drawing.Size(539, 39);
             this.tbDBInnerB.TabIndex = 4;
             // 
             // label11
             // 
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(3, 538);
+            this.label11.Location = new System.Drawing.Point(15, 480);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(119, 32);
             this.label11.TabIndex = 3;
@@ -1205,24 +1208,24 @@
             // tbDBModel
             // 
             this.tbDBModel.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbDBModel.Location = new System.Drawing.Point(128, 419);
+            this.tbDBModel.Location = new System.Drawing.Point(140, 387);
             this.tbDBModel.Name = "tbDBModel";
-            this.tbDBModel.Size = new System.Drawing.Size(244, 39);
+            this.tbDBModel.Size = new System.Drawing.Size(539, 39);
             this.tbDBModel.TabIndex = 6;
             // 
             // tbDBInnerA
             // 
             this.tbDBInnerA.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbDBInnerA.Location = new System.Drawing.Point(128, 490);
+            this.tbDBInnerA.Location = new System.Drawing.Point(140, 432);
             this.tbDBInnerA.Name = "tbDBInnerA";
-            this.tbDBInnerA.Size = new System.Drawing.Size(244, 39);
+            this.tbDBInnerA.Size = new System.Drawing.Size(539, 39);
             this.tbDBInnerA.TabIndex = 4;
             // 
             // label9
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(8, 422);
+            this.label9.Location = new System.Drawing.Point(15, 390);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(104, 32);
             this.label9.TabIndex = 5;
@@ -1232,7 +1235,7 @@
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(3, 493);
+            this.label10.Location = new System.Drawing.Point(15, 435);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(119, 32);
             this.label10.TabIndex = 3;
@@ -1241,9 +1244,9 @@
             // tbKBSearch
             // 
             this.tbKBSearch.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbKBSearch.Location = new System.Drawing.Point(128, 374);
+            this.tbKBSearch.Location = new System.Drawing.Point(140, 342);
             this.tbKBSearch.Name = "tbKBSearch";
-            this.tbKBSearch.Size = new System.Drawing.Size(244, 39);
+            this.tbKBSearch.Size = new System.Drawing.Size(539, 39);
             this.tbKBSearch.TabIndex = 4;
             this.tbKBSearch.TextChanged += new System.EventHandler(this.tbKBSearch_TextChanged);
             // 
@@ -1251,7 +1254,7 @@
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(8, 377);
+            this.label8.Location = new System.Drawing.Point(15, 345);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(89, 32);
             this.label8.TabIndex = 3;
@@ -1275,7 +1278,7 @@
             this.lvModelMaster.HideSelection = false;
             this.lvModelMaster.Location = new System.Drawing.Point(0, 0);
             this.lvModelMaster.Name = "lvModelMaster";
-            this.lvModelMaster.Size = new System.Drawing.Size(1021, 344);
+            this.lvModelMaster.Size = new System.Drawing.Size(1021, 315);
             this.lvModelMaster.TabIndex = 2;
             this.lvModelMaster.UseCompatibleStateImageBehavior = false;
             this.lvModelMaster.View = System.Windows.Forms.View.Details;
@@ -1362,7 +1365,7 @@
             this.tbDBPosition.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbDBPosition.Location = new System.Drawing.Point(202, 549);
             this.tbDBPosition.Name = "tbDBPosition";
-            this.tbDBPosition.Size = new System.Drawing.Size(200, 39);
+            this.tbDBPosition.Size = new System.Drawing.Size(343, 39);
             this.tbDBPosition.TabIndex = 11;
             // 
             // tbDBSurname
@@ -1370,7 +1373,7 @@
             this.tbDBSurname.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbDBSurname.Location = new System.Drawing.Point(202, 504);
             this.tbDBSurname.Name = "tbDBSurname";
-            this.tbDBSurname.Size = new System.Drawing.Size(200, 39);
+            this.tbDBSurname.Size = new System.Drawing.Size(343, 39);
             this.tbDBSurname.TabIndex = 11;
             // 
             // label28
@@ -1396,7 +1399,7 @@
             // btnDeleteAccount
             // 
             this.btnDeleteAccount.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDeleteAccount.Location = new System.Drawing.Point(422, 549);
+            this.btnDeleteAccount.Location = new System.Drawing.Point(835, 545);
             this.btnDeleteAccount.Name = "btnDeleteAccount";
             this.btnDeleteAccount.Size = new System.Drawing.Size(120, 39);
             this.btnDeleteAccount.TabIndex = 9;
@@ -1407,7 +1410,7 @@
             // btnUpdateAccount
             // 
             this.btnUpdateAccount.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnUpdateAccount.Location = new System.Drawing.Point(422, 504);
+            this.btnUpdateAccount.Location = new System.Drawing.Point(835, 500);
             this.btnUpdateAccount.Name = "btnUpdateAccount";
             this.btnUpdateAccount.Size = new System.Drawing.Size(120, 39);
             this.btnUpdateAccount.TabIndex = 8;
@@ -1418,7 +1421,7 @@
             // btnCreateAccount
             // 
             this.btnCreateAccount.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCreateAccount.Location = new System.Drawing.Point(422, 459);
+            this.btnCreateAccount.Location = new System.Drawing.Point(835, 455);
             this.btnCreateAccount.Name = "btnCreateAccount";
             this.btnCreateAccount.Size = new System.Drawing.Size(120, 39);
             this.btnCreateAccount.TabIndex = 7;
@@ -1431,7 +1434,7 @@
             this.tbDBName.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbDBName.Location = new System.Drawing.Point(202, 459);
             this.tbDBName.Name = "tbDBName";
-            this.tbDBName.Size = new System.Drawing.Size(200, 39);
+            this.tbDBName.Size = new System.Drawing.Size(343, 39);
             this.tbDBName.TabIndex = 6;
             // 
             // label22
@@ -1449,7 +1452,7 @@
             this.tbDBOperatorID.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbDBOperatorID.Location = new System.Drawing.Point(202, 414);
             this.tbDBOperatorID.Name = "tbDBOperatorID";
-            this.tbDBOperatorID.Size = new System.Drawing.Size(200, 39);
+            this.tbDBOperatorID.Size = new System.Drawing.Size(343, 39);
             this.tbDBOperatorID.TabIndex = 4;
             // 
             // label21
@@ -1467,7 +1470,7 @@
             this.tbDBTagpass.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbDBTagpass.Location = new System.Drawing.Point(202, 369);
             this.tbDBTagpass.Name = "tbDBTagpass";
-            this.tbDBTagpass.Size = new System.Drawing.Size(200, 39);
+            this.tbDBTagpass.Size = new System.Drawing.Size(343, 39);
             this.tbDBTagpass.TabIndex = 2;
             this.tbDBTagpass.TextChanged += new System.EventHandler(this.tbDBTagpass_TextChanged);
             // 
@@ -1570,6 +1573,7 @@
             // pLogin
             // 
             this.pLogin.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(52)))), ((int)(((byte)(96)))));
+            this.pLogin.Controls.Add(this.btnRFID);
             this.pLogin.Controls.Add(this.btnLogin);
             this.pLogin.Controls.Add(this.tbLogin);
             this.pLogin.Controls.Add(this.label29);
@@ -1578,6 +1582,20 @@
             this.pLogin.Name = "pLogin";
             this.pLogin.Size = new System.Drawing.Size(1029, 10);
             this.pLogin.TabIndex = 4;
+            // 
+            // btnRFID
+            // 
+            this.btnRFID.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRFID.Font = new System.Drawing.Font("Consolas", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRFID.ForeColor = System.Drawing.SystemColors.Control;
+            this.btnRFID.Location = new System.Drawing.Point(536, 329);
+            this.btnRFID.Margin = new System.Windows.Forms.Padding(3, 15, 3, 3);
+            this.btnRFID.Name = "btnRFID";
+            this.btnRFID.Size = new System.Drawing.Size(125, 53);
+            this.btnRFID.TabIndex = 3;
+            this.btnRFID.Text = "RFID";
+            this.btnRFID.UseVisualStyleBackColor = true;
+            this.btnRFID.Click += new System.EventHandler(this.btnRFID_Click);
             // 
             // btnLogin
             // 
@@ -1599,6 +1617,7 @@
             this.tbLogin.Location = new System.Drawing.Point(381, 270);
             this.tbLogin.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
             this.tbLogin.Name = "tbLogin";
+            this.tbLogin.PasswordChar = '*';
             this.tbLogin.Size = new System.Drawing.Size(280, 41);
             this.tbLogin.TabIndex = 1;
             this.tbLogin.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbLogin_KeyDown);
@@ -1613,6 +1632,17 @@
             this.label29.Size = new System.Drawing.Size(291, 29);
             this.label29.TabIndex = 0;
             this.label29.Text = "แสกนบัตร/ใส่รหัส เพื่อ Login";
+            // 
+            // btnMasterClear
+            // 
+            this.btnMasterClear.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMasterClear.Location = new System.Drawing.Point(701, 342);
+            this.btnMasterClear.Name = "btnMasterClear";
+            this.btnMasterClear.Size = new System.Drawing.Size(104, 50);
+            this.btnMasterClear.TabIndex = 5;
+            this.btnMasterClear.Text = "Clear";
+            this.btnMasterClear.UseVisualStyleBackColor = true;
+            this.btnMasterClear.Click += new System.EventHandler(this.btnAccountClear_Click);
             // 
             // Form1
             // 
@@ -1774,6 +1804,8 @@
         private System.Windows.Forms.Label label29;
         private System.Windows.Forms.Label lTotal;
         private System.Windows.Forms.Button btnLogout;
+        private System.Windows.Forms.Button btnRFID;
+        private System.Windows.Forms.Button btnMasterClear;
     }
 }
 

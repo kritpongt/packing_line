@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -13,7 +15,8 @@ namespace WindowsForms_packing_line
 {
     public partial class Authentication : Form
     {
-        string connectStr = "server=" + WindowsForms_packing_line.Properties.Settings.Default.dbIPServer + ";port=3306;Database=packing_line_element;uid=root;pwd=;SslMode=none;";
+        string connectStr = Form1.connectStr;
+        SerialPort portRFID = Form1.portRFID;
         public Authentication()
         {
             InitializeComponent();
@@ -36,7 +39,10 @@ namespace WindowsForms_packing_line
                     reader = dbcommand.ExecuteReader();
                     while (reader.Read())
                     {
-                        this.Close();
+                        if (reader.GetString("Position") == "Administrator" || reader.GetString("Position") == "Supervisor")
+                        {
+                            this.Close();
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -48,6 +54,71 @@ namespace WindowsForms_packing_line
                     dbconnect.Close();
                 }
             }
+        }//OK
+
+        private void btnLogin_Click(object sender, EventArgs e)
+        {
+            string TABLE = "test_account";
+            string queryList = "SELECT * FROM " + TABLE + " WHERE OperatorID = '" + tbAlarm.Text + "';";
+            MySqlConnection dbconnect = new MySqlConnection(connectStr);
+            MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
+            MySqlDataReader reader;
+            dbcommand.CommandTimeout = 100;
+            try
+            {
+                dbconnect.Open();
+                reader = dbcommand.ExecuteReader();
+                while (reader.Read())
+                {
+                    if (reader.GetString("Position") == "Administrator" || reader.GetString("Position") == "Supervisor")
+                    {
+                        this.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                dbconnect.Close();
+                tbAlarm.Focus();
+            }
+        }//Waittest
+
+        private void btnRFID_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                portRFID.Open();
+                portRFID.DataReceived += new SerialDataReceivedEventHandler(dataReceiverRFID);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+        private void dataReceiverRFID(object sender, SerialDataReceivedEventArgs e)
+        {
+            try
+            {
+                Thread.Sleep(100);
+                int input_value = portRFID.ReadByte();
+                byte[] buffer = new byte[input_value];
+                portRFID.Read(buffer, 0, input_value);
+                string s_buffer = "";
+                for (int i = 0; i < input_value; i++)
+                {
+                    s_buffer += s_buffer[i];
+                }
+                MessageBox.Show(s_buffer); //test
+                //code below
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }//Waittest
     }
 }

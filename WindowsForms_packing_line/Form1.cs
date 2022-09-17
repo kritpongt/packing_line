@@ -29,8 +29,8 @@ namespace WindowsForms_packing_line
         private SerialPort port2;
         private SerialPort port3;
         private SerialPort port4;
-        private SerialPort portRFID = new SerialPort("COM7", 115200, System.IO.Ports.Parity.None, 8, System.IO.Ports.StopBits.One);
-        string connectStr = "server=" + WindowsForms_packing_line.Properties.Settings.Default.dbIPServer + ";port=3306;Database=packing_line_element;uid=root;pwd=;SslMode=none;";
+        public static SerialPort portRFID = new SerialPort("COM7", 115200, System.IO.Ports.Parity.None, 8, System.IO.Ports.StopBits.One);
+        public static string connectStr = "server=" + WindowsForms_packing_line.Properties.Settings.Default.dbIPServer + ";port=3306;Database=packing_line_element;uid=root;pwd=;SslMode=none;";
         private int qty_kanban, qty_current, innerbox_max, cartonbox_max;   //get from db
         int total = 0, inner_count = 0, carton_count = 0 , carton_need = 0, export_need = 0; //counter +1 the larger box
         string inner_a_master = "";  //inner a master
@@ -53,15 +53,6 @@ namespace WindowsForms_packing_line
             WindowsForms_packing_line.Properties.Settings.Default.InnerBMaster = "";
             WindowsForms_packing_line.Properties.Settings.Default.CartonMaster = "";
             WindowsForms_packing_line.Properties.Settings.Default.ExportMaster = "";
-            try //btn
-            {
-                portRFID.Open();
-                portRFID.DataReceived += new SerialDataReceivedEventHandler(dataReceiverRFID);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }//Waittest
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -101,6 +92,7 @@ namespace WindowsForms_packing_line
                         roleChecker(reader.GetString("Position"));
                         tbKanban.Focus();
                         Invoke((MethodInvoker)delegate { tbLogin.Enabled = false; });
+                        portsCloser();
                     }
                 }
                 catch (Exception ex)
@@ -135,6 +127,7 @@ namespace WindowsForms_packing_line
                     roleChecker(reader.GetString("Position"));
                     tbKanban.Focus();
                     Invoke((MethodInvoker)delegate { tbLogin.Enabled = false; });
+                    portsCloser();
                 }
             }
             catch (Exception ex)
@@ -144,8 +137,22 @@ namespace WindowsForms_packing_line
             finally
             {
                 dbconnect.Close();
+                tbLogin.Focus();
             }
         }//OK
+        private void btnRFID_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                portRFID.Open();
+                portRFID.DataReceived += new SerialDataReceivedEventHandler(dataReceiverRFID);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            tbLogin.Focus();
+        }//Waittest
         private void btnLogout_Click(object sender, EventArgs e)
         {
             lOperatorID.Text = "Operator ID: ";
@@ -530,7 +537,7 @@ namespace WindowsForms_packing_line
                             if (inner_count % innerbox_max == 0)
                             {
                                 carton_need = inner_count / innerbox_max;
-                                Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Need: " + carton_need.ToString(); });
+                                Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Scan: " + carton_need.ToString(); });
                             }
                         }
                         else if (typeCheck() == 2)
@@ -538,12 +545,12 @@ namespace WindowsForms_packing_line
                             if (inner_count % cartonbox_max == 0)
                             {
                                 export_need = inner_count / cartonbox_max;
-                                Invoke((MethodInvoker)delegate { lNeedExport.Text = "Need: " + export_need.ToString(); });
+                                Invoke((MethodInvoker)delegate { lNeedExport.Text = "Scan: " + export_need.ToString(); });
                             }
                             else if (qty_current - inner_count == 0)
                             {
                                 export_need++;
-                                Invoke((MethodInvoker)delegate { lNeedExport.Text = "Need: " + export_need.ToString(); });
+                                Invoke((MethodInvoker)delegate { lNeedExport.Text = "Scan: " + export_need.ToString(); });
                             }
                         }
                     }
@@ -589,7 +596,7 @@ namespace WindowsForms_packing_line
                             if (inner_count % innerbox_max == 0)
                             {
                                 carton_need = inner_count / innerbox_max;
-                                Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Need: " + carton_need.ToString(); });
+                                Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Scan: " + carton_need.ToString(); });
                             }
                         }
                         else if (typeCheck() == 2)
@@ -597,12 +604,12 @@ namespace WindowsForms_packing_line
                             if (inner_count % cartonbox_max == 0)
                             {
                                 export_need = inner_count / cartonbox_max;
-                                Invoke((MethodInvoker)delegate { lNeedExport.Text = "Need: " + export_need.ToString(); });
+                                Invoke((MethodInvoker)delegate { lNeedExport.Text = "Scan: " + export_need.ToString(); });
                             }
                             else if (qty_current - inner_count == 0)
                             {
                                 export_need++;
-                                Invoke((MethodInvoker)delegate { lNeedExport.Text = "Need: " + export_need.ToString(); });
+                                Invoke((MethodInvoker)delegate { lNeedExport.Text = "Scan: " + export_need.ToString(); });
                             }
                         }
                     }
@@ -640,7 +647,7 @@ namespace WindowsForms_packing_line
                         Invoke((MethodInvoker)delegate { lbLog.Items.Add(input_value + "\tCarton Box"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
                         
                         carton_need--;
-                        Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Need: " + carton_need; });
+                        Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Scan: " + carton_need; });
 
                         if (typeCheck() == 1)
                         {
@@ -648,12 +655,12 @@ namespace WindowsForms_packing_line
                             if (carton_count % cartonbox_max == 0)
                             {
                                 export_need++;
-                                Invoke((MethodInvoker)delegate { lNeedExport.Text = "Need: " + export_need; });
+                                Invoke((MethodInvoker)delegate { lNeedExport.Text = "Scan: " + export_need; });
                             }
                             else if (qty_current - inner_count == 0 && carton_need == 0)
                             {
                                 export_need++;
-                                Invoke((MethodInvoker)delegate { lNeedExport.Text = "Need: " + export_need; });
+                                Invoke((MethodInvoker)delegate { lNeedExport.Text = "Scan: " + export_need; });
                             }
                         }
                         else if (typeCheck() == 4)
@@ -667,12 +674,12 @@ namespace WindowsForms_packing_line
                             if (carton_count % cartonbox_max == 0)
                             {
                                 export_need++;
-                                Invoke((MethodInvoker)delegate { lNeedExport.Text = "Need: " + export_need; });
+                                Invoke((MethodInvoker)delegate { lNeedExport.Text = "Scan: " + export_need; });
                             }
                             else if (total == 0 && carton_need ==0)
                             {
                                 export_need++;
-                                Invoke((MethodInvoker)delegate { lNeedExport.Text = "Need: " + export_need; });
+                                Invoke((MethodInvoker)delegate { lNeedExport.Text = "Scan: " + export_need; });
                             }
                         }
 
@@ -711,7 +718,7 @@ namespace WindowsForms_packing_line
                         Invoke((MethodInvoker)delegate { lbLog.Items.Add(input_value + "\tExport Box"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
 
                         export_need--;
-                        Invoke((MethodInvoker)delegate { lNeedExport.Text = "Need: " + export_need; });
+                        Invoke((MethodInvoker)delegate { lNeedExport.Text = "Scan: " + export_need; });
 
                         if (typeCheck() == 3)
                         {
@@ -745,7 +752,7 @@ namespace WindowsForms_packing_line
             {
                 MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }//Not OK
+        }
         //Decrease a counter -1 at a time
         private void btnDecreaseInnerA_Click(object sender, EventArgs e)
         {
@@ -757,12 +764,12 @@ namespace WindowsForms_packing_line
                 if (typeCheck() == 1)
                 {
                     carton_need = inner_count / innerbox_max;
-                    Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Need: " + carton_need.ToString(); });
+                    Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Scan: " + carton_need.ToString(); });
                 }
                 else if (typeCheck() ==2)
                 {
                     export_need = inner_count / cartonbox_max;
-                    Invoke((MethodInvoker)delegate { lNeedExport.Text = "Need: " + export_need.ToString(); });
+                    Invoke((MethodInvoker)delegate { lNeedExport.Text = "Scan: " + export_need.ToString(); });
                 }
             }
         }
@@ -776,12 +783,12 @@ namespace WindowsForms_packing_line
                 if (typeCheck() == 1)
                 {
                     carton_need = inner_count / innerbox_max;
-                    Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Need: " + carton_need.ToString(); });
+                    Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Scan: " + carton_need.ToString(); });
                 }
                 else if (typeCheck() == 2)
                 {
                     export_need = inner_count / cartonbox_max;
-                    Invoke((MethodInvoker)delegate { lNeedExport.Text = "Need: " + export_need.ToString(); });
+                    Invoke((MethodInvoker)delegate { lNeedExport.Text = "Scan: " + export_need.ToString(); });
                 }
             }
         }
@@ -795,13 +802,13 @@ namespace WindowsForms_packing_line
                     if (port1.IsOpen)
                     {
                         port1.Close();
-                        lIsPort1Open.Text = "Port1: Offine";
+                        lIsPort1Open.Text = "Port1: Offline";
                         lIsPort1Open.BackColor = System.Drawing.Color.Crimson;
                     }
                     else if (port1.IsOpen == false)
                     {
                         port1.Open();
-                        lIsPort1Open.Text = "Port1: Online";
+                        lIsPort1Open.Text = "Port1: Online ";
                         lIsPort1Open.BackColor = System.Drawing.Color.Green;
                     }
                 }
@@ -828,13 +835,13 @@ namespace WindowsForms_packing_line
                     if (port2.IsOpen)
                     {
                         port2.Close();
-                        lIsPort2Open.Text = "Port2: Offine";
+                        lIsPort2Open.Text = "Port2: Offline";
                         lIsPort2Open.BackColor = System.Drawing.Color.Crimson;
                     }
                     else if (port2.IsOpen == false)
                     {
                         port2.Open();
-                        lIsPort2Open.Text = "Port2: Online";
+                        lIsPort2Open.Text = "Port2: Online ";
                         lIsPort2Open.BackColor = System.Drawing.Color.Green;
                     }
                 }
@@ -861,13 +868,13 @@ namespace WindowsForms_packing_line
                     if (port3.IsOpen)
                     {
                         port3.Close();
-                        lIsPort3Open.Text = "Port3: Offine";
+                        lIsPort3Open.Text = "Port3: Offline";
                         lIsPort3Open.BackColor = System.Drawing.Color.Crimson;
                     }
                     else if (port3.IsOpen == false)
                     {
                         port3.Open();
-                        lIsPort3Open.Text = "Port3: Online";
+                        lIsPort3Open.Text = "Port3: Online ";
                         lIsPort3Open.BackColor = System.Drawing.Color.Green;
                     }
                 }
@@ -894,13 +901,13 @@ namespace WindowsForms_packing_line
                     if (port4.IsOpen)
                     {
                         port4.Close();
-                        lIsPort4Open.Text = "Port4: Offine";
+                        lIsPort4Open.Text = "Port4: Offline";
                         lIsPort4Open.BackColor = System.Drawing.Color.Crimson;
                     }
                     else if (port4.IsOpen == false)
                     {
                         port4.Open();
-                        lIsPort4Open.Text = "Port4: Online";
+                        lIsPort4Open.Text = "Port4: Online ";
                         lIsPort4Open.BackColor = System.Drawing.Color.Green;
                     }
                 }
@@ -920,10 +927,14 @@ namespace WindowsForms_packing_line
         }//OK
         private void btnResetKB_Click(object sender, EventArgs e)
         {
-            alarmAuth();
-            resetChecker();
-            tbKanban.ReadOnly = false;
-            tbKanban.Focus();
+            DialogResult dialog_result = MessageBox.Show("Are you sure to reset Kanban?", "Reset Kanban", MessageBoxButtons.YesNo);
+            if (dialog_result == DialogResult.Yes)
+            {
+                alarmAuth();
+                resetChecker();
+                tbKanban.ReadOnly = false;
+                tbKanban.Focus();
+            }
         }//OK
         //Edit Master page
         //Create kanban button
@@ -1063,6 +1074,10 @@ namespace WindowsForms_packing_line
                 }
             }
         }//OK
+        private void btnAccountClear_Click(object sender, EventArgs e)
+        {
+            tbEditMasterClear();
+        }//OK
         //Account Tagpass textbox
         private void tbDBTagpass_TextChanged(object sender, EventArgs e)
         {
@@ -1162,7 +1177,7 @@ namespace WindowsForms_packing_line
                 {
                     port1.Close();
                     Invoke((MethodInvoker)delegate {
-                        lIsPort1Open.Text = "Port1: Offine";
+                        lIsPort1Open.Text = "Port1: Offline";
                         lIsPort1Open.BackColor = System.Drawing.Color.Crimson;
                     });
                 }
@@ -1171,7 +1186,7 @@ namespace WindowsForms_packing_line
                     port2.Close();
                     Invoke((MethodInvoker)delegate
                     {
-                        lIsPort2Open.Text = "Port2: Offine";
+                        lIsPort2Open.Text = "Port2: Offline";
                         lIsPort2Open.BackColor = System.Drawing.Color.Crimson;
                     });
                 }
@@ -1180,7 +1195,7 @@ namespace WindowsForms_packing_line
                     port3.Close();
                     Invoke((MethodInvoker)delegate
                     {
-                        lIsPort3Open.Text = "Port3: Offine";
+                        lIsPort3Open.Text = "Port3: Offline";
                         lIsPort3Open.BackColor = System.Drawing.Color.Crimson;
                     });
                 }
@@ -1189,9 +1204,13 @@ namespace WindowsForms_packing_line
                     port4.Close();
                     Invoke((MethodInvoker)delegate
                     {
-                        lIsPort4Open.Text = "Port4: Offine";
+                        lIsPort4Open.Text = "Port4: Offline";
                         lIsPort4Open.BackColor = System.Drawing.Color.Crimson;
                     });
+                }
+                if (portRFID != null)
+                {
+                    portRFID.Close();
                 }
             }
             catch (Exception ex)
@@ -1211,7 +1230,7 @@ namespace WindowsForms_packing_line
                     if (port1.IsOpen)
                     {
                         //set port1 Status: Online
-                        lIsPort1Open.Text = "Port1: Online";
+                        lIsPort1Open.Text = "Port1: Online ";
                         lIsPort1Open.BackColor = System.Drawing.Color.Green;
                     }
                 }
@@ -1223,7 +1242,7 @@ namespace WindowsForms_packing_line
                     if (port2.IsOpen)
                     {
                         //set port1 Status: Online
-                        lIsPort2Open.Text = "Port2: Online";
+                        lIsPort2Open.Text = "Port2: Online ";
                         lIsPort2Open.BackColor = System.Drawing.Color.Green;
                     }
                 }
@@ -1235,7 +1254,7 @@ namespace WindowsForms_packing_line
                     if (port3.IsOpen)
                     {
                         //set port1 Status: Online
-                        lIsPort3Open.Text = "Port3: Online";
+                        lIsPort3Open.Text = "Port3: Online ";
                         lIsPort3Open.BackColor = System.Drawing.Color.Green;
                     }
                 }
@@ -1247,7 +1266,7 @@ namespace WindowsForms_packing_line
                     if (port4.IsOpen)
                     {
                         //set port1 Status: Online
-                        lIsPort4Open.Text = "Port4: Online";
+                        lIsPort4Open.Text = "Port4: Online ";
                         lIsPort4Open.BackColor = System.Drawing.Color.Green;
                     }
                 }
@@ -1299,8 +1318,8 @@ namespace WindowsForms_packing_line
                 {
                     innerbox_max = reader.GetInt32("InnerMax");     //Get InnerMax from db
                     cartonbox_max = reader.GetInt32("CartonMax");   //Get CartonMax from db
-                    lNeedCarton.Text = "Need: " + carton_need.ToString();   //Display - (Carton)Need: 0
-                    lNeedExport.Text = "Need: " + export_need.ToString();   //Display - (Export)Need: 0
+                    lNeedCarton.Text = "Scan: " + carton_need.ToString();   //Display - (Carton)Scan: 0
+                    lNeedExport.Text = "Scan: " + export_need.ToString();   //Display - (Export)Scan: 0
                 }
             }
             catch (Exception ex)
@@ -1648,6 +1667,9 @@ namespace WindowsForms_packing_line
             tbDBInnerMax.Clear();
             tbDBCartonMax.Clear();
         }//OK
+
+        
+
         public void tbEditAccountClear()
         {
             tbDBTagpass.Clear();
@@ -1793,8 +1815,8 @@ namespace WindowsForms_packing_line
             lMasterB.Text = "Master: -" + inner_b_master;
             lMasterCarton.Text = "Master: -" + carton_master;
             lMasterExport.Text = "Master: -" + export_master;
-            lNeedCarton.Text = "Need: " + carton_need.ToString();
-            lNeedExport.Text = "Need: " + export_need.ToString();
+            lNeedCarton.Text = "Scan: " + carton_need.ToString();
+            lNeedExport.Text = "Scan: " + export_need.ToString();
             tbInnerBoxA.Clear();
             tbInnerBoxB.Clear();
             tbCartonBox.Clear();
@@ -1823,6 +1845,6 @@ namespace WindowsForms_packing_line
                 type = 4;
             }
             return type;
-        }
+        }//Waittest
     }
 }
