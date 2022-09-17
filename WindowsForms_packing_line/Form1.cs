@@ -389,6 +389,7 @@ namespace WindowsForms_packing_line
                     }
                     string[] kanban_array = tbKanban.Text.Split('|');
                     tbQTY.Text = kanban_array[5];
+                    tbQTY.Focus();
                     qty_kanban = int.Parse(kanban_array[5]);
                 }
                 catch (Exception ex)
@@ -539,6 +540,11 @@ namespace WindowsForms_packing_line
                                 carton_need = inner_count / innerbox_max;
                                 Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Scan: " + carton_need.ToString(); });
                             }
+                            else if (qty_current - inner_count == 0)//Fraction
+                            {
+                                carton_need++;
+                                Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Scan: " + carton_need.ToString(); });
+                            }
                         }
                         else if (typeCheck() == 2)
                         {
@@ -596,6 +602,11 @@ namespace WindowsForms_packing_line
                             if (inner_count % innerbox_max == 0)
                             {
                                 carton_need = inner_count / innerbox_max;
+                                Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Scan: " + carton_need.ToString(); });
+                            }
+                            else if (qty_current - inner_count == 0)//Fraction
+                            {
+                                carton_need++;
                                 Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Scan: " + carton_need.ToString(); });
                             }
                         }
@@ -701,7 +712,7 @@ namespace WindowsForms_packing_line
             {
                 MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
+        }//Cannot decrease
         private void dataReceiver4(object sender, SerialDataReceivedEventArgs e)
         {
             try
@@ -752,7 +763,7 @@ namespace WindowsForms_packing_line
             {
                 MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
+        }//Cannot decrease
         //Decrease a counter -1 at a time
         private void btnDecreaseInnerA_Click(object sender, EventArgs e)
         {
@@ -1002,6 +1013,10 @@ namespace WindowsForms_packing_line
                 }
             }
         }//OK
+        private void btnMasterClear_Click(object sender, EventArgs e)
+        {
+            tbEditMasterClear();
+        }//OK
         //Listview click to select a item
         private void lvModelMaster_Click(object sender, EventArgs e)
         {
@@ -1026,7 +1041,7 @@ namespace WindowsForms_packing_line
             tbDBOperatorID.Text = selected_item.SubItems[1].Text;
             tbDBName.Text = selected_item.SubItems[2].Text;
             tbDBSurname.Text = selected_item.SubItems[3].Text;
-            tbDBPosition.Text = selected_item.SubItems[4].Text;
+            cbDBPosition.Text = selected_item.SubItems[4].Text;
         }//OK
         //Edit Account button
         private void btnCreateAccount_Click(object sender, EventArgs e)
@@ -1036,7 +1051,7 @@ namespace WindowsForms_packing_line
                 DialogResult dialog_result = MessageBox.Show("Are you sure to insert new Account?", "Database", MessageBoxButtons.YesNo);
                 if (dialog_result == DialogResult.Yes)
                 {
-                    dbCreate("INSERT INTO test_account (Tagpass, OperatorID, Name, Surname, Position) VALUES('" + tbDBTagpass.Text + "', '" + tbDBOperatorID.Text + "', '" + tbDBName.Text + "', '" + tbDBSurname.Text + "', '" + tbDBPosition.Text + "');");
+                    dbCreate("INSERT INTO test_account (Tagpass, OperatorID, Name, Surname, Position) VALUES('" + tbDBTagpass.Text + "', '" + tbDBOperatorID.Text + "', '" + tbDBName.Text + "', '" + tbDBSurname.Text + "', '" + cbDBPosition.Text + "');");
                     tbEditAccountClear();
                 }
             }
@@ -1050,9 +1065,9 @@ namespace WindowsForms_packing_line
                 {
                     MessageBox.Show("Error: Please select Tagpass before update database!", "Database");
                 }
-                else
+                else if(tbDBOperatorID.Text != "" && tbDBName.Text != "" && tbDBSurname.Text != "" && cbDBPosition.Text != "")
                 {
-                    dbUpdate("UPDATE test_account SET Tagpass = '" + tbDBTagpass.Text + "', OperatorID = '" + tbDBOperatorID.Text + "', Name = '" + tbDBName.Text + "', Surname = '" + tbDBSurname.Text + "', Position = '" + tbDBPosition.Text + "' WHERE Tagpass = '" + selected_account_tagpass + "';");
+                    dbUpdate("UPDATE test_account SET Tagpass = '" + tbDBTagpass.Text + "', OperatorID = '" + tbDBOperatorID.Text + "', Name = '" + tbDBName.Text + "', Surname = '" + tbDBSurname.Text + "', Position = '" + cbDBPosition.Text + "' WHERE Tagpass = '" + selected_account_tagpass + "';");
                     dbSearchTagpass();
                     selected_account_tagpass = "";
                 }
@@ -1076,8 +1091,8 @@ namespace WindowsForms_packing_line
         }//OK
         private void btnAccountClear_Click(object sender, EventArgs e)
         {
-            tbEditMasterClear();
-        }//OK
+            tbEditAccountClear();
+        }
         //Account Tagpass textbox
         private void tbDBTagpass_TextChanged(object sender, EventArgs e)
         {
@@ -1676,7 +1691,7 @@ namespace WindowsForms_packing_line
             tbDBOperatorID.Clear();
             tbDBName.Clear();
             tbDBSurname.Clear();
-            tbDBPosition.Clear();
+            cbDBPosition.SelectedIndex = -1;
         }//OK
         public void roleChecker(string s)
         {
@@ -1702,7 +1717,7 @@ namespace WindowsForms_packing_line
             tbDBOperatorID.Enabled = true;
             tbDBName.Enabled = true;
             tbDBSurname.Enabled = true;
-            tbDBPosition.Enabled = true;
+            cbDBPosition.Enabled = true;
             btnCreateAccount.Show();
             btnUpdateAccount.Show();
             btnDeleteAccount.Show();
@@ -1726,7 +1741,7 @@ namespace WindowsForms_packing_line
                 tbDBOperatorID.Enabled = false;
                 tbDBName.Enabled = false;
                 tbDBSurname.Enabled = false;
-                tbDBPosition.Enabled = false;
+                cbDBPosition.Enabled = false;
                 btnCreateAccount.Hide();
                 btnUpdateAccount.Hide();
                 btnDeleteAccount.Hide();
