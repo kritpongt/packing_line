@@ -34,7 +34,6 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.Checker = new System.Windows.Forms.TabPage();
             this.lTotal = new System.Windows.Forms.Label();
-            this.lRemainingCarton = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.lMasterExport = new System.Windows.Forms.Label();
             this.lIsPort4Open = new System.Windows.Forms.Label();
@@ -50,15 +49,13 @@
             this.lMasterB = new System.Windows.Forms.Label();
             this.lIsPort2Open = new System.Windows.Forms.Label();
             this.tbInnerBoxB = new System.Windows.Forms.TextBox();
+            this.btnResetKB = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnDecreaseInnerA = new System.Windows.Forms.Button();
             this.lMasterA = new System.Windows.Forms.Label();
             this.lIsPort1Open = new System.Windows.Forms.Label();
             this.tbInnerBoxA = new System.Windows.Forms.TextBox();
-            this.label12 = new System.Windows.Forms.Label();
             this.lbLog = new System.Windows.Forms.ListBox();
-            this.lRemainingInner = new System.Windows.Forms.Label();
-            this.btnResetKB = new System.Windows.Forms.Button();
             this.btnStart = new System.Windows.Forms.Button();
             this.tbQTY = new System.Windows.Forms.TextBox();
             this.tbModel = new System.Windows.Forms.TextBox();
@@ -148,6 +145,7 @@
             this.columnHeader14 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel1 = new System.Windows.Forms.Panel();
             this.pIcon = new System.Windows.Forms.Panel();
+            this.btnLogout = new System.Windows.Forms.Button();
             this.pLogin = new System.Windows.Forms.Panel();
             this.btnLogin = new System.Windows.Forms.Button();
             this.tbLogin = new System.Windows.Forms.TextBox();
@@ -194,7 +192,7 @@
             this.lPosition.AutoSize = true;
             this.lPosition.Font = new System.Drawing.Font("Consolas", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lPosition.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.lPosition.Location = new System.Drawing.Point(465, 20);
+            this.lPosition.Location = new System.Drawing.Point(431, 20);
             this.lPosition.Name = "lPosition";
             this.lPosition.Size = new System.Drawing.Size(118, 24);
             this.lPosition.TabIndex = 2;
@@ -219,15 +217,12 @@
             // 
             this.Checker.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(52)))), ((int)(((byte)(96)))));
             this.Checker.Controls.Add(this.lTotal);
-            this.Checker.Controls.Add(this.lRemainingCarton);
             this.Checker.Controls.Add(this.groupBox4);
             this.Checker.Controls.Add(this.groupBox3);
             this.Checker.Controls.Add(this.groupBox2);
-            this.Checker.Controls.Add(this.groupBox1);
-            this.Checker.Controls.Add(this.label12);
-            this.Checker.Controls.Add(this.lbLog);
-            this.Checker.Controls.Add(this.lRemainingInner);
             this.Checker.Controls.Add(this.btnResetKB);
+            this.Checker.Controls.Add(this.groupBox1);
+            this.Checker.Controls.Add(this.lbLog);
             this.Checker.Controls.Add(this.btnStart);
             this.Checker.Controls.Add(this.tbQTY);
             this.Checker.Controls.Add(this.tbModel);
@@ -247,21 +242,11 @@
             // 
             this.lTotal.AutoSize = true;
             this.lTotal.Font = new System.Drawing.Font("Consolas", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lTotal.Location = new System.Drawing.Point(520, 539);
+            this.lTotal.Location = new System.Drawing.Point(520, 573);
             this.lTotal.Name = "lTotal";
             this.lTotal.Size = new System.Drawing.Size(139, 43);
             this.lTotal.TabIndex = 25;
             this.lTotal.Text = "Total:";
-            // 
-            // lRemainingCarton
-            // 
-            this.lRemainingCarton.AutoSize = true;
-            this.lRemainingCarton.Font = new System.Drawing.Font("Consolas", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lRemainingCarton.Location = new System.Drawing.Point(88, 217);
-            this.lRemainingCarton.Name = "lRemainingCarton";
-            this.lRemainingCarton.Size = new System.Drawing.Size(77, 28);
-            this.lRemainingCarton.TabIndex = 16;
-            this.lRemainingCarton.Text = "Test:";
             // 
             // groupBox4
             // 
@@ -271,9 +256,10 @@
             this.groupBox4.Controls.Add(this.lNeedExport);
             this.groupBox4.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox4.ForeColor = System.Drawing.Color.Orange;
-            this.groupBox4.Location = new System.Drawing.Point(516, 366);
+            this.groupBox4.Location = new System.Drawing.Point(516, 397);
+            this.groupBox4.Margin = new System.Windows.Forms.Padding(3, 1, 3, 3);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(490, 140);
+            this.groupBox4.Size = new System.Drawing.Size(500, 145);
             this.groupBox4.TabIndex = 24;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Export Box";
@@ -281,11 +267,10 @@
             // lMasterExport
             // 
             this.lMasterExport.AutoSize = true;
-            this.lMasterExport.Dock = System.Windows.Forms.DockStyle.Left;
-            this.lMasterExport.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lMasterExport.Location = new System.Drawing.Point(3, 35);
+            this.lMasterExport.Font = new System.Drawing.Font("Consolas", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lMasterExport.Location = new System.Drawing.Point(12, 63);
             this.lMasterExport.Name = "lMasterExport";
-            this.lMasterExport.Size = new System.Drawing.Size(149, 32);
+            this.lMasterExport.Size = new System.Drawing.Size(129, 28);
             this.lMasterExport.TabIndex = 29;
             this.lMasterExport.Text = "Master: -";
             // 
@@ -296,7 +281,7 @@
             this.lIsPort4Open.Dock = System.Windows.Forms.DockStyle.Right;
             this.lIsPort4Open.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lIsPort4Open.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.lIsPort4Open.Location = new System.Drawing.Point(367, 35);
+            this.lIsPort4Open.Location = new System.Drawing.Point(377, 35);
             this.lIsPort4Open.Name = "lIsPort4Open";
             this.lIsPort4Open.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
             this.lIsPort4Open.Size = new System.Drawing.Size(120, 28);
@@ -306,19 +291,18 @@
             // 
             // tbExportBox
             // 
-            this.tbExportBox.Enabled = false;
             this.tbExportBox.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbExportBox.Location = new System.Drawing.Point(8, 70);
+            this.tbExportBox.Location = new System.Drawing.Point(12, 94);
             this.tbExportBox.Name = "tbExportBox";
-            this.tbExportBox.Size = new System.Drawing.Size(476, 39);
+            this.tbExportBox.ReadOnly = true;
+            this.tbExportBox.Size = new System.Drawing.Size(480, 39);
             this.tbExportBox.TabIndex = 14;
             // 
             // lNeedExport
             // 
             this.lNeedExport.AutoSize = true;
-            this.lNeedExport.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.lNeedExport.Font = new System.Drawing.Font("Consolas", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lNeedExport.Location = new System.Drawing.Point(3, 109);
+            this.lNeedExport.Location = new System.Drawing.Point(12, 35);
             this.lNeedExport.Name = "lNeedExport";
             this.lNeedExport.Size = new System.Drawing.Size(103, 28);
             this.lNeedExport.TabIndex = 20;
@@ -332,9 +316,10 @@
             this.groupBox3.Controls.Add(this.lNeedCarton);
             this.groupBox3.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox3.ForeColor = System.Drawing.Color.MediumSpringGreen;
-            this.groupBox3.Location = new System.Drawing.Point(516, 220);
+            this.groupBox3.Location = new System.Drawing.Point(516, 248);
+            this.groupBox3.Margin = new System.Windows.Forms.Padding(3, 1, 3, 3);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(490, 140);
+            this.groupBox3.Size = new System.Drawing.Size(500, 145);
             this.groupBox3.TabIndex = 23;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Carton Box";
@@ -342,11 +327,10 @@
             // lMasterCarton
             // 
             this.lMasterCarton.AutoSize = true;
-            this.lMasterCarton.Dock = System.Windows.Forms.DockStyle.Left;
-            this.lMasterCarton.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lMasterCarton.Location = new System.Drawing.Point(3, 35);
+            this.lMasterCarton.Font = new System.Drawing.Font("Consolas", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lMasterCarton.Location = new System.Drawing.Point(12, 63);
             this.lMasterCarton.Name = "lMasterCarton";
-            this.lMasterCarton.Size = new System.Drawing.Size(149, 32);
+            this.lMasterCarton.Size = new System.Drawing.Size(129, 28);
             this.lMasterCarton.TabIndex = 28;
             this.lMasterCarton.Text = "Master: -";
             // 
@@ -357,7 +341,7 @@
             this.lIsPort3Open.Dock = System.Windows.Forms.DockStyle.Right;
             this.lIsPort3Open.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lIsPort3Open.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.lIsPort3Open.Location = new System.Drawing.Point(367, 35);
+            this.lIsPort3Open.Location = new System.Drawing.Point(377, 35);
             this.lIsPort3Open.Name = "lIsPort3Open";
             this.lIsPort3Open.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
             this.lIsPort3Open.Size = new System.Drawing.Size(120, 28);
@@ -367,19 +351,18 @@
             // 
             // tbCartonBox
             // 
-            this.tbCartonBox.Enabled = false;
             this.tbCartonBox.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbCartonBox.Location = new System.Drawing.Point(8, 70);
+            this.tbCartonBox.Location = new System.Drawing.Point(11, 94);
             this.tbCartonBox.Name = "tbCartonBox";
-            this.tbCartonBox.Size = new System.Drawing.Size(476, 39);
+            this.tbCartonBox.ReadOnly = true;
+            this.tbCartonBox.Size = new System.Drawing.Size(480, 39);
             this.tbCartonBox.TabIndex = 14;
             // 
             // lNeedCarton
             // 
             this.lNeedCarton.AutoSize = true;
-            this.lNeedCarton.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.lNeedCarton.Font = new System.Drawing.Font("Consolas", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lNeedCarton.Location = new System.Drawing.Point(3, 109);
+            this.lNeedCarton.Location = new System.Drawing.Point(12, 35);
             this.lNeedCarton.Name = "lNeedCarton";
             this.lNeedCarton.Size = new System.Drawing.Size(103, 28);
             this.lNeedCarton.TabIndex = 19;
@@ -387,16 +370,16 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.lIsPort2Open);
             this.groupBox2.Controls.Add(this.btnDecreaseInnerB);
             this.groupBox2.Controls.Add(this.lMasterB);
-            this.groupBox2.Controls.Add(this.lIsPort2Open);
             this.groupBox2.Controls.Add(this.tbInnerBoxB);
             this.groupBox2.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.groupBox2.Location = new System.Drawing.Point(516, 74);
+            this.groupBox2.Location = new System.Drawing.Point(516, 104);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(5, 1, 3, 3);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(490, 140);
+            this.groupBox2.Size = new System.Drawing.Size(500, 140);
             this.groupBox2.TabIndex = 22;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Inner Box B";
@@ -406,7 +389,7 @@
             this.btnDecreaseInnerB.BackColor = System.Drawing.Color.Transparent;
             this.btnDecreaseInnerB.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDecreaseInnerB.Font = new System.Drawing.Font("Consolas", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDecreaseInnerB.Location = new System.Drawing.Point(367, 72);
+            this.btnDecreaseInnerB.Location = new System.Drawing.Point(377, 73);
             this.btnDecreaseInnerB.Name = "btnDecreaseInnerB";
             this.btnDecreaseInnerB.Size = new System.Drawing.Size(117, 61);
             this.btnDecreaseInnerB.TabIndex = 27;
@@ -431,7 +414,7 @@
             this.lIsPort2Open.Dock = System.Windows.Forms.DockStyle.Right;
             this.lIsPort2Open.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lIsPort2Open.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.lIsPort2Open.Location = new System.Drawing.Point(367, 35);
+            this.lIsPort2Open.Location = new System.Drawing.Point(377, 35);
             this.lIsPort2Open.Name = "lIsPort2Open";
             this.lIsPort2Open.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
             this.lIsPort2Open.Size = new System.Drawing.Size(120, 28);
@@ -441,26 +424,39 @@
             // 
             // tbInnerBoxB
             // 
-            this.tbInnerBoxB.Enabled = false;
             this.tbInnerBoxB.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbInnerBoxB.Location = new System.Drawing.Point(11, 72);
             this.tbInnerBoxB.Margin = new System.Windows.Forms.Padding(8, 3, 3, 3);
             this.tbInnerBoxB.Name = "tbInnerBoxB";
-            this.tbInnerBoxB.Size = new System.Drawing.Size(350, 39);
+            this.tbInnerBoxB.ReadOnly = true;
+            this.tbInnerBoxB.Size = new System.Drawing.Size(360, 39);
             this.tbInnerBoxB.TabIndex = 14;
+            // 
+            // btnResetKB
+            // 
+            this.btnResetKB.BackColor = System.Drawing.Color.Tan;
+            this.btnResetKB.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnResetKB.Location = new System.Drawing.Point(849, 546);
+            this.btnResetKB.Margin = new System.Windows.Forms.Padding(1);
+            this.btnResetKB.Name = "btnResetKB";
+            this.btnResetKB.Size = new System.Drawing.Size(160, 70);
+            this.btnResetKB.TabIndex = 10;
+            this.btnResetKB.Text = "Reset";
+            this.btnResetKB.UseVisualStyleBackColor = false;
+            this.btnResetKB.Click += new System.EventHandler(this.btnResetKB_Click);
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.lIsPort1Open);
             this.groupBox1.Controls.Add(this.btnDecreaseInnerA);
             this.groupBox1.Controls.Add(this.lMasterA);
-            this.groupBox1.Controls.Add(this.lIsPort1Open);
             this.groupBox1.Controls.Add(this.tbInnerBoxA);
             this.groupBox1.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.groupBox1.Location = new System.Drawing.Point(10, 74);
+            this.groupBox1.Location = new System.Drawing.Point(8, 104);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(5, 3, 3, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(490, 140);
+            this.groupBox1.Size = new System.Drawing.Size(500, 140);
             this.groupBox1.TabIndex = 21;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Inner Box A";
@@ -470,7 +466,7 @@
             this.btnDecreaseInnerA.BackColor = System.Drawing.Color.Transparent;
             this.btnDecreaseInnerA.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDecreaseInnerA.Font = new System.Drawing.Font("Consolas", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDecreaseInnerA.Location = new System.Drawing.Point(367, 73);
+            this.btnDecreaseInnerA.Location = new System.Drawing.Point(377, 73);
             this.btnDecreaseInnerA.Name = "btnDecreaseInnerA";
             this.btnDecreaseInnerA.Size = new System.Drawing.Size(117, 61);
             this.btnDecreaseInnerA.TabIndex = 27;
@@ -495,7 +491,7 @@
             this.lIsPort1Open.Dock = System.Windows.Forms.DockStyle.Right;
             this.lIsPort1Open.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lIsPort1Open.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.lIsPort1Open.Location = new System.Drawing.Point(367, 35);
+            this.lIsPort1Open.Location = new System.Drawing.Point(377, 35);
             this.lIsPort1Open.Name = "lIsPort1Open";
             this.lIsPort1Open.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
             this.lIsPort1Open.Size = new System.Drawing.Size(120, 28);
@@ -505,64 +501,33 @@
             // 
             // tbInnerBoxA
             // 
-            this.tbInnerBoxA.Enabled = false;
             this.tbInnerBoxA.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbInnerBoxA.Location = new System.Drawing.Point(11, 72);
             this.tbInnerBoxA.Margin = new System.Windows.Forms.Padding(8, 3, 3, 3);
             this.tbInnerBoxA.Name = "tbInnerBoxA";
-            this.tbInnerBoxA.Size = new System.Drawing.Size(350, 39);
+            this.tbInnerBoxA.ReadOnly = true;
+            this.tbInnerBoxA.Size = new System.Drawing.Size(360, 39);
             this.tbInnerBoxA.TabIndex = 13;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Font = new System.Drawing.Font("Consolas", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(10, 217);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(64, 28);
-            this.label12.TabIndex = 18;
-            this.label12.Text = "Log:";
             // 
             // lbLog
             // 
             this.lbLog.Font = new System.Drawing.Font("Consolas", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbLog.FormattingEnabled = true;
+            this.lbLog.HorizontalScrollbar = true;
             this.lbLog.ItemHeight = 28;
-            this.lbLog.Location = new System.Drawing.Point(16, 248);
+            this.lbLog.Location = new System.Drawing.Point(18, 259);
             this.lbLog.Name = "lbLog";
-            this.lbLog.Size = new System.Drawing.Size(478, 340);
+            this.lbLog.Size = new System.Drawing.Size(484, 340);
             this.lbLog.TabIndex = 17;
-            // 
-            // lRemainingInner
-            // 
-            this.lRemainingInner.AutoSize = true;
-            this.lRemainingInner.Font = new System.Drawing.Font("Consolas", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lRemainingInner.Location = new System.Drawing.Point(202, 217);
-            this.lRemainingInner.Name = "lRemainingInner";
-            this.lRemainingInner.Size = new System.Drawing.Size(77, 28);
-            this.lRemainingInner.TabIndex = 15;
-            this.lRemainingInner.Text = "Test:";
-            // 
-            // btnResetKB
-            // 
-            this.btnResetKB.BackColor = System.Drawing.Color.Tan;
-            this.btnResetKB.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnResetKB.Location = new System.Drawing.Point(850, 512);
-            this.btnResetKB.Margin = new System.Windows.Forms.Padding(1);
-            this.btnResetKB.Name = "btnResetKB";
-            this.btnResetKB.Size = new System.Drawing.Size(160, 70);
-            this.btnResetKB.TabIndex = 10;
-            this.btnResetKB.Text = "Reset";
-            this.btnResetKB.UseVisualStyleBackColor = false;
             // 
             // btnStart
             // 
             this.btnStart.BackColor = System.Drawing.Color.MediumAquamarine;
             this.btnStart.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnStart.Location = new System.Drawing.Point(850, 4);
+            this.btnStart.Location = new System.Drawing.Point(849, 14);
             this.btnStart.Margin = new System.Windows.Forms.Padding(1);
             this.btnStart.Name = "btnStart";
-            this.btnStart.Size = new System.Drawing.Size(161, 70);
+            this.btnStart.Size = new System.Drawing.Size(161, 86);
             this.btnStart.TabIndex = 10;
             this.btnStart.Text = "START";
             this.btnStart.UseVisualStyleBackColor = false;
@@ -571,26 +536,27 @@
             // tbQTY
             // 
             this.tbQTY.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbQTY.Location = new System.Drawing.Point(737, 17);
+            this.tbQTY.Location = new System.Drawing.Point(651, 61);
             this.tbQTY.Name = "tbQTY";
-            this.tbQTY.Size = new System.Drawing.Size(109, 39);
+            this.tbQTY.Size = new System.Drawing.Size(181, 39);
             this.tbQTY.TabIndex = 9;
             // 
             // tbModel
             // 
-            this.tbModel.Enabled = false;
             this.tbModel.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbModel.Location = new System.Drawing.Point(431, 17);
+            this.tbModel.Location = new System.Drawing.Point(121, 59);
+            this.tbModel.Margin = new System.Windows.Forms.Padding(1, 3, 3, 3);
             this.tbModel.Name = "tbModel";
-            this.tbModel.Size = new System.Drawing.Size(220, 39);
+            this.tbModel.ReadOnly = true;
+            this.tbModel.Size = new System.Drawing.Size(424, 39);
             this.tbModel.TabIndex = 8;
             // 
             // tbKanban
             // 
             this.tbKanban.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbKanban.Location = new System.Drawing.Point(95, 17);
+            this.tbKanban.Location = new System.Drawing.Point(120, 14);
             this.tbKanban.Name = "tbKanban";
-            this.tbKanban.Size = new System.Drawing.Size(220, 39);
+            this.tbKanban.Size = new System.Drawing.Size(712, 39);
             this.tbKanban.TabIndex = 7;
             this.tbKanban.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbKanban_KeyDown);
             // 
@@ -599,7 +565,7 @@
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label6.Location = new System.Drawing.Point(657, 20);
+            this.label6.Location = new System.Drawing.Point(571, 64);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(74, 32);
             this.label6.TabIndex = 6;
@@ -610,7 +576,8 @@
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label5.Location = new System.Drawing.Point(321, 20);
+            this.label5.Location = new System.Drawing.Point(15, 64);
+            this.label5.Margin = new System.Windows.Forms.Padding(3, 3, 1, 3);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(104, 32);
             this.label5.TabIndex = 5;
@@ -621,7 +588,8 @@
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label4.Location = new System.Drawing.Point(15, 20);
+            this.label4.Location = new System.Drawing.Point(15, 17);
+            this.label4.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(74, 32);
             this.label4.TabIndex = 4;
@@ -1364,7 +1332,7 @@
             // 
             this.columnHeader9.Text = "CartonMax";
             this.columnHeader9.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader9.Width = 147;
+            this.columnHeader9.Width = 149;
             // 
             // Account
             // 
@@ -1566,6 +1534,7 @@
             this.panel1.Controls.Add(this.lPosition);
             this.panel1.Controls.Add(this.lOperatorID);
             this.panel1.Controls.Add(this.lOperatorName);
+            this.panel1.Controls.Add(this.btnLogout);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Font = new System.Drawing.Font("Consolas", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel1.Location = new System.Drawing.Point(0, 0);
@@ -1582,6 +1551,21 @@
             this.pIcon.Size = new System.Drawing.Size(190, 85);
             this.pIcon.TabIndex = 3;
             this.pIcon.Click += new System.EventHandler(this.pIcon_Click);
+            // 
+            // btnLogout
+            // 
+            this.btnLogout.BackColor = System.Drawing.Color.Transparent;
+            this.btnLogout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnLogout.Font = new System.Drawing.Font("Consolas", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLogout.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.btnLogout.Location = new System.Drawing.Point(724, 12);
+            this.btnLogout.Margin = new System.Windows.Forms.Padding(1);
+            this.btnLogout.Name = "btnLogout";
+            this.btnLogout.Size = new System.Drawing.Size(100, 40);
+            this.btnLogout.TabIndex = 10;
+            this.btnLogout.Text = "Logout";
+            this.btnLogout.UseVisualStyleBackColor = false;
+            this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
             // 
             // pLogin
             // 
@@ -1600,7 +1584,7 @@
             this.btnLogin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLogin.Font = new System.Drawing.Font("Consolas", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLogin.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnLogin.Location = new System.Drawing.Point(458, 329);
+            this.btnLogin.Location = new System.Drawing.Point(381, 329);
             this.btnLogin.Margin = new System.Windows.Forms.Padding(3, 15, 3, 3);
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(125, 53);
@@ -1682,11 +1666,9 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.ComboBox cbPort1;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label lRemainingInner;
         private System.Windows.Forms.TextBox tbInnerBoxB;
         private System.Windows.Forms.TextBox tbInnerBoxA;
         private System.Windows.Forms.ListBox lbLog;
-        private System.Windows.Forms.Label lRemainingCarton;
         private System.Windows.Forms.TextBox tbExportBox;
         private System.Windows.Forms.TextBox tbCartonBox;
         private System.Windows.Forms.ComboBox cbPort4;
@@ -1719,7 +1701,6 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.ListView lvModelMaster;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label15;
@@ -1792,6 +1773,7 @@
         private System.Windows.Forms.TextBox tbLogin;
         private System.Windows.Forms.Label label29;
         private System.Windows.Forms.Label lTotal;
+        private System.Windows.Forms.Button btnLogout;
     }
 }
 

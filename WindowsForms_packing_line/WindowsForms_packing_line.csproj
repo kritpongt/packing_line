@@ -111,6 +111,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authentication.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Authentication.Designer.cs">
+      <DependentUpon>Authentication.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -120,6 +126,9 @@
     <Compile Include="ModelMaster.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Authentication.resx">
+      <DependentUpon>Authentication.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
