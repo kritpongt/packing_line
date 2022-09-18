@@ -64,6 +64,8 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.Settings = new System.Windows.Forms.TabPage();
+            this.lLinkPDF = new System.Windows.Forms.Label();
+            this.lTowerLamp = new System.Windows.Forms.Label();
             this.cbPort1 = new System.Windows.Forms.ComboBox();
             this.label26 = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
@@ -93,6 +95,8 @@
             this.cbPort2 = new System.Windows.Forms.ComboBox();
             this.label17 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+            this.Actualtable = new System.Windows.Forms.TabPage();
+            this.dataGVActualTable = new System.Windows.Forms.DataGridView();
             this.Edit = new System.Windows.Forms.TabPage();
             this.btnDeleteMaster = new System.Windows.Forms.Button();
             this.btnUpdateMaster = new System.Windows.Forms.Button();
@@ -125,6 +129,7 @@
             this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Account = new System.Windows.Forms.TabPage();
+            this.btnAccountClear = new System.Windows.Forms.Button();
             this.cbDBPosition = new System.Windows.Forms.ComboBox();
             this.tbDBSurname = new System.Windows.Forms.TextBox();
             this.label28 = new System.Windows.Forms.Label();
@@ -152,7 +157,11 @@
             this.btnLogin = new System.Windows.Forms.Button();
             this.tbLogin = new System.Windows.Forms.TextBox();
             this.label29 = new System.Windows.Forms.Label();
-            this.btnAccountClear = new System.Windows.Forms.Button();
+            this.btnActualTableRefresh = new System.Windows.Forms.Button();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnAccountRFID = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.Checker.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -160,6 +169,8 @@
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.Settings.SuspendLayout();
+            this.Actualtable.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGVActualTable)).BeginInit();
             this.Edit.SuspendLayout();
             this.Account.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -205,6 +216,7 @@
             // 
             this.tabControl1.Controls.Add(this.Checker);
             this.tabControl1.Controls.Add(this.Settings);
+            this.tabControl1.Controls.Add(this.Actualtable);
             this.tabControl1.Controls.Add(this.Edit);
             this.tabControl1.Controls.Add(this.Account);
             this.tabControl1.Cursor = System.Windows.Forms.Cursors.Default;
@@ -444,7 +456,7 @@
             this.btnResetKB.Location = new System.Drawing.Point(849, 546);
             this.btnResetKB.Margin = new System.Windows.Forms.Padding(1);
             this.btnResetKB.Name = "btnResetKB";
-            this.btnResetKB.Size = new System.Drawing.Size(160, 70);
+            this.btnResetKB.Size = new System.Drawing.Size(161, 70);
             this.btnResetKB.TabIndex = 10;
             this.btnResetKB.Text = "Reset";
             this.btnResetKB.UseVisualStyleBackColor = false;
@@ -605,6 +617,9 @@
             // 
             // Settings
             // 
+            this.Settings.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.Settings.Controls.Add(this.lLinkPDF);
+            this.Settings.Controls.Add(this.lTowerLamp);
             this.Settings.Controls.Add(this.cbPort1);
             this.Settings.Controls.Add(this.label26);
             this.Settings.Controls.Add(this.label25);
@@ -640,7 +655,26 @@
             this.Settings.Size = new System.Drawing.Size(1021, 629);
             this.Settings.TabIndex = 1;
             this.Settings.Text = " Settings ";
-            this.Settings.UseVisualStyleBackColor = true;
+            // 
+            // lLinkPDF
+            // 
+            this.lLinkPDF.AutoSize = true;
+            this.lLinkPDF.Font = new System.Drawing.Font("Consolas", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lLinkPDF.Location = new System.Drawing.Point(15, 377);
+            this.lLinkPDF.Name = "lLinkPDF";
+            this.lLinkPDF.Size = new System.Drawing.Size(191, 34);
+            this.lLinkPDF.TabIndex = 5;
+            this.lLinkPDF.Text = "Link PDF: -";
+            // 
+            // lTowerLamp
+            // 
+            this.lTowerLamp.AutoSize = true;
+            this.lTowerLamp.Font = new System.Drawing.Font("Consolas", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lTowerLamp.Location = new System.Drawing.Point(15, 324);
+            this.lTowerLamp.Name = "lTowerLamp";
+            this.lTowerLamp.Size = new System.Drawing.Size(223, 34);
+            this.lTowerLamp.TabIndex = 5;
+            this.lTowerLamp.Text = "Tower Lamp: -";
             // 
             // cbPort1
             // 
@@ -980,7 +1014,7 @@
             // 
             this.btnSavePorts.Location = new System.Drawing.Point(797, 267);
             this.btnSavePorts.Name = "btnSavePorts";
-            this.btnSavePorts.Size = new System.Drawing.Size(160, 44);
+            this.btnSavePorts.Size = new System.Drawing.Size(160, 50);
             this.btnSavePorts.TabIndex = 2;
             this.btnSavePorts.Text = "Save";
             this.btnSavePorts.UseVisualStyleBackColor = true;
@@ -1058,6 +1092,34 @@
             this.label7.Size = new System.Drawing.Size(104, 32);
             this.label7.TabIndex = 0;
             this.label7.Text = "Port1:";
+            // 
+            // Actualtable
+            // 
+            this.Actualtable.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.Actualtable.Controls.Add(this.btnActualTableRefresh);
+            this.Actualtable.Controls.Add(this.dataGVActualTable);
+            this.Actualtable.Location = new System.Drawing.Point(4, 43);
+            this.Actualtable.Name = "Actualtable";
+            this.Actualtable.Size = new System.Drawing.Size(1021, 629);
+            this.Actualtable.TabIndex = 4;
+            this.Actualtable.Text = " ActualTable ";
+            // 
+            // dataGVActualTable
+            // 
+            this.dataGVActualTable.AllowUserToAddRows = false;
+            this.dataGVActualTable.AllowUserToDeleteRows = false;
+            this.dataGVActualTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGVActualTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.dataGVActualTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGVActualTable.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Column1,
+            this.Column2,
+            this.Column3});
+            this.dataGVActualTable.Dock = System.Windows.Forms.DockStyle.Left;
+            this.dataGVActualTable.Location = new System.Drawing.Point(0, 0);
+            this.dataGVActualTable.Name = "dataGVActualTable";
+            this.dataGVActualTable.Size = new System.Drawing.Size(829, 629);
+            this.dataGVActualTable.TabIndex = 0;
             // 
             // Edit
             // 
@@ -1356,6 +1418,8 @@
             // 
             // Account
             // 
+            this.Account.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.Account.Controls.Add(this.btnAccountRFID);
             this.Account.Controls.Add(this.btnAccountClear);
             this.Account.Controls.Add(this.cbDBPosition);
             this.Account.Controls.Add(this.tbDBSurname);
@@ -1376,7 +1440,17 @@
             this.Account.Size = new System.Drawing.Size(1021, 629);
             this.Account.TabIndex = 3;
             this.Account.Text = " Edit Account ";
-            this.Account.UseVisualStyleBackColor = true;
+            // 
+            // btnAccountClear
+            // 
+            this.btnAccountClear.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAccountClear.Location = new System.Drawing.Point(638, 420);
+            this.btnAccountClear.Name = "btnAccountClear";
+            this.btnAccountClear.Size = new System.Drawing.Size(100, 50);
+            this.btnAccountClear.TabIndex = 6;
+            this.btnAccountClear.Text = "Clear";
+            this.btnAccountClear.UseVisualStyleBackColor = true;
+            this.btnAccountClear.Click += new System.EventHandler(this.btnAccountClear_Click);
             // 
             // cbDBPosition
             // 
@@ -1423,7 +1497,7 @@
             // btnDeleteAccount
             // 
             this.btnDeleteAccount.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDeleteAccount.Location = new System.Drawing.Point(637, 474);
+            this.btnDeleteAccount.Location = new System.Drawing.Point(638, 532);
             this.btnDeleteAccount.Name = "btnDeleteAccount";
             this.btnDeleteAccount.Size = new System.Drawing.Size(296, 50);
             this.btnDeleteAccount.TabIndex = 9;
@@ -1434,7 +1508,7 @@
             // btnUpdateAccount
             // 
             this.btnUpdateAccount.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnUpdateAccount.Location = new System.Drawing.Point(637, 418);
+            this.btnUpdateAccount.Location = new System.Drawing.Point(638, 476);
             this.btnUpdateAccount.Name = "btnUpdateAccount";
             this.btnUpdateAccount.Size = new System.Drawing.Size(296, 50);
             this.btnUpdateAccount.TabIndex = 8;
@@ -1445,7 +1519,7 @@
             // btnCreateAccount
             // 
             this.btnCreateAccount.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCreateAccount.Location = new System.Drawing.Point(743, 362);
+            this.btnCreateAccount.Location = new System.Drawing.Point(744, 420);
             this.btnCreateAccount.Name = "btnCreateAccount";
             this.btnCreateAccount.Size = new System.Drawing.Size(190, 50);
             this.btnCreateAccount.TabIndex = 7;
@@ -1657,16 +1731,52 @@
             this.label29.TabIndex = 0;
             this.label29.Text = "แสกนบัตร/ใส่รหัส เพื่อ Login";
             // 
-            // btnAccountClear
+            // btnActualTableRefresh
             // 
-            this.btnAccountClear.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAccountClear.Location = new System.Drawing.Point(637, 362);
-            this.btnAccountClear.Name = "btnAccountClear";
-            this.btnAccountClear.Size = new System.Drawing.Size(100, 50);
-            this.btnAccountClear.TabIndex = 6;
-            this.btnAccountClear.Text = "Clear";
-            this.btnAccountClear.UseVisualStyleBackColor = true;
-            this.btnAccountClear.Click += new System.EventHandler(this.btnAccountClear_Click);
+            this.btnActualTableRefresh.Location = new System.Drawing.Point(835, 47);
+            this.btnActualTableRefresh.Name = "btnActualTableRefresh";
+            this.btnActualTableRefresh.Size = new System.Drawing.Size(180, 60);
+            this.btnActualTableRefresh.TabIndex = 1;
+            this.btnActualTableRefresh.Text = "Refresh";
+            this.btnActualTableRefresh.UseVisualStyleBackColor = true;
+            this.btnActualTableRefresh.Click += new System.EventHandler(this.btnActualTableRefresh_Click);
+            // 
+            // Column1
+            // 
+            this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Column1.DataPropertyName = "No";
+            this.Column1.FillWeight = 21.68711F;
+            this.Column1.HeaderText = "No.";
+            this.Column1.Name = "Column1";
+            this.Column1.Width = 88;
+            // 
+            // Column2
+            // 
+            this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Column2.DataPropertyName = "PartNo";
+            this.Column2.FillWeight = 213.198F;
+            this.Column2.HeaderText = "Part No.";
+            this.Column2.Name = "Column2";
+            this.Column2.Width = 168;
+            // 
+            // Column3
+            // 
+            this.Column3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Column3.DataPropertyName = "Count";
+            this.Column3.FillWeight = 65.11491F;
+            this.Column3.HeaderText = "Count";
+            this.Column3.Name = "Column3";
+            // 
+            // btnAccountRFID
+            // 
+            this.btnAccountRFID.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAccountRFID.Location = new System.Drawing.Point(638, 362);
+            this.btnAccountRFID.Name = "btnAccountRFID";
+            this.btnAccountRFID.Size = new System.Drawing.Size(172, 39);
+            this.btnAccountRFID.TabIndex = 6;
+            this.btnAccountRFID.Text = "RFID Scan";
+            this.btnAccountRFID.UseVisualStyleBackColor = true;
+            this.btnAccountRFID.Click += new System.EventHandler(this.btnAccountRFID_Click);
             // 
             // Form1
             // 
@@ -1692,6 +1802,8 @@
             this.groupBox1.PerformLayout();
             this.Settings.ResumeLayout(false);
             this.Settings.PerformLayout();
+            this.Actualtable.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGVActualTable)).EndInit();
             this.Edit.ResumeLayout(false);
             this.Edit.PerformLayout();
             this.Account.ResumeLayout(false);
@@ -1831,6 +1943,15 @@
         private System.Windows.Forms.ColumnHeader columnHeader10;
         private System.Windows.Forms.ComboBox cbDBPosition;
         private System.Windows.Forms.Button btnAccountClear;
+        private System.Windows.Forms.Label lLinkPDF;
+        private System.Windows.Forms.Label lTowerLamp;
+        private System.Windows.Forms.TabPage Actualtable;
+        private System.Windows.Forms.DataGridView dataGVActualTable;
+        private System.Windows.Forms.Button btnActualTableRefresh;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
+        private System.Windows.Forms.Button btnAccountRFID;
     }
 }
 

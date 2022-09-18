@@ -39,6 +39,9 @@ namespace WindowsForms_packing_line
         string export_master = "";   //export master
         string selected_kanban_id = ""; //temp_str kanban for update database
         string selected_account_tagpass = ""; //temp_str account for update database
+        string kanban_master = "";  //kanban no for update actual table
+        int rfid_login = 0, rfid_account = 0;
+        //public List<ActualTable> actual_table { get; set; }
         public Form1()
         {
             InitializeComponent();
@@ -46,6 +49,7 @@ namespace WindowsForms_packing_line
             //this.FormBorderStyle = FormBorderStyle.None;
             refreshListViewMaster();
             refreshListViewAccount();
+            refreshDGVAcutalTable();
             initialPorts();
             this.ActiveControl = tbLogin;
             btnLogout.Hide();
@@ -53,6 +57,7 @@ namespace WindowsForms_packing_line
             WindowsForms_packing_line.Properties.Settings.Default.InnerBMaster = "";
             WindowsForms_packing_line.Properties.Settings.Default.CartonMaster = "";
             WindowsForms_packing_line.Properties.Settings.Default.ExportMaster = "";
+            //actual_table = getActualTable();
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -91,7 +96,7 @@ namespace WindowsForms_packing_line
                         btnLogout.Show();
                         roleChecker(reader.GetString("Position"));
                         tbKanban.Focus();
-                        Invoke((MethodInvoker)delegate { tbLogin.Enabled = false; });
+                        //Invoke((MethodInvoker)delegate { tbLogin.Enabled = false; });
                         portsCloser();
                     }
                 }
@@ -126,7 +131,7 @@ namespace WindowsForms_packing_line
                     btnLogout.Show();
                     roleChecker(reader.GetString("Position"));
                     tbKanban.Focus();
-                    Invoke((MethodInvoker)delegate { tbLogin.Enabled = false; });
+                    //Invoke((MethodInvoker)delegate { tbLogin.Enabled = false; });
                     portsCloser();
                 }
             }
@@ -145,13 +150,14 @@ namespace WindowsForms_packing_line
             try
             {
                 portRFID.Open();
-                portRFID.DataReceived += new SerialDataReceivedEventHandler(dataReceiverRFID);
+                portRFID.DataReceived += new SerialDataReceivedEventHandler(dataReceiverRFIDLogin);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             tbLogin.Focus();
+
         }//Waittest
         private void btnLogout_Click(object sender, EventArgs e)
         {
@@ -160,7 +166,7 @@ namespace WindowsForms_packing_line
             lPosition.Text = "Position: ";
             pLogin.Show();
             tbLogin.Clear();
-            Invoke((MethodInvoker)delegate { tbLogin.Enabled = true; });
+            //Invoke((MethodInvoker)delegate { tbLogin.Enabled = true; });
             Invoke((MethodInvoker)delegate { btnLogout.Hide(); });
             tbLogin.Focus();
         }//OK
@@ -386,11 +392,12 @@ namespace WindowsForms_packing_line
                     while (reader.Read())
                     {
                         tbModel.Text = reader.GetString("ModelNo"); //Get Model
+                        kanban_master = tbKanban.Text;
+                        string[] kanban_array = tbKanban.Text.Split('|');
+                        tbQTY.Text = kanban_array[5];
+                        tbQTY.Focus();
+                        qty_kanban = int.Parse(kanban_array[5]);
                     }
-                    string[] kanban_array = tbKanban.Text.Split('|');
-                    tbQTY.Text = kanban_array[5];
-                    tbQTY.Focus();
-                    qty_kanban = int.Parse(kanban_array[5]);
                 }
                 catch (Exception ex)
                 {
@@ -486,7 +493,7 @@ namespace WindowsForms_packing_line
 
         }//OK
         //Data Receiver
-        private void dataReceiverRFID(object sender, SerialDataReceivedEventArgs e)
+        private void dataReceiverRFIDLogin(object sender, SerialDataReceivedEventArgs e)
         {
             try
             {
@@ -499,15 +506,29 @@ namespace WindowsForms_packing_line
                 {
                     s_buffer += s_buffer[i];
                 }
-                MessageBox.Show(s_buffer);
-                if(tbLogin.Enabled == true)
+                MessageBox.Show(s_buffer);  //TEST
+                Invoke((MethodInvoker)delegate { tbLogin.Text = s_buffer; });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }//Waittest
+        private void dataReceiverRFIDAccount(object sender, SerialDataReceivedEventArgs e)
+        {
+            try
+            {
+                Thread.Sleep(100);
+                int input_value = portRFID.ReadByte();
+                byte[] buffer = new byte[input_value];
+                portRFID.Read(buffer, 0, input_value);
+                string s_buffer = "";
+                for (int i = 0; i < input_value; i++)
                 {
-                    Invoke((MethodInvoker)delegate { tbLogin.Text = s_buffer; });
+                    s_buffer += s_buffer[i];
                 }
-                else if (tbDBTagpass.Enabled == true)
-                {
-                    Invoke((MethodInvoker)delegate { tbDBTagpass.Text = s_buffer; });
-                }
+                MessageBox.Show(s_buffer);  //TEST
+                Invoke((MethodInvoker)delegate { tbDBTagpass.Text = s_buffer; });
             }
             catch (Exception ex)
             {
@@ -562,7 +583,7 @@ namespace WindowsForms_packing_line
                     }
                     else
                     {
-                        Invoke((MethodInvoker)delegate { lbLog.Items.Add("did not count."); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
+                        Invoke((MethodInvoker)delegate { lbLog.Items.Add("do not count."); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
                     }
                 }
                 else
@@ -626,7 +647,7 @@ namespace WindowsForms_packing_line
                     }
                     else
                     {
-                        Invoke((MethodInvoker)delegate { lbLog.Items.Add("did not count."); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
+                        Invoke((MethodInvoker)delegate { lbLog.Items.Add("do not count."); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
                     }
                 }
                 else
@@ -697,7 +718,7 @@ namespace WindowsForms_packing_line
                     }
                     else
                     {
-                        Invoke((MethodInvoker)delegate { lbLog.Items.Add("did not count."); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
+                        Invoke((MethodInvoker)delegate { lbLog.Items.Add("do not count."); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
                     }
                 }
                 else
@@ -738,18 +759,21 @@ namespace WindowsForms_packing_line
                             if (total < 0) { total = 0; }
                             Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + (total).ToString(); });
                         }
-                    }
-                    else if (export_need == 0 && total == 0 && inner_count != 0)
-                    {
-                        portsCloser();
-                        Invoke((MethodInvoker)delegate { lbLog.Items.Add("Need to reset Kanban."); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
-                        MessageBox.Show("Alarm reset this Kanban! "+ total);
-                        inner_count = 0;
+                        if (export_need == 0 && total == 0 && inner_count != 0)
+                        {
+                            portsCloser();
+                            Invoke((MethodInvoker)delegate { lbLog.Items.Add("Need to reset Kanban."); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
+                            MessageBox.Show("Alarm reset this Kanban! " + total);
+                            updateActualTable(kanban_master, qty_current); //Update Actual Table
+                            Invoke((MethodInvoker)delegate { lbLog.Items.Add("Actual Table has been updated."); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
+                            inner_count = 0;
+                        }
                     }
                     else
                     {
-                        Invoke((MethodInvoker)delegate { lbLog.Items.Add("did not count."); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
+                        Invoke((MethodInvoker)delegate { lbLog.Items.Add("do not count."); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
                     }
+                    
                 }
                 else
                 {
@@ -942,11 +966,16 @@ namespace WindowsForms_packing_line
             if (dialog_result == DialogResult.Yes)
             {
                 alarmAuth();
-                resetChecker();
+                resetDefault();
                 tbKanban.ReadOnly = false;
                 tbKanban.Focus();
             }
         }//OK
+        //Actual Table
+        private void btnActualTableRefresh_Click(object sender, EventArgs e)
+        {
+            refreshDGVAcutalTable();
+        }
         //Edit Master page
         //Create kanban button
         private void btnCreateMaster_Click(object sender, EventArgs e)
@@ -1044,6 +1073,19 @@ namespace WindowsForms_packing_line
             cbDBPosition.Text = selected_item.SubItems[4].Text;
         }//OK
         //Edit Account button
+        private void btnAccountRFID_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                portRFID.Open();
+                portRFID.DataReceived += new SerialDataReceivedEventHandler(dataReceiverRFIDAccount);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            tbDBTagpass.Focus();
+        }//Waittest
         private void btnCreateAccount_Click(object sender, EventArgs e)
         {
             if(tbDBTagpass.Text != "")
@@ -1603,6 +1645,99 @@ namespace WindowsForms_packing_line
                 dbconnect.Close();
             }
         }//OK
+        public void refreshDGVAcutalTable()
+        {
+            string TABLE = "test_actual_table";
+            string queryList = "SELECT * FROM " + TABLE + " ORDER BY CAST(No AS UNSIGNED);";
+            MySqlConnection dbconnect = new MySqlConnection(connectStr);
+            MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
+            MySqlDataAdapter da = new MySqlDataAdapter(dbcommand);
+            MySqlDataReader reader;
+            dbcommand.CommandTimeout = 60;
+            try
+            {
+                dbconnect.Open();
+                reader = dbcommand.ExecuteReader();
+                DataTable dt = new DataTable();
+                dt.Load(reader);
+                dataGVActualTable.DataSource = dt;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                dbconnect.Close();
+            }
+        }//Waittest
+        public void updateActualTable(string kanban, int amount)
+        {
+            int db_count = 0;
+            string TABLE = "test_actual_table";
+            string queryList = "SELECT * FROM " + TABLE + " WHERE PartNo = '" + kanban + "';";
+            MySqlConnection dbconnect = new MySqlConnection(connectStr);
+            MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
+            MySqlDataReader reader;
+            dbcommand.CommandTimeout = 60;
+            try
+            {
+                dbconnect.Open();
+                reader = dbcommand.ExecuteReader();
+                while (reader.Read())
+                {
+                    db_count = Int32.Parse(reader.GetString("Count"));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            if (db_count == 0)
+            {
+                TABLE = "`test_actual_table`(PartNo, Count)";
+                queryList = "INSERT INTO " + TABLE + " VALUES('" + kanban + "', '" + amount + "');";
+                dbconnect = new MySqlConnection(connectStr);
+                dbcommand = new MySqlCommand(queryList, dbconnect);
+                dbcommand.CommandTimeout = 60;
+                try
+                {
+                    dbconnect.Open();
+                    reader = dbcommand.ExecuteReader();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    dbconnect.Close();
+                }
+            }
+            else
+            {
+                amount += db_count;
+                TABLE = "`test_actual_table`";
+                queryList = "UPDATE " + TABLE + " SET Count = '" + amount +"' WHERE PartNo = '" + kanban + "';";
+                dbconnect = new MySqlConnection(connectStr);
+                dbcommand = new MySqlCommand(queryList, dbconnect);
+                dbcommand.CommandTimeout = 60;
+                try
+                {
+                    dbconnect.Open();
+                    reader = dbcommand.ExecuteReader();
+                    MessageBox.Show("amount " + amount.ToString());
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    dbconnect.Close();
+                }
+            }
+        }//Waittest
         //SQL connect, Edit
         public void dbCreate(string qeury_s)
         {
@@ -1682,9 +1817,6 @@ namespace WindowsForms_packing_line
             tbDBInnerMax.Clear();
             tbDBCartonMax.Clear();
         }//OK
-
-        
-
         public void tbEditAccountClear()
         {
             tbDBTagpass.Clear();
@@ -1806,7 +1938,7 @@ namespace WindowsForms_packing_line
             }
         }//Waittest
         //Reset Checker
-        public void resetChecker()
+        public void resetDefault()
         {
             WindowsForms_packing_line.Properties.Settings.Default.InnerAMaster = "";
             WindowsForms_packing_line.Properties.Settings.Default.InnerBMaster = "";
@@ -1823,6 +1955,7 @@ namespace WindowsForms_packing_line
             inner_b_master = "";
             carton_master = "";
             export_master = "";
+            kanban_master = "";
             tbKanban.Clear();
             tbModel.Clear();
             tbQTY.Clear();
@@ -1861,5 +1994,18 @@ namespace WindowsForms_packing_line
             }
             return type;
         }//Waittest
+        
+        //private List<ActualTable> getActualTable()
+        //{
+        //    var list = new List<ActualTable>();
+        //    list.Add(new ActualTable()
+        //    {
+        //        No = 0,
+        //        PartNo = "",
+        //        Count = 0
+
+        //    });
+        //    return list;
+        //}
     }
 }
