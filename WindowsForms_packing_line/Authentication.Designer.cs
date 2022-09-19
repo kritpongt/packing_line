@@ -54,6 +54,7 @@
             this.tbAlarm.PasswordChar = '*';
             this.tbAlarm.Size = new System.Drawing.Size(280, 41);
             this.tbAlarm.TabIndex = 1;
+            this.tbAlarm.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.tbAlarm.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbAlarm_KeyDown);
             // 
             // btnLogin

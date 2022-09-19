@@ -39,22 +39,20 @@
             this.lIsPort4Open = new System.Windows.Forms.Label();
             this.tbExportBox = new System.Windows.Forms.TextBox();
             this.lNeedExport = new System.Windows.Forms.Label();
+            this.panel5 = new System.Windows.Forms.Panel();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.lMasterCarton = new System.Windows.Forms.Label();
             this.lIsPort3Open = new System.Windows.Forms.Label();
             this.tbCartonBox = new System.Windows.Forms.TextBox();
             this.lNeedCarton = new System.Windows.Forms.Label();
+            this.panel4 = new System.Windows.Forms.Panel();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.lIsPort2Open = new System.Windows.Forms.Label();
             this.btnDecreaseInnerB = new System.Windows.Forms.Button();
             this.lMasterB = new System.Windows.Forms.Label();
             this.tbInnerBoxB = new System.Windows.Forms.TextBox();
+            this.panel3 = new System.Windows.Forms.Panel();
             this.btnResetKB = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.lIsPort1Open = new System.Windows.Forms.Label();
-            this.btnDecreaseInnerA = new System.Windows.Forms.Button();
-            this.lMasterA = new System.Windows.Forms.Label();
-            this.tbInnerBoxA = new System.Windows.Forms.TextBox();
             this.lbLog = new System.Windows.Forms.ListBox();
             this.btnStart = new System.Windows.Forms.Button();
             this.tbQTY = new System.Windows.Forms.TextBox();
@@ -63,6 +61,12 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lIsPort1Open = new System.Windows.Forms.Label();
+            this.btnDecreaseInnerA = new System.Windows.Forms.Button();
+            this.lMasterA = new System.Windows.Forms.Label();
+            this.tbInnerBoxA = new System.Windows.Forms.TextBox();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.Settings = new System.Windows.Forms.TabPage();
             this.lLinkPDF = new System.Windows.Forms.Label();
             this.lTowerLamp = new System.Windows.Forms.Label();
@@ -96,6 +100,7 @@
             this.label17 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.Actualtable = new System.Windows.Forms.TabPage();
+            this.btnActualTableRefresh = new System.Windows.Forms.Button();
             this.dataGVActualTable = new System.Windows.Forms.DataGridView();
             this.Edit = new System.Windows.Forms.TabPage();
             this.btnDeleteMaster = new System.Windows.Forms.Button();
@@ -129,6 +134,7 @@
             this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Account = new System.Windows.Forms.TabPage();
+            this.btnAccountRFID = new System.Windows.Forms.Button();
             this.btnAccountClear = new System.Windows.Forms.Button();
             this.cbDBPosition = new System.Windows.Forms.ComboBox();
             this.tbDBSurname = new System.Windows.Forms.TextBox();
@@ -157,11 +163,11 @@
             this.btnLogin = new System.Windows.Forms.Button();
             this.tbLogin = new System.Windows.Forms.TextBox();
             this.label29 = new System.Windows.Forms.Label();
-            this.btnActualTableRefresh = new System.Windows.Forms.Button();
+            this.cbPortTL = new System.Windows.Forms.ComboBox();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btnAccountRFID = new System.Windows.Forms.Button();
+            this.btnCountPerDay = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.Checker.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -236,7 +242,6 @@
             this.Checker.Controls.Add(this.groupBox3);
             this.Checker.Controls.Add(this.groupBox2);
             this.Checker.Controls.Add(this.btnResetKB);
-            this.Checker.Controls.Add(this.groupBox1);
             this.Checker.Controls.Add(this.lbLog);
             this.Checker.Controls.Add(this.btnStart);
             this.Checker.Controls.Add(this.tbQTY);
@@ -245,6 +250,7 @@
             this.Checker.Controls.Add(this.label6);
             this.Checker.Controls.Add(this.label5);
             this.Checker.Controls.Add(this.label4);
+            this.Checker.Controls.Add(this.groupBox1);
             this.Checker.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.Checker.Location = new System.Drawing.Point(4, 43);
             this.Checker.Name = "Checker";
@@ -257,7 +263,7 @@
             // 
             this.lTotal.AutoSize = true;
             this.lTotal.Font = new System.Drawing.Font("Consolas", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lTotal.Location = new System.Drawing.Point(520, 573);
+            this.lTotal.Location = new System.Drawing.Point(525, 556);
             this.lTotal.Name = "lTotal";
             this.lTotal.Size = new System.Drawing.Size(139, 43);
             this.lTotal.TabIndex = 25;
@@ -269,6 +275,7 @@
             this.groupBox4.Controls.Add(this.lIsPort4Open);
             this.groupBox4.Controls.Add(this.tbExportBox);
             this.groupBox4.Controls.Add(this.lNeedExport);
+            this.groupBox4.Controls.Add(this.panel5);
             this.groupBox4.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox4.ForeColor = System.Drawing.Color.Orange;
             this.groupBox4.Location = new System.Drawing.Point(516, 397);
@@ -323,12 +330,22 @@
             this.lNeedExport.TabIndex = 20;
             this.lNeedExport.Text = "Scan: 0";
             // 
+            // panel5
+            // 
+            this.panel5.BackColor = System.Drawing.Color.Transparent;
+            this.panel5.Location = new System.Drawing.Point(294, 22);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(200, 66);
+            this.panel5.TabIndex = 28;
+            this.panel5.Click += new System.EventHandler(this.lIsPort4Open_Click);
+            // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.lMasterCarton);
             this.groupBox3.Controls.Add(this.lIsPort3Open);
             this.groupBox3.Controls.Add(this.tbCartonBox);
             this.groupBox3.Controls.Add(this.lNeedCarton);
+            this.groupBox3.Controls.Add(this.panel4);
             this.groupBox3.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox3.ForeColor = System.Drawing.Color.MediumSpringGreen;
             this.groupBox3.Location = new System.Drawing.Point(516, 248);
@@ -383,12 +400,22 @@
             this.lNeedCarton.TabIndex = 19;
             this.lNeedCarton.Text = "Scan: 0";
             // 
+            // panel4
+            // 
+            this.panel4.BackColor = System.Drawing.Color.Transparent;
+            this.panel4.Location = new System.Drawing.Point(294, 22);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(200, 66);
+            this.panel4.TabIndex = 28;
+            this.panel4.Click += new System.EventHandler(this.lIsPort3Open_Click);
+            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.lIsPort2Open);
             this.groupBox2.Controls.Add(this.btnDecreaseInnerB);
             this.groupBox2.Controls.Add(this.lMasterB);
             this.groupBox2.Controls.Add(this.tbInnerBoxB);
+            this.groupBox2.Controls.Add(this.panel3);
             this.groupBox2.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.groupBox2.Location = new System.Drawing.Point(516, 104);
@@ -449,6 +476,15 @@
             this.tbInnerBoxB.Size = new System.Drawing.Size(360, 39);
             this.tbInnerBoxB.TabIndex = 14;
             // 
+            // panel3
+            // 
+            this.panel3.BackColor = System.Drawing.Color.Transparent;
+            this.panel3.Location = new System.Drawing.Point(294, 22);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(200, 41);
+            this.panel3.TabIndex = 28;
+            this.panel3.Click += new System.EventHandler(this.lIsPort2Open_Click);
+            // 
             // btnResetKB
             // 
             this.btnResetKB.BackColor = System.Drawing.Color.Tan;
@@ -461,73 +497,6 @@
             this.btnResetKB.Text = "Reset";
             this.btnResetKB.UseVisualStyleBackColor = false;
             this.btnResetKB.Click += new System.EventHandler(this.btnResetKB_Click);
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.lIsPort1Open);
-            this.groupBox1.Controls.Add(this.btnDecreaseInnerA);
-            this.groupBox1.Controls.Add(this.lMasterA);
-            this.groupBox1.Controls.Add(this.tbInnerBoxA);
-            this.groupBox1.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.groupBox1.Location = new System.Drawing.Point(8, 104);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(5, 3, 3, 3);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(500, 140);
-            this.groupBox1.TabIndex = 21;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Inner Box A";
-            // 
-            // lIsPort1Open
-            // 
-            this.lIsPort1Open.AutoSize = true;
-            this.lIsPort1Open.BackColor = System.Drawing.Color.Crimson;
-            this.lIsPort1Open.Dock = System.Windows.Forms.DockStyle.Right;
-            this.lIsPort1Open.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lIsPort1Open.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.lIsPort1Open.Location = new System.Drawing.Point(377, 35);
-            this.lIsPort1Open.Name = "lIsPort1Open";
-            this.lIsPort1Open.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
-            this.lIsPort1Open.Size = new System.Drawing.Size(120, 28);
-            this.lIsPort1Open.TabIndex = 25;
-            this.lIsPort1Open.Text = "Port1: Offline";
-            this.lIsPort1Open.Click += new System.EventHandler(this.lIsPort1Open_Click);
-            // 
-            // btnDecreaseInnerA
-            // 
-            this.btnDecreaseInnerA.BackColor = System.Drawing.Color.Transparent;
-            this.btnDecreaseInnerA.Cursor = System.Windows.Forms.Cursors.Default;
-            this.btnDecreaseInnerA.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-            this.btnDecreaseInnerA.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-            this.btnDecreaseInnerA.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDecreaseInnerA.Font = new System.Drawing.Font("Consolas", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDecreaseInnerA.Location = new System.Drawing.Point(377, 73);
-            this.btnDecreaseInnerA.Name = "btnDecreaseInnerA";
-            this.btnDecreaseInnerA.Size = new System.Drawing.Size(117, 61);
-            this.btnDecreaseInnerA.TabIndex = 27;
-            this.btnDecreaseInnerA.Text = "-1";
-            this.btnDecreaseInnerA.UseVisualStyleBackColor = false;
-            this.btnDecreaseInnerA.Click += new System.EventHandler(this.btnDecreaseInnerA_Click);
-            // 
-            // lMasterA
-            // 
-            this.lMasterA.AutoSize = true;
-            this.lMasterA.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lMasterA.Location = new System.Drawing.Point(6, 37);
-            this.lMasterA.Name = "lMasterA";
-            this.lMasterA.Size = new System.Drawing.Size(149, 32);
-            this.lMasterA.TabIndex = 26;
-            this.lMasterA.Text = "Master: -";
-            // 
-            // tbInnerBoxA
-            // 
-            this.tbInnerBoxA.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbInnerBoxA.Location = new System.Drawing.Point(11, 72);
-            this.tbInnerBoxA.Margin = new System.Windows.Forms.Padding(8, 3, 3, 3);
-            this.tbInnerBoxA.Name = "tbInnerBoxA";
-            this.tbInnerBoxA.ReadOnly = true;
-            this.tbInnerBoxA.Size = new System.Drawing.Size(360, 39);
-            this.tbInnerBoxA.TabIndex = 13;
             // 
             // lbLog
             // 
@@ -615,9 +584,87 @@
             this.label4.TabIndex = 4;
             this.label4.Text = "K/B:";
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.lIsPort1Open);
+            this.groupBox1.Controls.Add(this.btnDecreaseInnerA);
+            this.groupBox1.Controls.Add(this.lMasterA);
+            this.groupBox1.Controls.Add(this.tbInnerBoxA);
+            this.groupBox1.Controls.Add(this.panel2);
+            this.groupBox1.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.groupBox1.Location = new System.Drawing.Point(8, 104);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(5, 3, 3, 3);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(500, 140);
+            this.groupBox1.TabIndex = 21;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Inner Box A";
+            // 
+            // lIsPort1Open
+            // 
+            this.lIsPort1Open.AutoSize = true;
+            this.lIsPort1Open.BackColor = System.Drawing.Color.Crimson;
+            this.lIsPort1Open.Dock = System.Windows.Forms.DockStyle.Right;
+            this.lIsPort1Open.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lIsPort1Open.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lIsPort1Open.Location = new System.Drawing.Point(377, 35);
+            this.lIsPort1Open.Name = "lIsPort1Open";
+            this.lIsPort1Open.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
+            this.lIsPort1Open.Size = new System.Drawing.Size(120, 28);
+            this.lIsPort1Open.TabIndex = 25;
+            this.lIsPort1Open.Text = "Port1: Offline";
+            this.lIsPort1Open.Click += new System.EventHandler(this.lIsPort1Open_Click);
+            // 
+            // btnDecreaseInnerA
+            // 
+            this.btnDecreaseInnerA.BackColor = System.Drawing.Color.Transparent;
+            this.btnDecreaseInnerA.Cursor = System.Windows.Forms.Cursors.Default;
+            this.btnDecreaseInnerA.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.btnDecreaseInnerA.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.btnDecreaseInnerA.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDecreaseInnerA.Font = new System.Drawing.Font("Consolas", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDecreaseInnerA.Location = new System.Drawing.Point(377, 73);
+            this.btnDecreaseInnerA.Name = "btnDecreaseInnerA";
+            this.btnDecreaseInnerA.Size = new System.Drawing.Size(117, 61);
+            this.btnDecreaseInnerA.TabIndex = 27;
+            this.btnDecreaseInnerA.Text = "-1";
+            this.btnDecreaseInnerA.UseVisualStyleBackColor = false;
+            this.btnDecreaseInnerA.Click += new System.EventHandler(this.btnDecreaseInnerA_Click);
+            // 
+            // lMasterA
+            // 
+            this.lMasterA.AutoSize = true;
+            this.lMasterA.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lMasterA.Location = new System.Drawing.Point(6, 37);
+            this.lMasterA.Name = "lMasterA";
+            this.lMasterA.Size = new System.Drawing.Size(149, 32);
+            this.lMasterA.TabIndex = 26;
+            this.lMasterA.Text = "Master: -";
+            // 
+            // tbInnerBoxA
+            // 
+            this.tbInnerBoxA.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbInnerBoxA.Location = new System.Drawing.Point(11, 72);
+            this.tbInnerBoxA.Margin = new System.Windows.Forms.Padding(8, 3, 3, 3);
+            this.tbInnerBoxA.Name = "tbInnerBoxA";
+            this.tbInnerBoxA.ReadOnly = true;
+            this.tbInnerBoxA.Size = new System.Drawing.Size(360, 39);
+            this.tbInnerBoxA.TabIndex = 13;
+            // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.Color.Transparent;
+            this.panel2.Location = new System.Drawing.Point(294, 22);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(200, 41);
+            this.panel2.TabIndex = 28;
+            this.panel2.Click += new System.EventHandler(this.lIsPort1Open_Click);
+            // 
             // Settings
             // 
             this.Settings.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.Settings.Controls.Add(this.cbPortTL);
             this.Settings.Controls.Add(this.lLinkPDF);
             this.Settings.Controls.Add(this.lTowerLamp);
             this.Settings.Controls.Add(this.cbPort1);
@@ -660,7 +707,7 @@
             // 
             this.lLinkPDF.AutoSize = true;
             this.lLinkPDF.Font = new System.Drawing.Font("Consolas", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lLinkPDF.Location = new System.Drawing.Point(15, 377);
+            this.lLinkPDF.Location = new System.Drawing.Point(15, 356);
             this.lLinkPDF.Name = "lLinkPDF";
             this.lLinkPDF.Size = new System.Drawing.Size(191, 34);
             this.lLinkPDF.TabIndex = 5;
@@ -670,7 +717,7 @@
             // 
             this.lTowerLamp.AutoSize = true;
             this.lTowerLamp.Font = new System.Drawing.Font("Consolas", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lTowerLamp.Location = new System.Drawing.Point(15, 324);
+            this.lTowerLamp.Location = new System.Drawing.Point(15, 295);
             this.lTowerLamp.Name = "lTowerLamp";
             this.lTowerLamp.Size = new System.Drawing.Size(223, 34);
             this.lTowerLamp.TabIndex = 5;
@@ -1012,7 +1059,7 @@
             // 
             // btnSavePorts
             // 
-            this.btnSavePorts.Location = new System.Drawing.Point(797, 267);
+            this.btnSavePorts.Location = new System.Drawing.Point(797, 348);
             this.btnSavePorts.Name = "btnSavePorts";
             this.btnSavePorts.Size = new System.Drawing.Size(160, 50);
             this.btnSavePorts.TabIndex = 2;
@@ -1096,6 +1143,7 @@
             // Actualtable
             // 
             this.Actualtable.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.Actualtable.Controls.Add(this.btnCountPerDay);
             this.Actualtable.Controls.Add(this.btnActualTableRefresh);
             this.Actualtable.Controls.Add(this.dataGVActualTable);
             this.Actualtable.Location = new System.Drawing.Point(4, 43);
@@ -1103,6 +1151,16 @@
             this.Actualtable.Size = new System.Drawing.Size(1021, 629);
             this.Actualtable.TabIndex = 4;
             this.Actualtable.Text = " ActualTable ";
+            // 
+            // btnActualTableRefresh
+            // 
+            this.btnActualTableRefresh.Location = new System.Drawing.Point(835, 47);
+            this.btnActualTableRefresh.Name = "btnActualTableRefresh";
+            this.btnActualTableRefresh.Size = new System.Drawing.Size(180, 60);
+            this.btnActualTableRefresh.TabIndex = 1;
+            this.btnActualTableRefresh.Text = "Refresh";
+            this.btnActualTableRefresh.UseVisualStyleBackColor = true;
+            this.btnActualTableRefresh.Click += new System.EventHandler(this.btnActualTableRefresh_Click);
             // 
             // dataGVActualTable
             // 
@@ -1441,6 +1499,17 @@
             this.Account.TabIndex = 3;
             this.Account.Text = " Edit Account ";
             // 
+            // btnAccountRFID
+            // 
+            this.btnAccountRFID.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAccountRFID.Location = new System.Drawing.Point(638, 362);
+            this.btnAccountRFID.Name = "btnAccountRFID";
+            this.btnAccountRFID.Size = new System.Drawing.Size(172, 39);
+            this.btnAccountRFID.TabIndex = 6;
+            this.btnAccountRFID.Text = "RFID Scan";
+            this.btnAccountRFID.UseVisualStyleBackColor = true;
+            this.btnAccountRFID.Click += new System.EventHandler(this.btnAccountRFID_Click);
+            // 
             // btnAccountClear
             // 
             this.btnAccountClear.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -1552,11 +1621,12 @@
             this.tbDBOperatorID.Name = "tbDBOperatorID";
             this.tbDBOperatorID.Size = new System.Drawing.Size(394, 39);
             this.tbDBOperatorID.TabIndex = 2;
+            this.tbDBOperatorID.TextChanged += new System.EventHandler(this.tbDBOperatorID_TextChanged);
             // 
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label21.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label21.Location = new System.Drawing.Point(31, 410);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(179, 32);
@@ -1718,6 +1788,7 @@
             this.tbLogin.PasswordChar = '*';
             this.tbLogin.Size = new System.Drawing.Size(280, 41);
             this.tbLogin.TabIndex = 1;
+            this.tbLogin.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.tbLogin.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbLogin_KeyDown);
             // 
             // label29
@@ -1731,15 +1802,16 @@
             this.label29.TabIndex = 0;
             this.label29.Text = "แสกนบัตร/ใส่รหัส เพื่อ Login";
             // 
-            // btnActualTableRefresh
+            // cbPortTL
             // 
-            this.btnActualTableRefresh.Location = new System.Drawing.Point(835, 47);
-            this.btnActualTableRefresh.Name = "btnActualTableRefresh";
-            this.btnActualTableRefresh.Size = new System.Drawing.Size(180, 60);
-            this.btnActualTableRefresh.TabIndex = 1;
-            this.btnActualTableRefresh.Text = "Refresh";
-            this.btnActualTableRefresh.UseVisualStyleBackColor = true;
-            this.btnActualTableRefresh.Click += new System.EventHandler(this.btnActualTableRefresh_Click);
+            this.cbPortTL.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbPortTL.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbPortTL.FormattingEnabled = true;
+            this.cbPortTL.Location = new System.Drawing.Point(441, 294);
+            this.cbPortTL.Name = "cbPortTL";
+            this.cbPortTL.Size = new System.Drawing.Size(121, 40);
+            this.cbPortTL.TabIndex = 6;
+            this.cbPortTL.SelectedIndexChanged += new System.EventHandler(this.cbPortTL_SelectedIndexChanged);
             // 
             // Column1
             // 
@@ -1767,16 +1839,15 @@
             this.Column3.HeaderText = "Count";
             this.Column3.Name = "Column3";
             // 
-            // btnAccountRFID
+            // btnCountPerDay
             // 
-            this.btnAccountRFID.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAccountRFID.Location = new System.Drawing.Point(638, 362);
-            this.btnAccountRFID.Name = "btnAccountRFID";
-            this.btnAccountRFID.Size = new System.Drawing.Size(172, 39);
-            this.btnAccountRFID.TabIndex = 6;
-            this.btnAccountRFID.Text = "RFID Scan";
-            this.btnAccountRFID.UseVisualStyleBackColor = true;
-            this.btnAccountRFID.Click += new System.EventHandler(this.btnAccountRFID_Click);
+            this.btnCountPerDay.Location = new System.Drawing.Point(835, 134);
+            this.btnCountPerDay.Name = "btnCountPerDay";
+            this.btnCountPerDay.Size = new System.Drawing.Size(180, 80);
+            this.btnCountPerDay.TabIndex = 1;
+            this.btnCountPerDay.Text = "Count\r\nper day";
+            this.btnCountPerDay.UseVisualStyleBackColor = true;
+            this.btnCountPerDay.Click += new System.EventHandler(this.btnCountPerDay_Click);
             // 
             // Form1
             // 
@@ -1948,10 +2019,16 @@
         private System.Windows.Forms.TabPage Actualtable;
         private System.Windows.Forms.DataGridView dataGVActualTable;
         private System.Windows.Forms.Button btnActualTableRefresh;
+        private System.Windows.Forms.Button btnAccountRFID;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Panel panel5;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.ComboBox cbPortTL;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
-        private System.Windows.Forms.Button btnAccountRFID;
+        private System.Windows.Forms.Button btnCountPerDay;
     }
 }
 

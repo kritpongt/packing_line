@@ -77,5 +77,8 @@
     <Setting Name="Stopbits4" Type="System.IO.Ports.StopBits" Scope="User">
       <Value Profile="(Default)">One</Value>
     </Setting>
+    <Setting Name="PortTL" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

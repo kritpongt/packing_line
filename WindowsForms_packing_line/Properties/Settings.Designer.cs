@@ -322,5 +322,17 @@ namespace WindowsForms_packing_line.Properties {
                 this["Stopbits4"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string PortTL {
+            get {
+                return ((string)(this["PortTL"]));
+            }
+            set {
+                this["PortTL"] = value;
+            }
+        }
     }
 }

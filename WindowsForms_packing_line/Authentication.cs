@@ -39,11 +39,12 @@ namespace WindowsForms_packing_line
                     reader = dbcommand.ExecuteReader();
                     while (reader.Read())
                     {
-                        if (reader.GetString("Position") == "Administrator" || reader.GetString("Position") == "Supervisor")
+                        if (reader.GetString("Position").Equals("Administrator") || reader.GetString("Position").Equals("Supervisor"))
                         {
                             this.Close();
                         }
                     }
+                    tbAlarm.SelectAll();
                 }
                 catch (Exception ex)
                 {
@@ -55,7 +56,6 @@ namespace WindowsForms_packing_line
                 }
             }
         }//OK
-
         private void btnLogin_Click(object sender, EventArgs e)
         {
             string TABLE = "test_account";
@@ -86,20 +86,19 @@ namespace WindowsForms_packing_line
                 tbAlarm.Focus();
             }
         }//Waittest
-
         private void btnRFID_Click(object sender, EventArgs e)
         {
             try
             {
                 portRFID.Open();
-                portRFID.DataReceived += new SerialDataReceivedEventHandler(dataReceiverRFID);
+                portRFID.DataReceived += new SerialDataReceivedEventHandler(dataReceiverRFIDAlarm);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void dataReceiverRFID(object sender, SerialDataReceivedEventArgs e)
+        private void dataReceiverRFIDAlarm(object sender, SerialDataReceivedEventArgs e)
         {
             try
             {
