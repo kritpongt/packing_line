@@ -79,16 +79,19 @@
             // columnHeader3
             // 
             this.columnHeader3.Text = "Inner Box";
+            this.columnHeader3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.columnHeader3.Width = 166;
             // 
             // columnHeader4
             // 
             this.columnHeader4.Text = "Carton Box";
+            this.columnHeader4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.columnHeader4.Width = 177;
             // 
             // columnHeader5
             // 
             this.columnHeader5.Text = "Export Box";
+            this.columnHeader5.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.columnHeader5.Width = 179;
             // 
             // Countperday
@@ -101,7 +104,7 @@
             this.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.Name = "Countperday";
-            this.Text = "CountPerDay";
+            this.Text = "Countperday";
             this.ResumeLayout(false);
 
         }
