@@ -37,7 +37,8 @@ namespace WindowsForms_packing_line
         //private ModbusClient modbus_tcp = new ModbusClient("192.168.1.110", 502);
         private int qty_kanban, qty_current, innerbox_max, cartonbox_max;   //get from db
         int total = 0, inner_count = 0, carton_count = 0 , carton_need = 0, export_need = 0; //counter +1 the larger box
-        int carton_scanned = 0, export_scanned = 0;
+        int carton_scanned = 0, export_scanned = 0; // carton box, export box when scanned
+        int carton_deleted = 0, export_deleted = 0;
         string inner_a_master = "";  //inner a master
         string inner_b_master = "";  //inner b master
         string carton_master = "";   //carton master
@@ -732,6 +733,7 @@ namespace WindowsForms_packing_line
                         carton_scanned++;
                         carton_need--;
                         Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Scan: " + carton_need + " Scanned: " + carton_scanned; });
+                        insertCountperday("INSERT INTO `test_countperday`(Kanban, Count) VALUES('" + kanban_master + "', 'Carton Box');");
 
                         if (typeCheck() == 1)
                         {
@@ -742,7 +744,7 @@ namespace WindowsForms_packing_line
                                 Invoke((MethodInvoker)delegate { lNeedExport.Text = "Scan: " + export_need + " Scanned: " + export_scanned; });
                                 insertCountperday("INSERT INTO `test_countperday`(Kanban, Count) VALUES('" + kanban_master + "', 'Carton Box');");
                             }
-                            else if (qty_current - inner_count == 0 && carton_need == 0)
+                            else if (qty_current - inner_count == 0 & carton_need == 0)
                             {
                                 export_need++;
                                 Invoke((MethodInvoker)delegate { lNeedExport.Text = "Scan: " + export_need + " Scanned: " + export_scanned; });
@@ -754,7 +756,7 @@ namespace WindowsForms_packing_line
                             inner_count += innerbox_max;
                             total = qty_current - inner_count;
                             if (total < 0) { total = 0; }
-                            Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + (total).ToString(); });
+                            Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + total.ToString(); });
 
                             carton_count++;
                             if (carton_count % cartonbox_max == 0)
@@ -858,17 +860,22 @@ namespace WindowsForms_packing_line
                     if (inner_count % innerbox_max == 0 && carton_scanned > 0)
                     {
                         carton_scanned--;
+                        deleteCountperday("DELETE FROM test_countperday WHERE Count = 'Carton Box' ORDER BY ID DESC LIMIT 1;");//Not OK
                     }
                     carton_need = (inner_count / innerbox_max) - carton_scanned;
+                    if (carton_need < 0) { carton_need = 0; }
                     Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Scan: " + carton_need.ToString() + " Scanned: " + carton_scanned; });
                 }
                 else if (typeCheck() ==2)
                 {
+
                     if (inner_count % cartonbox_max == 0 && export_scanned > 0)
-                    {
+                    { 
                         export_scanned--;
+                        deleteCountperday("DELETE FROM test_countperday WHERE Count = 'Carton Box' ORDER BY ID DESC LIMIT 1;");//Not OK
                     }
                     export_need = (inner_count / cartonbox_max) - export_scanned;
+                    if (export_need < 0) { export_need = 0; }
                     Invoke((MethodInvoker)delegate { lNeedExport.Text = "Scan: " + export_need.ToString() + " Scanned: " + export_scanned; });
                 }
             }
@@ -890,18 +897,22 @@ namespace WindowsForms_packing_line
                     if (inner_count % innerbox_max == 0 && carton_scanned > 0)
                     {
                         carton_scanned--;
+                        deleteCountperday("DELETE FROM test_countperday WHERE Count = 'Carton Box' ORDER BY ID DESC LIMIT 1;");//Not OK
                     }
                     carton_need = (inner_count / innerbox_max) - carton_scanned;
-                    Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Scan: " + carton_need.ToString() + " Scanned: " + carton_scanned; });
+                    if (carton_need < 0) { carton_need = 0; }
+                    Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Scan: " + carton_need + " Scanned: " + carton_scanned; });
                 }
                 else if (typeCheck() == 2)
                 {
                     if (inner_count % cartonbox_max == 0 && export_scanned > 0)
                     {
                         export_scanned--;
+                        deleteCountperday("DELETE FROM test_countperday WHERE Count = 'Carton Box' ORDER BY ID DESC LIMIT 1;");//Not OK
                     }
                     export_need = (inner_count / cartonbox_max) - export_scanned;
-                    Invoke((MethodInvoker)delegate { lNeedExport.Text = "Scan: " + export_need.ToString() + " Scanned: " + export_scanned; });
+                    if (export_need < 0) { export_need = 0; }
+                    Invoke((MethodInvoker)delegate { lNeedExport.Text = "Scan: " + export_need + " Scanned: " + export_scanned; });
                 }
             }
             else if (typeCheck() == 3 || typeCheck() == 4)
@@ -1603,7 +1614,6 @@ namespace WindowsForms_packing_line
                     WindowsForms_packing_line.Properties.Settings.Default.CartonMaster = reader.GetString("Carton");
                     lMasterCarton.Text = WindowsForms_packing_line.Properties.Settings.Default.CartonMaster;
                 }
-
             }
             catch (Exception ex)
             {
@@ -2136,6 +2146,8 @@ namespace WindowsForms_packing_line
             export_need = 0;
             carton_scanned = 0;
             export_scanned = 0;
+            carton_deleted = 0;
+            export_deleted = 0;
             inner_a_master = "";
             inner_b_master = "";
             carton_master = "";
@@ -2300,7 +2312,6 @@ namespace WindowsForms_packing_line
             });
         }
         
-
         //private List<ActualTable> getActualTable()
         //{
         //    var list = new List<ActualTable>();
