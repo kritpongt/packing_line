@@ -220,5 +220,50 @@ namespace WindowsForms_packing_line
                 }
             }
         }
+
+        private void btnResetCountperday_Click(object sender, EventArgs e)
+        {
+            DialogResult dialog_result = MessageBox.Show("Are you sure to Reset Database counter per day?(จะลบตางรางด้านซ้ายมือด้วย)", "Reset Counter", MessageBoxButtons.YesNo);
+            if (dialog_result == DialogResult.Yes)
+            {
+                string queryList = "DELETE FROM `test_countperday`;";
+                MySqlConnection dbconnect = new MySqlConnection(connectStr);
+                MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
+                MySqlDataReader reader;
+                dbcommand.CommandTimeout = 60;
+                try
+                {
+                    dbconnect.Open();
+                    reader = dbcommand.ExecuteReader();
+                    MessageBox.Show("Reset Counter is completed.");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    dbconnect.Close();
+                }
+                //string queryList2 = "AFTER TABLE test_countperday AUTO_INCREMENT = value;";
+                //MySqlCommand dbcommand2 = new MySqlCommand(queryList2, dbconnect);
+                //MySqlDataReader reader2;
+                //dbcommand.CommandTimeout = 60;
+                //try
+                //{
+                //    dbconnect.Open();
+                //    reader2 = dbcommand2.ExecuteReader();
+                //}
+                //catch (Exception ex)
+                //{
+                //    MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //}
+                //finally
+                //{
+                //    dbconnect.Close();
+                //}
+                lvCountperday.Items.Clear();
+            }
+        }
     }
 }

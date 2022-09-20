@@ -31,14 +31,13 @@ namespace WindowsForms_packing_line
         private SerialPort port2;
         private SerialPort port3;
         private SerialPort port4;
-        private SerialPort portTowerLamp;
+        private SerialPort portTowerLamp, portPDFLink;
         public static SerialPort portRFID = new SerialPort("COM7", 115200, System.IO.Ports.Parity.None, 8, System.IO.Ports.StopBits.One);
         public static string connectStr = "server=" + WindowsForms_packing_line.Properties.Settings.Default.dbIPServer + ";port=3306;Database=packing_line_element;uid=root;pwd=;SslMode=none;";
         //private ModbusClient modbus_tcp = new ModbusClient("192.168.1.110", 502);
         private int qty_kanban, qty_current, innerbox_max, cartonbox_max;   //get from db
         int total = 0, inner_count = 0, carton_count = 0 , carton_need = 0, export_need = 0; //counter +1 the larger box
         int carton_scanned = 0, export_scanned = 0; // carton box, export box when scanned
-        int carton_deleted = 0, export_deleted = 0;
         string inner_a_master = "";  //inner a master
         string inner_b_master = "";  //inner b master
         string carton_master = "";   //carton master
@@ -58,6 +57,7 @@ namespace WindowsForms_packing_line
             refreshDGVAcutalTable();
             initialPorts();
             portTLOpen();
+            portPDFLinkOpen();
             this.ActiveControl = tbLogin;
             btnLogout.Hide();
             WindowsForms_packing_line.Properties.Settings.Default.InnerAMaster = "";
@@ -75,6 +75,7 @@ namespace WindowsForms_packing_line
             cbPort3.Items.AddRange(getPorts);
             cbPort4.Items.AddRange(getPorts);
             cbPortTL.Items.AddRange(getPorts);
+            cbPortLink.Items.AddRange(getPorts);
             cbPort1.Text = WindowsForms_packing_line.Properties.Settings.Default.Port1;
             cbPort2.Text = WindowsForms_packing_line.Properties.Settings.Default.Port2;
             cbPort3.Text = WindowsForms_packing_line.Properties.Settings.Default.Port3;
@@ -210,6 +211,10 @@ namespace WindowsForms_packing_line
             {
                 cbPortTL.SelectedIndex = -1;
             }
+            else if (cbPort1.Text == cbPortLink.Text)
+            {
+                cbPortLink.SelectedIndex = -1;
+            }
         }//OK
         private void cbPort2_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -228,6 +233,10 @@ namespace WindowsForms_packing_line
             else if (cbPort2.Text == cbPortTL.Text)
             {
                 cbPortTL.SelectedIndex = -1;
+            }
+            else if (cbPort2.Text == cbPortLink.Text)
+            {
+                cbPortLink.SelectedIndex = -1;
             }
         }//OK
         private void cbPort3_SelectedIndexChanged(object sender, EventArgs e)
@@ -248,6 +257,10 @@ namespace WindowsForms_packing_line
             {
                 cbPortTL.SelectedIndex = -1;
             }
+            else if (cbPort3.Text == cbPortLink.Text)
+            {
+                cbPortLink.SelectedIndex = -1;
+            }
         }//OK
         private void cbPort4_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -267,6 +280,10 @@ namespace WindowsForms_packing_line
             {
                 cbPortTL.SelectedIndex = -1;
             }
+            else if (cbPort4.Text == cbPortLink.Text)
+            {
+                cbPortLink.SelectedIndex = -1;
+            }
         }//OK
         private void cbPortTL_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -285,6 +302,33 @@ namespace WindowsForms_packing_line
             else if (cbPortTL.Text == cbPort4.Text)
             {
                 cbPort4.SelectedIndex = -1;
+            }
+            else if (cbPortTL.Text == cbPortLink.Text)
+            {
+                cbPortLink.SelectedIndex = -1;
+            }
+        }
+        private void cbPortLink_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbPortLink.Text == cbPort1.Text)
+            {
+                cbPort1.SelectedIndex = -1;
+            }
+            else if (cbPortLink.Text == cbPort2.Text)
+            {
+                cbPort2.SelectedIndex = -1;
+            }
+            else if (cbPortLink.Text == cbPort3.Text)
+            {
+                cbPort3.SelectedIndex = -1;
+            }
+            else if (cbPortLink.Text == cbPort4.Text)
+            {
+                cbPort4.SelectedIndex = -1;
+            }
+            else if (cbPortLink.Text == cbPortTL.Text)
+            {
+                cbPortTL.SelectedIndex = -1;
             }
         }
         //Set Baud rate
@@ -417,6 +461,7 @@ namespace WindowsForms_packing_line
             WindowsForms_packing_line.Properties.Settings.Default.Port3 = cbPort3.Text;
             WindowsForms_packing_line.Properties.Settings.Default.Port4 = cbPort4.Text;
             WindowsForms_packing_line.Properties.Settings.Default.PortTL = cbPortTL.Text;
+            WindowsForms_packing_line.Properties.Settings.Default.PortLink = cbPortLink.Text;
             WindowsForms_packing_line.Properties.Settings.Default.Save();
             portsCloser();
             portsOpener();
@@ -445,6 +490,7 @@ namespace WindowsForms_packing_line
                         tbQTY.Focus();
                         qty_kanban = int.Parse(kanban_array[5]);
                     }
+                    sendToRS232();
                     tbKanban.SelectAll();
                 }
                 catch (Exception ex)
@@ -742,13 +788,11 @@ namespace WindowsForms_packing_line
                             {
                                 export_need++;
                                 Invoke((MethodInvoker)delegate { lNeedExport.Text = "Scan: " + export_need + " Scanned: " + export_scanned; });
-                                insertCountperday("INSERT INTO `test_countperday`(Kanban, Count) VALUES('" + kanban_master + "', 'Carton Box');");
                             }
                             else if (qty_current - inner_count == 0 & carton_need == 0)
                             {
                                 export_need++;
                                 Invoke((MethodInvoker)delegate { lNeedExport.Text = "Scan: " + export_need + " Scanned: " + export_scanned; });
-                                insertCountperday("INSERT INTO `test_countperday`(Kanban, Count) VALUES('" + kanban_master + "', 'Carton Box');");
                             }
                         }
                         else if (typeCheck() == 4)
@@ -763,13 +807,11 @@ namespace WindowsForms_packing_line
                             {
                                 export_need++;
                                 Invoke((MethodInvoker)delegate { lNeedExport.Text = "Scan: " + export_need; });
-                                insertCountperday("INSERT INTO `test_countperday`(Kanban, Count) VALUES('" + kanban_master + "', 'Carton Box');");
                             }
                             else if (total == 0 && carton_need ==0)
                             {
                                 export_need++;
                                 Invoke((MethodInvoker)delegate { lNeedExport.Text = "Scan: " + export_need; });
-                                insertCountperday("INSERT INTO `test_countperday`(Kanban, Count) VALUES('" + kanban_master + "', 'Carton Box');");
                             }
                         }
 
@@ -806,10 +848,10 @@ namespace WindowsForms_packing_line
                     {
                         //Log
                         Invoke((MethodInvoker)delegate { lbLog.Items.Add(input_value + "\tExport Box"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
-                        insertCountperday("INSERT INTO `test_countperday`(Kanban, Count) VALUES('" + kanban_master + "', 'Export Box');");
                         export_scanned++;
                         export_need--;
                         Invoke((MethodInvoker)delegate { lNeedExport.Text = "Scan: " + export_need + " Scanned: " + export_scanned; });
+                        insertCountperday("INSERT INTO `test_countperday`(Kanban, Count) VALUES('" + kanban_master + "', 'Export Box');");
 
                         if (typeCheck() == 3)
                         {
@@ -1415,6 +1457,12 @@ namespace WindowsForms_packing_line
                     lTowerLamp.Text = "Tower Lamp: Disonnected";
                     lTowerLamp.ForeColor = Color.Red;
                 }
+                if (portPDFLink != null)
+                {
+                    portPDFLink.Close();
+                    lLinkPDF.Text = "PDF Link: Disconnected";
+                    lLinkPDF.ForeColor = Color.Red;
+                }
             }
             catch (Exception ex)
             {
@@ -1481,6 +1529,16 @@ namespace WindowsForms_packing_line
                     {
                         lTowerLamp.Text = "Tower Lamp: Connected";
                         lTowerLamp.ForeColor = Color.Green;
+                    }
+                }
+                if (cbPortLink.Text != "")
+                {
+                    portPDFLink = new SerialPort(WindowsForms_packing_line.Properties.Settings.Default.PortLink, 9600, System.IO.Ports.Parity.None, 8, System.IO.Ports.StopBits.One);
+                    portPDFLink.Open();
+                    if (portPDFLink.IsOpen)
+                    {
+                        lLinkPDF.Text = "PDF Link: Connected";
+                        lLinkPDF.ForeColor = Color.Green;
                     }
                 }
             }
@@ -2146,8 +2204,6 @@ namespace WindowsForms_packing_line
             export_need = 0;
             carton_scanned = 0;
             export_scanned = 0;
-            carton_deleted = 0;
-            export_deleted = 0;
             inner_a_master = "";
             inner_b_master = "";
             carton_master = "";
@@ -2279,6 +2335,45 @@ namespace WindowsForms_packing_line
                         byte[] buffer3 = new byte[] { 0X28 };
                         portTowerLamp.Write(buffer3, 0, buffer.Length);
                     }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        //PDF
+        public void portPDFLinkOpen()
+        {
+            try
+            {
+                if (WindowsForms_packing_line.Properties.Settings.Default.PortLink != "")
+                {
+                    portPDFLink = new SerialPort(WindowsForms_packing_line.Properties.Settings.Default.PortLink, 9600, System.IO.Ports.Parity.None, 8, System.IO.Ports.StopBits.One);
+                    portPDFLink.Open();
+                    lLinkPDF.Text = "PDF Link: Connected";
+                    lLinkPDF.ForeColor = Color.Green;
+                }
+                else
+                {
+                    lLinkPDF.Text = "PDF Link: Disconnected";
+                    lLinkPDF.ForeColor = Color.Red;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Port PDF Link", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        public void sendToRS232()
+        {
+            Thread.Sleep(500);
+            try
+            {
+                if (portPDFLink.IsOpen == true)
+                {
+                    Thread.Sleep(60);
+                    portPDFLink.Write(kanban_master + Environment.NewLine);
                 }
             }
             catch (Exception ex)

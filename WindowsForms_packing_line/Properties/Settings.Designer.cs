@@ -334,5 +334,17 @@ namespace WindowsForms_packing_line.Properties {
                 this["PortTL"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string PortLink {
+            get {
+                return ((string)(this["PortLink"]));
+            }
+            set {
+                this["PortLink"] = value;
+            }
+        }
     }
 }
