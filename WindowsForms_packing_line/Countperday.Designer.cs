@@ -102,7 +102,7 @@
             this.btnResetCountperday.Name = "btnResetCountperday";
             this.btnResetCountperday.Size = new System.Drawing.Size(161, 105);
             this.btnResetCountperday.TabIndex = 2;
-            this.btnResetCountperday.Text = "Reset\r\nCount per day";
+            this.btnResetCountperday.Text = "Reset\r\nCount Per day";
             this.btnResetCountperday.UseVisualStyleBackColor = true;
             this.btnResetCountperday.Click += new System.EventHandler(this.btnResetCountperday_Click);
             // 

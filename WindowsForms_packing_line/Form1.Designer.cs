@@ -68,6 +68,7 @@
             this.tbInnerBoxA = new System.Windows.Forms.TextBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.Settings = new System.Windows.Forms.TabPage();
+            this.cbPortLink = new System.Windows.Forms.ComboBox();
             this.cbPortTL = new System.Windows.Forms.ComboBox();
             this.lLinkPDF = new System.Windows.Forms.Label();
             this.lTowerLamp = new System.Windows.Forms.Label();
@@ -104,7 +105,6 @@
             this.btnCountPerDay = new System.Windows.Forms.Button();
             this.btnActualTableRefresh = new System.Windows.Forms.Button();
             this.dataGVActualTable = new System.Windows.Forms.DataGridView();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Edit = new System.Windows.Forms.TabPage();
@@ -129,7 +129,6 @@
             this.tbKBSearch = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.lvModelMaster = new System.Windows.Forms.ListView();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -161,14 +160,13 @@
             this.columnHeader13 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader14 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel1 = new System.Windows.Forms.Panel();
-            this.pIcon = new System.Windows.Forms.Panel();
+            this.pbIcon = new System.Windows.Forms.PictureBox();
             this.btnLogout = new System.Windows.Forms.Button();
             this.pLogin = new System.Windows.Forms.Panel();
             this.btnRFID = new System.Windows.Forms.Button();
             this.btnLogin = new System.Windows.Forms.Button();
             this.tbLogin = new System.Windows.Forms.TextBox();
             this.label29 = new System.Windows.Forms.Label();
-            this.cbPortLink = new System.Windows.Forms.ComboBox();
             this.tabControl1.SuspendLayout();
             this.Checker.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -181,6 +179,7 @@
             this.Edit.SuspendLayout();
             this.Account.SuspendLayout();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbIcon)).BeginInit();
             this.pLogin.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -705,6 +704,17 @@
             this.Settings.TabIndex = 1;
             this.Settings.Text = " Settings ";
             // 
+            // cbPortLink
+            // 
+            this.cbPortLink.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbPortLink.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbPortLink.FormattingEnabled = true;
+            this.cbPortLink.Location = new System.Drawing.Point(441, 355);
+            this.cbPortLink.Name = "cbPortLink";
+            this.cbPortLink.Size = new System.Drawing.Size(121, 40);
+            this.cbPortLink.TabIndex = 6;
+            this.cbPortLink.SelectedIndexChanged += new System.EventHandler(this.cbPortLink_SelectedIndexChanged);
+            // 
             // cbPortTL
             // 
             this.cbPortTL.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -1163,15 +1173,16 @@
             this.Actualtable.Name = "Actualtable";
             this.Actualtable.Size = new System.Drawing.Size(1021, 629);
             this.Actualtable.TabIndex = 4;
-            this.Actualtable.Text = " Actual Table ";
+            this.Actualtable.Text = " ActualTable ";
             // 
             // btnCountPerDay
             // 
+            this.btnCountPerDay.Font = new System.Drawing.Font("Consolas", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCountPerDay.Location = new System.Drawing.Point(835, 134);
             this.btnCountPerDay.Name = "btnCountPerDay";
             this.btnCountPerDay.Size = new System.Drawing.Size(180, 80);
             this.btnCountPerDay.TabIndex = 1;
-            this.btnCountPerDay.Text = "Count\r\nper day";
+            this.btnCountPerDay.Text = "Count Per day";
             this.btnCountPerDay.UseVisualStyleBackColor = true;
             this.btnCountPerDay.Click += new System.EventHandler(this.btnCountPerDay_Click);
             // 
@@ -1193,7 +1204,6 @@
             this.dataGVActualTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dataGVActualTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGVActualTable.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Column1,
             this.Column2,
             this.Column3});
             this.dataGVActualTable.Dock = System.Windows.Forms.DockStyle.Left;
@@ -1202,19 +1212,10 @@
             this.dataGVActualTable.Size = new System.Drawing.Size(829, 629);
             this.dataGVActualTable.TabIndex = 0;
             // 
-            // Column1
-            // 
-            this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Column1.DataPropertyName = "No";
-            this.Column1.FillWeight = 21.68711F;
-            this.Column1.HeaderText = "No.";
-            this.Column1.Name = "Column1";
-            this.Column1.Width = 88;
-            // 
             // Column2
             // 
             this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Column2.DataPropertyName = "PartNo";
+            this.Column2.DataPropertyName = "pn";
             this.Column2.FillWeight = 213.198F;
             this.Column2.HeaderText = "Part No.";
             this.Column2.Name = "Column2";
@@ -1223,7 +1224,7 @@
             // Column3
             // 
             this.Column3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Column3.DataPropertyName = "Count";
+            this.Column3.DataPropertyName = "count";
             this.Column3.FillWeight = 65.11491F;
             this.Column3.HeaderText = "Count";
             this.Column3.Name = "Column3";
@@ -1449,7 +1450,6 @@
             // lvModelMaster
             // 
             this.lvModelMaster.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
             this.columnHeader2,
             this.columnHeader3,
             this.columnHeader4,
@@ -1470,22 +1470,16 @@
             this.lvModelMaster.View = System.Windows.Forms.View.Details;
             this.lvModelMaster.Click += new System.EventHandler(this.lvModelMaster_Click);
             // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = "No.";
-            this.columnHeader1.Width = 57;
-            // 
             // columnHeader2
             // 
             this.columnHeader2.Text = "K/B";
-            this.columnHeader2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader2.Width = 118;
+            this.columnHeader2.Width = 161;
             // 
             // columnHeader3
             // 
-            this.columnHeader3.Text = "ModelNo.";
+            this.columnHeader3.Text = "Model No.";
             this.columnHeader3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader3.Width = 132;
+            this.columnHeader3.Width = 159;
             // 
             // columnHeader4
             // 
@@ -1576,9 +1570,9 @@
             this.cbDBPosition.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbDBPosition.FormattingEnabled = true;
             this.cbDBPosition.Items.AddRange(new object[] {
-            "Operator",
-            "Supervisor",
-            "Administrator"});
+            "operator",
+            "supervisor",
+            "admin"});
             this.cbDBPosition.Location = new System.Drawing.Point(216, 542);
             this.cbDBPosition.Name = "cbDBPosition";
             this.cbDBPosition.Size = new System.Drawing.Size(270, 40);
@@ -1750,7 +1744,7 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(33)))), ((int)(((byte)(62)))));
-            this.panel1.Controls.Add(this.pIcon);
+            this.panel1.Controls.Add(this.pbIcon);
             this.panel1.Controls.Add(this.lPosition);
             this.panel1.Controls.Add(this.lOperatorID);
             this.panel1.Controls.Add(this.lOperatorName);
@@ -1762,15 +1756,17 @@
             this.panel1.Size = new System.Drawing.Size(1029, 85);
             this.panel1.TabIndex = 4;
             // 
-            // pIcon
+            // pbIcon
             // 
-            this.pIcon.BackColor = System.Drawing.Color.Black;
-            this.pIcon.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pIcon.Location = new System.Drawing.Point(839, 0);
-            this.pIcon.Name = "pIcon";
-            this.pIcon.Size = new System.Drawing.Size(190, 85);
-            this.pIcon.TabIndex = 3;
-            this.pIcon.Click += new System.EventHandler(this.pIcon_Click);
+            this.pbIcon.Dock = System.Windows.Forms.DockStyle.Right;
+            this.pbIcon.Image = global::WindowsForms_packing_line.Properties.Resources.logo;
+            this.pbIcon.Location = new System.Drawing.Point(839, 0);
+            this.pbIcon.Name = "pbIcon";
+            this.pbIcon.Size = new System.Drawing.Size(190, 85);
+            this.pbIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbIcon.TabIndex = 0;
+            this.pbIcon.TabStop = false;
+            this.pbIcon.Click += new System.EventHandler(this.pbIcon_Click);
             // 
             // btnLogout
             // 
@@ -1794,10 +1790,10 @@
             this.pLogin.Controls.Add(this.btnLogin);
             this.pLogin.Controls.Add(this.tbLogin);
             this.pLogin.Controls.Add(this.label29);
-            this.pLogin.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pLogin.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pLogin.Location = new System.Drawing.Point(0, 85);
             this.pLogin.Name = "pLogin";
-            this.pLogin.Size = new System.Drawing.Size(1029, 10);
+            this.pLogin.Size = new System.Drawing.Size(1029, 676);
             this.pLogin.TabIndex = 4;
             // 
             // btnRFID
@@ -1851,17 +1847,6 @@
             this.label29.TabIndex = 0;
             this.label29.Text = "แสกนบัตร/ใส่รหัส เพื่อ Login";
             // 
-            // cbPortLink
-            // 
-            this.cbPortLink.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbPortLink.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbPortLink.FormattingEnabled = true;
-            this.cbPortLink.Location = new System.Drawing.Point(441, 355);
-            this.cbPortLink.Name = "cbPortLink";
-            this.cbPortLink.Size = new System.Drawing.Size(121, 40);
-            this.cbPortLink.TabIndex = 6;
-            this.cbPortLink.SelectedIndexChanged += new System.EventHandler(this.cbPortLink_SelectedIndexChanged);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1871,7 +1856,7 @@
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.panel1);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Packing Line";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.tabControl1.ResumeLayout(false);
             this.Checker.ResumeLayout(false);
@@ -1894,6 +1879,7 @@
             this.Account.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbIcon)).EndInit();
             this.pLogin.ResumeLayout(false);
             this.pLogin.PerformLayout();
             this.ResumeLayout(false);
@@ -1964,7 +1950,6 @@
         private System.Windows.Forms.TextBox tbDBCarton;
         private System.Windows.Forms.Button btnUpdateMaster;
         private System.Windows.Forms.Button btnCreateMaster;
-        private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader4;
@@ -2014,7 +1999,6 @@
         private System.Windows.Forms.ColumnHeader columnHeader13;
         private System.Windows.Forms.ColumnHeader columnHeader14;
         private System.Windows.Forms.Label label28;
-        private System.Windows.Forms.Panel pIcon;
         private System.Windows.Forms.Button btnResetKB;
         private System.Windows.Forms.Panel pLogin;
         private System.Windows.Forms.Button btnLogin;
@@ -2038,11 +2022,11 @@
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.ComboBox cbPortTL;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
         private System.Windows.Forms.Button btnCountPerDay;
         private System.Windows.Forms.ComboBox cbPortLink;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
+        private System.Windows.Forms.PictureBox pbIcon;
     }
 }
 

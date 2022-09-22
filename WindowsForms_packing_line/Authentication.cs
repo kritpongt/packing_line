@@ -17,6 +17,7 @@ namespace WindowsForms_packing_line
     {
         string connectStr = Form1.connectStr;
         SerialPort portRFID = Form1.portRFID;
+        public static bool alarm_turn_off = false;
         public Authentication()
         {
             InitializeComponent();
@@ -27,8 +28,8 @@ namespace WindowsForms_packing_line
         {
             if (e.KeyCode == Keys.Enter)
             {
-                string TABLE = "test_account";
-                string queryList = "SELECT * FROM " + TABLE + " WHERE OperatorID = '" + tbAlarm.Text + "';";
+                string TABLE = "account";
+                string queryList = "SELECT * FROM " + TABLE + " WHERE operatorID = '" + tbAlarm.Text + "';";
                 MySqlConnection dbconnect = new MySqlConnection(connectStr);
                 MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
                 MySqlDataReader reader;
@@ -39,9 +40,10 @@ namespace WindowsForms_packing_line
                     reader = dbcommand.ExecuteReader();
                     while (reader.Read())
                     {
-                        if (reader.GetString("Position").Equals("Administrator") || reader.GetString("Position").Equals("Supervisor"))
+                        if (reader.GetString("position").Equals("Administrator") || reader.GetString("position").Equals("Supervisor"))
                         {
                             this.Close();
+                            alarm_turn_off = true;
                         }
                     }
                     tbAlarm.SelectAll();
@@ -58,8 +60,8 @@ namespace WindowsForms_packing_line
         }//OK
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            string TABLE = "test_account";
-            string queryList = "SELECT * FROM " + TABLE + " WHERE OperatorID = '" + tbAlarm.Text + "';";
+            string TABLE = "account";
+            string queryList = "SELECT * FROM " + TABLE + " WHERE operatorID = '" + tbAlarm.Text + "';";
             MySqlConnection dbconnect = new MySqlConnection(connectStr);
             MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
             MySqlDataReader reader;
@@ -70,7 +72,7 @@ namespace WindowsForms_packing_line
                 reader = dbcommand.ExecuteReader();
                 while (reader.Read())
                 {
-                    if (reader.GetString("Position") == "Administrator" || reader.GetString("Position") == "Supervisor")
+                    if (reader.GetString("position").Equals("Administrator") || reader.GetString("pposition").Equals("Supervisor"))
                     {
                         this.Close();
                     }

@@ -33,8 +33,8 @@ namespace WindowsForms_packing_line
         public void dbCountperday()
         {
             lvCountperday.Items.Clear();
-            string TABLE = "test_countperday";
-            string queryList = "SELECT * FROM " + TABLE + " ORDER BY CAST(Kanban AS UNSIGNED);";
+            string TABLE = "countperday";
+            string queryList = "SELECT * FROM " + TABLE + " ORDER BY CAST(kanban AS UNSIGNED);";
             MySqlConnection dbconnect = new MySqlConnection(connectStr);
             MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
             MySqlDataAdapter da = new MySqlDataAdapter(dbcommand);
@@ -62,11 +62,11 @@ namespace WindowsForms_packing_line
             {
                 dbconnect.Close();
             }
-        }
+        }//not connect
         public int dbCountBox(string kanban, string count)
         {
             int countbox = 0;
-            string queryList = "SELECT COUNT(kanban) FROM test_countperday WHERE Kanban = '" + kanban + "' AND Count = '" + count + "';";
+            string queryList = "SELECT COUNT(kanban) FROM countperday WHERE kanban = '" + kanban + "' AND countFrom = '" + count + "';";
             MySqlConnection dbconnect = new MySqlConnection(connectStr);
             MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
             MySqlDataReader reader;
@@ -82,14 +82,14 @@ namespace WindowsForms_packing_line
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "dbCountBox", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return countbox;
         }
         public string[] dbDistinctKanban()
         {
             int index_lenght = 0;
-            string queryList = "SELECT COUNT(DISTINCT Kanban) FROM test_countperday;";
+            string queryList = "SELECT COUNT(DISTINCT kanban) FROM countperday;";
             MySqlConnection dbconnect = new MySqlConnection(connectStr);
             MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
             MySqlDataReader reader;
@@ -105,7 +105,7 @@ namespace WindowsForms_packing_line
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "dbDistinct", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
@@ -113,7 +113,7 @@ namespace WindowsForms_packing_line
             }
             int index = 0;
             string[] kanban_no = new string[index_lenght];
-            string queryList2 = "SELECT DISTINCT Kanban FROM test_countperday;";
+            string queryList2 = "SELECT DISTINCT kanban FROM countperday;";
             MySqlConnection dbconnect2 = new MySqlConnection(connectStr);
             MySqlCommand dbcommand2 = new MySqlCommand(queryList2, dbconnect2);
             MySqlDataReader reader2;
@@ -124,7 +124,7 @@ namespace WindowsForms_packing_line
                 reader2 = dbcommand2.ExecuteReader();
                 while (reader2.Read())
                 {
-                    kanban_no[index] = reader2.GetString("Kanban");
+                    kanban_no[index] = reader2.GetString("kanban");
                     index++;
                 }
             }
@@ -220,13 +220,12 @@ namespace WindowsForms_packing_line
                 }
             }
         }
-
         private void btnResetCountperday_Click(object sender, EventArgs e)
         {
             DialogResult dialog_result = MessageBox.Show("Are you sure to Reset Database counter per day?(จะลบตางรางด้านซ้ายมือด้วย)", "Reset Counter", MessageBoxButtons.YesNo);
             if (dialog_result == DialogResult.Yes)
             {
-                string queryList = "DELETE FROM `test_countperday`;";
+                string queryList = "DELETE FROM `countperday`;";
                 MySqlConnection dbconnect = new MySqlConnection(connectStr);
                 MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
                 MySqlDataReader reader;
@@ -245,6 +244,7 @@ namespace WindowsForms_packing_line
                 {
                     dbconnect.Close();
                 }
+                //reset auto increment
                 //string queryList2 = "AFTER TABLE test_countperday AUTO_INCREMENT = value;";
                 //MySqlCommand dbcommand2 = new MySqlCommand(queryList2, dbconnect);
                 //MySqlDataReader reader2;

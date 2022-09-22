@@ -22,6 +22,7 @@ using System.Diagnostics.Eventing.Reader;
 using Org.BouncyCastle.Bcpg.OpenPgp;
 using EasyModbus;
 using System.Runtime.CompilerServices;
+using System.Security;
 
 namespace WindowsForms_packing_line
 {
@@ -33,7 +34,7 @@ namespace WindowsForms_packing_line
         private SerialPort port4;
         private SerialPort portTowerLamp, portPDFLink;
         public static SerialPort portRFID = new SerialPort("COM7", 115200, System.IO.Ports.Parity.None, 8, System.IO.Ports.StopBits.One);
-        public static string connectStr = "server=" + WindowsForms_packing_line.Properties.Settings.Default.dbIPServer + ";port=3306;Database=packing_line_element;uid=root;pwd=;SslMode=none;";
+        public static string connectStr = "server=" + WindowsForms_packing_line.Properties.Settings.Default.dbIPServer + ";port=3306;Database=scannerstb;uid=root;pwd=;SslMode=none;";
         //private ModbusClient modbus_tcp = new ModbusClient("192.168.1.110", 502);
         private int qty_kanban, qty_current, innerbox_max, cartonbox_max;   //get from db
         int total = 0, inner_count = 0, carton_count = 0 , carton_need = 0, export_need = 0; //counter +1 the larger box
@@ -42,7 +43,7 @@ namespace WindowsForms_packing_line
         string inner_b_master = "";  //inner b master
         string carton_master = "";   //carton master
         string export_master = "";   //export master
-        string selected_kanban_id = ""; //temp_str kanban for update database
+        string selected_kanban_name = ""; //temp_str kanban for update database
         string selected_account_tagpass = ""; //temp_str account for update database
         string kanban_master = "";  //kanban no for update actual table
         public enum colors { red, yellow, green, buzzer, reset }
@@ -50,8 +51,8 @@ namespace WindowsForms_packing_line
         public Form1()
         {
             InitializeComponent();
-            //this.WindowState = FormWindowState.Maximized;
-            //this.FormBorderStyle = FormBorderStyle.None;
+            this.WindowState = FormWindowState.Maximized;
+            this.FormBorderStyle = FormBorderStyle.None;
             refreshListViewMaster();
             refreshListViewAccount();
             refreshDGVAcutalTable();
@@ -81,50 +82,52 @@ namespace WindowsForms_packing_line
             cbPort3.Text = WindowsForms_packing_line.Properties.Settings.Default.Port3;
             cbPort4.Text = WindowsForms_packing_line.Properties.Settings.Default.Port4;
             cbPortTL.Text = WindowsForms_packing_line.Properties.Settings.Default.PortTL;
+            cbPortLink.Text = WindowsForms_packing_line.Properties.Settings.Default.PortLink;
+            greenAlarm();
         }
         //Login
         private void tbLogin_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
-                string TABLE = "test_account";
-                string queryList = "SELECT * FROM " + TABLE + " WHERE OperatorID = '" + tbLogin.Text + "';";
-                MySqlConnection dbconnect = new MySqlConnection(connectStr);
-                MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
-                MySqlDataReader reader;
-                dbcommand.CommandTimeout = 100;
-                try
-                {
-                    dbconnect.Open();
-                    reader = dbcommand.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        lOperatorID.Text = "Operator ID: " + reader.GetString("OperatorID");
-                        lOperatorName.Text = "Operator Name: " + reader.GetString("Name") + " " + reader.GetString("Surname");
-                        lPosition.Text = "Position: " + reader.GetString("Position");
-                        pLogin.Hide();
-                        btnLogout.Show();
-                        roleChecker(reader.GetString("Position"));
-                        tbKanban.Focus();
-                        //Invoke((MethodInvoker)delegate { tbLogin.Enabled = false; });
-                        portsCloser();
-                    }
-                    tbLogin.SelectAll();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                finally
-                {
-                    dbconnect.Close();
-                }
+                //string TABLE = "account";
+                //string queryList = "SELECT * FROM " + TABLE + " WHERE operatorID = '" + tbLogin.Text + "';";
+                //MySqlConnection dbconnect = new MySqlConnection(connectStr);
+                //MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
+                //MySqlDataReader reader;
+                //dbcommand.CommandTimeout = 100;
+                //try
+                //{
+                //    dbconnect.Open();
+                //    reader = dbcommand.ExecuteReader();
+                //    while (reader.Read())
+                //    {
+                //        lOperatorID.Text = "Operator ID: " + reader.GetString("operatorID");
+                //        lOperatorName.Text = "Operator Name: " + reader.GetString("fname") + " " + reader.GetString("lname");
+                //        lPosition.Text = "Position: " + reader.GetString("position");
+                //        pLogin.Hide();
+                //        btnLogout.Show();
+                //        roleChecker(reader.GetString("position"));
+                //        tbKanban.Focus();
+                //        portsCloser();
+                //    }
+                //    tbLogin.SelectAll();
+                //}
+                //catch (Exception ex)
+                //{
+                //    MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //}
+                //finally
+                //{
+                //    dbconnect.Close();
+                //}
+                Login();
             }
         }//OK
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            string TABLE = "test_account";
-            string queryList = "SELECT * FROM " + TABLE + " WHERE OperatorID = '" + tbLogin.Text + "';";
+            string TABLE = "account";
+            string queryList = "SELECT * FROM " + TABLE + " WHERE operatorID = '" + tbLogin.Text + "';";
             MySqlConnection dbconnect = new MySqlConnection(connectStr);
             MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
             MySqlDataReader reader;
@@ -135,14 +138,13 @@ namespace WindowsForms_packing_line
                 reader = dbcommand.ExecuteReader();
                 while (reader.Read())
                 {
-                    lOperatorID.Text = "Operator ID: " + reader.GetString("OperatorID");
-                    lOperatorName.Text = "Operator Name: " + reader.GetString("Name") + " " + reader.GetString("Surname");
-                    lPosition.Text = "Position: " + reader.GetString("Position");
+                    lOperatorID.Text = "Operator ID: " + reader.GetString("operatorID");
+                    lOperatorName.Text = "Operator Name: " + reader.GetString("fname") + " " + reader.GetString("lname");
+                    lPosition.Text = "Position: " + reader.GetString("position");
                     pLogin.Hide();
                     btnLogout.Show();
-                    roleChecker(reader.GetString("Position"));
+                    roleChecker(reader.GetString("position"));
                     tbKanban.Focus();
-                    //Invoke((MethodInvoker)delegate { tbLogin.Enabled = false; });
                     portsCloser();
                 }
             }
@@ -181,7 +183,7 @@ namespace WindowsForms_packing_line
             Invoke((MethodInvoker)delegate { btnLogout.Hide(); });
             tbLogin.Focus();
         }//OK
-        private void pIcon_Click(object sender, EventArgs e)
+        private void pbIcon_Click(object sender, EventArgs e)
         {
             if (this.FormBorderStyle == FormBorderStyle.Sizable)
             {
@@ -456,6 +458,7 @@ namespace WindowsForms_packing_line
             WindowsForms_packing_line.Properties.Settings.Default.Port3 = "";
             WindowsForms_packing_line.Properties.Settings.Default.Port4 = "";
             WindowsForms_packing_line.Properties.Settings.Default.PortTL = "";
+            WindowsForms_packing_line.Properties.Settings.Default.PortLink = "";
             WindowsForms_packing_line.Properties.Settings.Default.Port1 = cbPort1.Text;
             WindowsForms_packing_line.Properties.Settings.Default.Port2 = cbPort2.Text;
             WindowsForms_packing_line.Properties.Settings.Default.Port3 = cbPort3.Text;
@@ -464,15 +467,18 @@ namespace WindowsForms_packing_line
             WindowsForms_packing_line.Properties.Settings.Default.PortLink = cbPortLink.Text;
             WindowsForms_packing_line.Properties.Settings.Default.Save();
             portsCloser();
+            portsOtherClose();
             portsOpener();
+            portsOtherOpen();
         }//OK
         //Data Receiver and Output
         private void tbKanban_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
-                string TABLE = "test_model_master";
-                string queryList = "SELECT * FROM " + TABLE + " WHERE Kanban = '" + tbKanban.Text + "';";
+                string cut_string = "";
+                string TABLE = "modelmaster";
+                string queryList = "SELECT * FROM " + TABLE + " WHERE kanban = '" + tbKanban.Text + "';";
                 MySqlConnection dbconnect = new MySqlConnection(connectStr);
                 MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
                 MySqlDataReader reader;
@@ -484,13 +490,14 @@ namespace WindowsForms_packing_line
                     while (reader.Read())
                     {
                         kanban_master = tbKanban.Text;
-                        tbModel.Text = reader.GetString("ModelNo"); //Get Model
+                        tbModel.Text = reader.GetString("modelName"); //Get Model
                         string[] kanban_array = tbKanban.Text.Split('|');
                         tbQTY.Text = kanban_array[5];
                         tbQTY.Focus();
                         qty_kanban = int.Parse(kanban_array[5]);
+                        cut_string = kanban_array[2];
+                        //sendToRS232();
                     }
-                    sendToRS232();
                     tbKanban.SelectAll();
                 }
                 catch (Exception ex)
@@ -500,6 +507,7 @@ namespace WindowsForms_packing_line
                 finally
                 {
                     dbconnect.Close();
+                    sendToRS232(cut_string);
                 }
             }
         }//Waitfix
@@ -578,6 +586,7 @@ namespace WindowsForms_packing_line
                             }
                         }
                     }
+                    yellowAlarm();
                 }
             }
             catch (Exception ex)
@@ -644,7 +653,7 @@ namespace WindowsForms_packing_line
                         //Log
                         Invoke((MethodInvoker)delegate { lbLog.Items.Add(input_value + "\tInner Box A"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
                         //db Count per day
-                        insertCountperday("INSERT INTO `test_countperday`(Kanban, Count) VALUES('" + kanban_master + "', 'Inner Box');");
+                        insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'Inner Box');");
                         
                         inner_count++;
                         total = qty_current - inner_count;
@@ -685,8 +694,12 @@ namespace WindowsForms_packing_line
                 else
                 {
                     portsCloser();
-                    
+                    redAlarm();
                     alarmAuth();
+                    if (Authentication.alarm_turn_off == true)
+                    {
+                        yellowAlarm();
+                    }
                     Invoke((MethodInvoker)delegate { lbLog.Items.Add(input_value + "\tInner Box A"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
                     Invoke((MethodInvoker)delegate { lbLog.Items.Add("The alarm has been reset."); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
                 }
@@ -710,7 +723,7 @@ namespace WindowsForms_packing_line
                     {
                         //Log
                         Invoke((MethodInvoker)delegate { lbLog.Items.Add(input_value + "\tInner Box B"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
-                        insertCountperday("INSERT INTO `test_countperday`(Kanban, Count) VALUES('" + kanban_master + "', 'Inner Box');");
+                        insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'Inner Box');");
 
                         inner_count++;
                         total = qty_current - inner_count;
@@ -751,8 +764,12 @@ namespace WindowsForms_packing_line
                 else
                 {
                     portsCloser();
-                    
+                    redAlarm();
                     alarmAuth();
+                    if (Authentication.alarm_turn_off == true)
+                    {
+                        yellowAlarm();
+                    }
                     Invoke((MethodInvoker)delegate { lbLog.Items.Add(input_value + "\tInner Box B"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
                     Invoke((MethodInvoker)delegate { lbLog.Items.Add("The alarm has been reset."); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
                 }
@@ -779,7 +796,7 @@ namespace WindowsForms_packing_line
                         carton_scanned++;
                         carton_need--;
                         Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Scan: " + carton_need + " Scanned: " + carton_scanned; });
-                        insertCountperday("INSERT INTO `test_countperday`(Kanban, Count) VALUES('" + kanban_master + "', 'Carton Box');");
+                        insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'Carton Box');");
 
                         if (typeCheck() == 1)
                         {
@@ -824,7 +841,12 @@ namespace WindowsForms_packing_line
                 else
                 {
                     portsCloser();
+                    redAlarm();
                     alarmAuth();
+                    if (Authentication.alarm_turn_off == true)
+                    {
+                        yellowAlarm();
+                    }
                     Invoke((MethodInvoker)delegate { lbLog.Items.Add(input_value + "\tCarton Box"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
                     Invoke((MethodInvoker)delegate { lbLog.Items.Add("The alarm has been reset."); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
                 }
@@ -851,7 +873,7 @@ namespace WindowsForms_packing_line
                         export_scanned++;
                         export_need--;
                         Invoke((MethodInvoker)delegate { lNeedExport.Text = "Scan: " + export_need + " Scanned: " + export_scanned; });
-                        insertCountperday("INSERT INTO `test_countperday`(Kanban, Count) VALUES('" + kanban_master + "', 'Export Box');");
+                        insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'Export Box');");
 
                         if (typeCheck() == 3)
                         {
@@ -878,7 +900,12 @@ namespace WindowsForms_packing_line
                 else
                 {
                     portsCloser();
+                    redAlarm();
                     alarmAuth();
+                    if (Authentication.alarm_turn_off == true)
+                    {
+                        yellowAlarm();
+                    }
                     Invoke((MethodInvoker)delegate { lbLog.Items.Add(input_value + "\tExport Box"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
                     Invoke((MethodInvoker)delegate { lbLog.Items.Add("The alarm has been reset."); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
                 }
@@ -896,13 +923,13 @@ namespace WindowsForms_packing_line
                 inner_count--;
                 Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + (qty_current - inner_count).ToString(); });
                 Invoke((MethodInvoker)delegate { lbLog.Items.Add("Delete 1 Item!\tInner Box A"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
-                deleteCountperday("DELETE FROM test_countperday WHERE Count = 'Inner Box' ORDER BY ID DESC LIMIT 1;");
+                deleteCountperday("DELETE FROM countperday WHERE countFrom = 'Inner Box' LIMIT 1;");
                 if (typeCheck() == 1)
                 {
                     if (inner_count % innerbox_max == 0 && carton_scanned > 0)
                     {
                         carton_scanned--;
-                        deleteCountperday("DELETE FROM test_countperday WHERE Count = 'Carton Box' ORDER BY ID DESC LIMIT 1;");//Not OK
+                        deleteCountperday("DELETE FROM countperday WHERE countFrom = 'Carton Box' LIMIT 1;");//Not OK
                     }
                     carton_need = (inner_count / innerbox_max) - carton_scanned;
                     if (carton_need < 0) { carton_need = 0; }
@@ -914,7 +941,7 @@ namespace WindowsForms_packing_line
                     if (inner_count % cartonbox_max == 0 && export_scanned > 0)
                     { 
                         export_scanned--;
-                        deleteCountperday("DELETE FROM test_countperday WHERE Count = 'Carton Box' ORDER BY ID DESC LIMIT 1;");//Not OK
+                        deleteCountperday("DELETE FROM countperday WHERE countFrom = 'Export Box' LIMIT 1;");//Not OK
                     }
                     export_need = (inner_count / cartonbox_max) - export_scanned;
                     if (export_need < 0) { export_need = 0; }
@@ -933,13 +960,13 @@ namespace WindowsForms_packing_line
                 inner_count--;
                 Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + (qty_current - inner_count).ToString(); });
                 Invoke((MethodInvoker)delegate { lbLog.Items.Add("Delete 1 Item!\tInner Box B"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
-                deleteCountperday("DELETE FROM test_countperday WHERE Count = 'Inner Box' ORDER BY ID DESC LIMIT 1;");
+                deleteCountperday("DELETE FROM countperday WHERE countFrom = 'Inner Box' ORDER BY ID DESC LIMIT 1;");
                 if (typeCheck() == 1)
                 {
                     if (inner_count % innerbox_max == 0 && carton_scanned > 0)
                     {
                         carton_scanned--;
-                        deleteCountperday("DELETE FROM test_countperday WHERE Count = 'Carton Box' ORDER BY ID DESC LIMIT 1;");//Not OK
+                        deleteCountperday("DELETE FROM countperday WHERE countFrom = 'Carton Box' LIMIT 1;");//Not OK
                     }
                     carton_need = (inner_count / innerbox_max) - carton_scanned;
                     if (carton_need < 0) { carton_need = 0; }
@@ -950,7 +977,7 @@ namespace WindowsForms_packing_line
                     if (inner_count % cartonbox_max == 0 && export_scanned > 0)
                     {
                         export_scanned--;
-                        deleteCountperday("DELETE FROM test_countperday WHERE Count = 'Carton Box' ORDER BY ID DESC LIMIT 1;");//Not OK
+                        deleteCountperday("DELETE FROM countperday WHERE countFrom = 'Export Box' LIMIT 1;");//Not OK
                     }
                     export_need = (inner_count / cartonbox_max) - export_scanned;
                     if (export_need < 0) { export_need = 0; }
@@ -1101,7 +1128,10 @@ namespace WindowsForms_packing_line
             if (dialog_result == DialogResult.Yes)
             {
                 alarmAuth();
-                resetDefault();
+                if (Authentication.alarm_turn_off == true)
+                {
+                    resetDefault();
+                }
                 tbKanban.ReadOnly = false;
                 tbKanban.Focus();
             }
@@ -1123,8 +1153,8 @@ namespace WindowsForms_packing_line
             DialogResult dialog_result = MessageBox.Show("Are you sure to insert new tool setting?", "Database", MessageBoxButtons.YesNo);
             if (dialog_result == DialogResult.Yes)
             {
-                string TABLE = "test_model_master";
-                string INSERT_STR = " (Kanban, ModelNo, InnerA, InnerB, Carton, Export, InnerMax, CartonMax) VALUES('" + tbKBSearch.Text + "', '" + tbDBModel.Text + "', '" + tbDBInnerA.Text + "', '" + tbDBInnerB.Text + "', '" + tbDBCarton.Text + "', '" + tbDBExport.Text + "', '" + tbDBInnerMax.Text + "', '" + tbDBCartonMax.Text + "');";
+                string TABLE = "modelmaster";
+                string INSERT_STR = " (kanban, modelName, bc1, bc2, bc3, bc4, obMax, ebMax) VALUES('" + tbKBSearch.Text + "', '" + tbDBModel.Text + "', '" + tbDBInnerA.Text + "', '" + tbDBInnerB.Text + "', '" + tbDBCarton.Text + "', '" + tbDBExport.Text + "', '" + tbDBInnerMax.Text + "', '" + tbDBCartonMax.Text + "');";
                 string queryList = "INSERT INTO " + TABLE + INSERT_STR;
                 MySqlConnection dbconnect = new MySqlConnection(connectStr);
                 MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
@@ -1153,15 +1183,15 @@ namespace WindowsForms_packing_line
             DialogResult dialog_result = MessageBox.Show("Update databasse", "Database", MessageBoxButtons.YesNo);
             if (dialog_result == DialogResult.Yes)
             {
-                if (selected_kanban_id == "")
+                if (selected_kanban_name == "")
                 {
                     MessageBox.Show("Error: Please select Kanban before update database!", "Database");
                 }
                 else
                 {
-                    dbUpdate("UPDATE test_model_master SET Kanban = '" + tbKBSearch.Text + "', ModelNo = '" + tbDBModel.Text + "', InnerA = '" + tbDBInnerA.Text + "', InnerB = '" + tbDBInnerB.Text + "', Carton = '" + tbDBCarton.Text + "', Export = '" + tbDBExport.Text + "', InnerMax = '" + tbDBInnerMax.Text + "', CartonMax = '" + tbDBCartonMax.Text + "' WHERE ID = '" + selected_kanban_id + "';");
+                    dbUpdate("UPDATE modelmaster SET kanban = '" + tbKBSearch.Text + "', modelName = '" + tbDBModel.Text + "', bc1 = '" + tbDBInnerA.Text + "', bc2 = '" + tbDBInnerB.Text + "', bc3 = '" + tbDBCarton.Text + "', bc4 = '" + tbDBExport.Text + "', obMax = '" + tbDBInnerMax.Text + "', ebMax = '" + tbDBCartonMax.Text + "' WHERE kanban = '" + selected_kanban_name + "';");
                     dbSearchKanban();
-                    selected_kanban_id = "";
+                    selected_kanban_name = "";
                 }
             }
         }//OK
@@ -1171,13 +1201,13 @@ namespace WindowsForms_packing_line
             DialogResult dialog_result = MessageBox.Show("Delete databasse", "Database", MessageBoxButtons.YesNo);
             if (dialog_result == DialogResult.Yes)
             {
-                if (selected_kanban_id == "")
+                if (selected_kanban_name == "")
                 {
                     MessageBox.Show("Error: Please select Kanban before delete database!", "Database");
                 }
                 else
                 {
-                    dbDelete("DELETE FROM `test_model_master` WHERE ID = '" + selected_kanban_id + "';");
+                    dbDelete("DELETE FROM `modelmaster` WHERE kanban = '" + selected_kanban_name + "';");
                     tbEditMasterClear();
                 }
             }
@@ -1190,16 +1220,15 @@ namespace WindowsForms_packing_line
         private void lvModelMaster_Click(object sender, EventArgs e)
         {
             var selected_item = lvModelMaster.SelectedItems[0];
-            selected_kanban_id = selected_item.SubItems[0].Text;
-
-            tbKBSearch.Text = selected_item.SubItems[1].Text;
-            tbDBModel.Text = selected_item.SubItems[2].Text;
-            tbDBInnerA.Text = selected_item.SubItems[3].Text;
-            tbDBInnerB.Text = selected_item.SubItems[4].Text;
-            tbDBCarton.Text = selected_item.SubItems[5].Text;
-            tbDBExport.Text = selected_item.SubItems[6].Text;
-            tbDBInnerMax.Text = selected_item.SubItems[7].Text;
-            tbDBCartonMax.Text = selected_item.SubItems[8].Text;
+            selected_kanban_name = selected_item.SubItems[0].Text;
+            tbKBSearch.Text = selected_item.SubItems[0].Text;
+            tbDBModel.Text = selected_item.SubItems[1].Text;
+            tbDBInnerA.Text = selected_item.SubItems[2].Text;
+            tbDBInnerB.Text = selected_item.SubItems[3].Text;
+            tbDBCarton.Text = selected_item.SubItems[4].Text;
+            tbDBExport.Text = selected_item.SubItems[5].Text;
+            tbDBInnerMax.Text = selected_item.SubItems[6].Text;
+            tbDBCartonMax.Text = selected_item.SubItems[7].Text;
         }//OK
         private void lvAccount_Click(object sender, EventArgs e)
         {
@@ -1233,7 +1262,7 @@ namespace WindowsForms_packing_line
                 DialogResult dialog_result = MessageBox.Show("Are you sure to insert new Account?", "Database", MessageBoxButtons.YesNo);
                 if (dialog_result == DialogResult.Yes)
                 {
-                    dbCreate("INSERT INTO test_account (Tagpass, OperatorID, Name, Surname, Position) VALUES('" + tbDBTagpass.Text + "', '" + tbDBOperatorID.Text + "', '" + tbDBName.Text + "', '" + tbDBSurname.Text + "', '" + cbDBPosition.Text + "');");
+                    dbCreate("INSERT INTO account (tagpass, operatorID, fname, lname, position) VALUES('" + tbDBTagpass.Text + "', '" + tbDBOperatorID.Text + "', '" + tbDBName.Text + "', '" + tbDBSurname.Text + "', '" + cbDBPosition.Text + "');");
                     tbEditAccountClear();
                 }
             }
@@ -1249,7 +1278,7 @@ namespace WindowsForms_packing_line
                 }
                 else if(tbDBOperatorID.Text != "" && tbDBName.Text != "" && tbDBSurname.Text != "" && cbDBPosition.Text != "")
                 {
-                    dbUpdate("UPDATE test_account SET Tagpass = '" + tbDBTagpass.Text + "', OperatorID = '" + tbDBOperatorID.Text + "', Name = '" + tbDBName.Text + "', Surname = '" + tbDBSurname.Text + "', Position = '" + cbDBPosition.Text + "' WHERE Tagpass = '" + selected_account_tagpass + "';");
+                    dbUpdate("UPDATE account SET tagpass = '" + tbDBTagpass.Text + "', operatorID = '" + tbDBOperatorID.Text + "', fname = '" + tbDBName.Text + "', lname = '" + tbDBSurname.Text + "', position = '" + cbDBPosition.Text + "' WHERE tagpass = '" + selected_account_tagpass + "';");
                     dbSearchTagpass();
                     selected_account_tagpass = "";
                 }
@@ -1266,7 +1295,7 @@ namespace WindowsForms_packing_line
                 }
                 else
                 {
-                    dbDelete("DELETE FROM `test_account` WHERE Tagpass = '" + selected_account_tagpass + "';");
+                    dbDelete("DELETE FROM `account` WHERE tagpass = '" + selected_account_tagpass + "';");
                     tbEditAccountClear();
                 }
             }
@@ -1286,8 +1315,8 @@ namespace WindowsForms_packing_line
             else
             {
                 lvAccount.Items.Clear();
-                string TABLE = "test_account";
-                string queryList = "SELECT * FROM " + TABLE + " WHERE Tagpass LIKE '%" + tbDBTagpass.Text + "%' ORDER BY CAST(Tagpass AS UNSIGNED);";
+                string TABLE = "account";
+                string queryList = "SELECT * FROM " + TABLE + " WHERE tagpass LIKE '%" + tbDBTagpass.Text + "%' ORDER BY CAST(tagpass AS UNSIGNED);";
                 MySqlConnection dbconnect = new MySqlConnection(connectStr);
                 MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
                 MySqlDataAdapter da = new MySqlDataAdapter(dbcommand);
@@ -1300,11 +1329,11 @@ namespace WindowsForms_packing_line
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
                         DataRow dr = dt.Rows[i];    //dr["Column Name from db"]
-                        ListViewItem list = new ListViewItem(dr["Tagpass"].ToString());
-                        list.SubItems.Add(dr["OperatorID"].ToString());
-                        list.SubItems.Add(dr["Name"].ToString());
-                        list.SubItems.Add(dr["Surname"].ToString());
-                        list.SubItems.Add(dr["Position"].ToString());
+                        ListViewItem list = new ListViewItem(dr["tagpass"].ToString());
+                        list.SubItems.Add(dr["operatorID"].ToString());
+                        list.SubItems.Add(dr["fname"].ToString());
+                        list.SubItems.Add(dr["lname"].ToString());
+                        list.SubItems.Add(dr["position"].ToString());
                         lvAccount.Items.Add(list);
                     }
                 }
@@ -1328,8 +1357,8 @@ namespace WindowsForms_packing_line
             else
             {
                 lvAccount.Items.Clear();
-                string TABLE = "test_account";
-                string queryList = "SELECT * FROM " + TABLE + " WHERE OperatorID LIKE '%" + tbDBOperatorID.Text + "%' ORDER BY CAST(OperatorID AS UNSIGNED);";
+                string TABLE = "account";
+                string queryList = "SELECT * FROM " + TABLE + " WHERE operatorID LIKE '%" + tbDBOperatorID.Text + "%' ORDER BY CAST(operatorID AS UNSIGNED);";
                 MySqlConnection dbconnect = new MySqlConnection(connectStr);
                 MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
                 MySqlDataAdapter da = new MySqlDataAdapter(dbcommand);
@@ -1342,11 +1371,11 @@ namespace WindowsForms_packing_line
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
                         DataRow dr = dt.Rows[i];    //dr["Column Name from db"]
-                        ListViewItem list = new ListViewItem(dr["Tagpass"].ToString());
-                        list.SubItems.Add(dr["OperatorID"].ToString());
-                        list.SubItems.Add(dr["Name"].ToString());
-                        list.SubItems.Add(dr["Surname"].ToString());
-                        list.SubItems.Add(dr["Position"].ToString());
+                        ListViewItem list = new ListViewItem(dr["tagpass"].ToString());
+                        list.SubItems.Add(dr["operatorID"].ToString());
+                        list.SubItems.Add(dr["fname"].ToString());
+                        list.SubItems.Add(dr["lname"].ToString());
+                        list.SubItems.Add(dr["position"].ToString());
                         lvAccount.Items.Add(list);
                     }
                 }
@@ -1372,8 +1401,8 @@ namespace WindowsForms_packing_line
             {
                 lvModelMaster.Items.Clear();
                 //Database display Search data from table
-                string TABLE = "test_model_master";
-                string queryList = "SELECT * FROM " + TABLE + " WHERE Kanban LIKE '%" + tbKBSearch.Text + "%' ORDER BY CAST(Kanban AS UNSIGNED);";
+                string TABLE = "modelmaster";
+                string queryList = "SELECT * FROM " + TABLE + " WHERE kanban LIKE '%" + tbKBSearch.Text + "%' ORDER BY CAST(kanban AS UNSIGNED);";
                 MySqlConnection dbconnect = new MySqlConnection(connectStr);
                 MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
                 MySqlDataAdapter da = new MySqlDataAdapter(dbcommand);
@@ -1386,15 +1415,15 @@ namespace WindowsForms_packing_line
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
                         DataRow dr = dt.Rows[i];    //dr["Column Name from db"]
-                        ListViewItem list = new ListViewItem(dr["ID"].ToString());
-                        list.SubItems.Add(dr["Kanban"].ToString());
-                        list.SubItems.Add(dr["ModelNo"].ToString());
-                        list.SubItems.Add(dr["InnerA"].ToString());
-                        list.SubItems.Add(dr["InnerB"].ToString());
-                        list.SubItems.Add(dr["Carton"].ToString());
-                        list.SubItems.Add(dr["Export"].ToString());
-                        list.SubItems.Add(dr["InnerMax"].ToString());
-                        list.SubItems.Add(dr["CartonMax"].ToString());
+                        ListViewItem list = new ListViewItem(dr["kanban"].ToString());
+                        list.SubItems.Add(dr["modelName"].ToString());
+                        list.SubItems.Add(dr["bc1"].ToString());
+                        list.SubItems.Add(dr["bc2"].ToString());
+                        list.SubItems.Add(dr["bc3"].ToString());
+                        list.SubItems.Add(dr["bc4"].ToString());
+                        list.SubItems.Add(dr["obMax"].ToString());
+                        list.SubItems.Add(dr["ebMax"].ToString());
+                        //list.SubItems.Add(dr["CartonMax"].ToString());
                         lvModelMaster.Items.Add(list);
                     }
                 }
@@ -1415,7 +1444,8 @@ namespace WindowsForms_packing_line
                 if (port1 != null)
                 {
                     port1.Close();
-                    Invoke((MethodInvoker)delegate {
+                    Invoke((MethodInvoker)delegate
+                    {
                         lIsPort1Open.Text = "Port1: Offline";
                         lIsPort1Open.BackColor = System.Drawing.Color.Crimson;
                     });
@@ -1451,24 +1481,41 @@ namespace WindowsForms_packing_line
                 {
                     portRFID.Close();
                 }
-                if (portTowerLamp != null)
-                {
-                    portTowerLamp.Close();
-                    lTowerLamp.Text = "Tower Lamp: Disonnected";
-                    lTowerLamp.ForeColor = Color.Red;
-                }
-                if (portPDFLink != null)
-                {
-                    portPDFLink.Close();
-                    lLinkPDF.Text = "PDF Link: Disconnected";
-                    lLinkPDF.ForeColor = Color.Red;
-                }
+                
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }//OK
+        public void portsOtherClose()
+        {
+            try
+            {
+                if (portTowerLamp != null)
+                {
+                    portTowerLamp.Close();
+                    Invoke((MethodInvoker)delegate
+                    {
+                        lTowerLamp.Text = "Tower Lamp: Disonnected";
+                        lTowerLamp.ForeColor = Color.Red;
+                    });
+                }
+                if (portPDFLink != null)
+                {
+                    portPDFLink.Close();
+                    Invoke((MethodInvoker)delegate
+                    {
+                        lLinkPDF.Text = "PDF Link: Disconnected";
+                        lLinkPDF.ForeColor = Color.Red;
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         public void portsOpener()
         {
             try
@@ -1481,8 +1528,11 @@ namespace WindowsForms_packing_line
                     if (port1.IsOpen)
                     {
                         //set port1 Status: Online
-                        lIsPort1Open.Text = "Port1: Online ";
-                        lIsPort1Open.BackColor = System.Drawing.Color.Green;
+                        Invoke((MethodInvoker)delegate
+                        {
+                            lIsPort1Open.Text = "Port1: Online ";
+                            lIsPort1Open.BackColor = System.Drawing.Color.Green;
+                        });
                     }
                 }
                 if (cbPort2.Text != "")
@@ -1493,8 +1543,11 @@ namespace WindowsForms_packing_line
                     if (port2.IsOpen)
                     {
                         //set port1 Status: Online
-                        lIsPort2Open.Text = "Port2: Online ";
-                        lIsPort2Open.BackColor = System.Drawing.Color.Green;
+                        Invoke((MethodInvoker)delegate
+                        {
+                            lIsPort2Open.Text = "Port2: Online ";
+                            lIsPort2Open.BackColor = System.Drawing.Color.Green;
+                        });
                     }
                 }
                 if (cbPort3.Text != "")
@@ -1505,8 +1558,11 @@ namespace WindowsForms_packing_line
                     if (port3.IsOpen)
                     {
                         //set port1 Status: Online
-                        lIsPort3Open.Text = "Port3: Online ";
-                        lIsPort3Open.BackColor = System.Drawing.Color.Green;
+                        Invoke((MethodInvoker)delegate
+                        {
+                            lIsPort3Open.Text = "Port3: Online ";
+                            lIsPort3Open.BackColor = System.Drawing.Color.Green;
+                        });
                     }
                 }
                 if (cbPort4.Text != "")
@@ -1517,10 +1573,23 @@ namespace WindowsForms_packing_line
                     if (port4.IsOpen)
                     {
                         //set port1 Status: Online
-                        lIsPort4Open.Text = "Port4: Online ";
-                        lIsPort4Open.BackColor = System.Drawing.Color.Green;
+                        Invoke((MethodInvoker)delegate
+                        {
+                            lIsPort4Open.Text = "Port4: Online ";
+                            lIsPort4Open.BackColor = System.Drawing.Color.Green;
+                        });
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }//OK
+        public void portsOtherOpen()
+        {
+            try
+            {
                 if (cbPortTL.Text != "")
                 {
                     portTowerLamp = new SerialPort(WindowsForms_packing_line.Properties.Settings.Default.PortTL, 9600, System.IO.Ports.Parity.None, 8, System.IO.Ports.StopBits.One);
@@ -1546,7 +1615,7 @@ namespace WindowsForms_packing_line
             {
                 MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }//OK
+        }
         public void initialPorts()
         {
             cbPort1.Text = WindowsForms_packing_line.Properties.Settings.Default.Port1;
@@ -1576,7 +1645,7 @@ namespace WindowsForms_packing_line
         //SQL Connect, Get
         public void qeuryMax()
         {
-            string queryList = "SELECT * FROM test_model_master WHERE Kanban = '" + tbKanban.Text + "';";
+            string queryList = "SELECT * FROM modelmaster WHERE kanban = '" + tbKanban.Text + "';";
             MySqlConnection dbconnect = new MySqlConnection(connectStr);
             MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
             MySqlDataReader reader;
@@ -1587,8 +1656,8 @@ namespace WindowsForms_packing_line
                 reader = dbcommand.ExecuteReader();
                 while (reader.Read())
                 {
-                    innerbox_max = reader.GetInt32("InnerMax");     //Get InnerMax from db
-                    cartonbox_max = reader.GetInt32("CartonMax");   //Get CartonMax from db
+                    innerbox_max = reader.GetInt32("obMax");     //Get InnerMax from db
+                    cartonbox_max = reader.GetInt32("ebMax");   //Get CartonMax from db
                     lNeedCarton.Text = "Scan: " + carton_need.ToString();   //Display - (Carton)Scan: 0
                     lNeedExport.Text = "Scan: " + export_need.ToString();   //Display - (Export)Scan: 0
                 }
@@ -1604,7 +1673,7 @@ namespace WindowsForms_packing_line
         }//OK
         public void queryInnerA()
         {
-            string queryList = "SELECT * FROM test_model_master WHERE Kanban = '" + tbKanban.Text + "';";
+            string queryList = "SELECT * FROM modelmaster WHERE kanban = '" + tbKanban.Text + "';";
             MySqlConnection dbconnect = new MySqlConnection(connectStr);
             MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
             MySqlDataReader reader;
@@ -1615,10 +1684,9 @@ namespace WindowsForms_packing_line
                 reader = dbcommand.ExecuteReader();
                 while (reader.Read())
                 {
-                    WindowsForms_packing_line.Properties.Settings.Default.InnerAMaster = reader.GetString("InnerA");
+                    WindowsForms_packing_line.Properties.Settings.Default.InnerAMaster = reader.GetString("bc1");
                     lMasterA.Text = WindowsForms_packing_line.Properties.Settings.Default.InnerAMaster;
                 }
-
             }
             catch (Exception ex)
             {
@@ -1631,7 +1699,7 @@ namespace WindowsForms_packing_line
         }//OK
         public void queryInnerB()
         {
-            string queryList = "SELECT * FROM test_model_master WHERE Kanban = '" + tbKanban.Text + "';";
+            string queryList = "SELECT * FROM modelmaster WHERE kanban = '" + tbKanban.Text + "';";
             MySqlConnection dbconnect = new MySqlConnection(connectStr);
             MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
             MySqlDataReader reader;
@@ -1642,10 +1710,9 @@ namespace WindowsForms_packing_line
                 reader = dbcommand.ExecuteReader();
                 while (reader.Read())
                 {
-                    WindowsForms_packing_line.Properties.Settings.Default.InnerBMaster = reader.GetString("InnerB");
+                    WindowsForms_packing_line.Properties.Settings.Default.InnerBMaster = reader.GetString("bc2");
                     lMasterB.Text = WindowsForms_packing_line.Properties.Settings.Default.InnerBMaster;
                 }
-
             }
             catch (Exception ex)
             {
@@ -1658,7 +1725,7 @@ namespace WindowsForms_packing_line
         }//OK
         public void queryCarton()
         {
-            string queryList = "SELECT * FROM test_model_master WHERE Kanban = '" + tbKanban.Text + "';";
+            string queryList = "SELECT * FROM modelmaster WHERE kanban = '" + tbKanban.Text + "';";
             MySqlConnection dbconnect = new MySqlConnection(connectStr);
             MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
             MySqlDataReader reader;
@@ -1669,7 +1736,7 @@ namespace WindowsForms_packing_line
                 reader = dbcommand.ExecuteReader();
                 while (reader.Read())
                 {
-                    WindowsForms_packing_line.Properties.Settings.Default.CartonMaster = reader.GetString("Carton");
+                    WindowsForms_packing_line.Properties.Settings.Default.CartonMaster = reader.GetString("bc3");
                     lMasterCarton.Text = WindowsForms_packing_line.Properties.Settings.Default.CartonMaster;
                 }
             }
@@ -1684,7 +1751,7 @@ namespace WindowsForms_packing_line
         }//OK
         public void queryExport()
         {
-            string queryList = "SELECT * FROM test_model_master WHERE Kanban = '" + tbKanban.Text + "';";
+            string queryList = "SELECT * FROM modelmaster WHERE kanban = '" + tbKanban.Text + "';";
             MySqlConnection dbconnect = new MySqlConnection(connectStr);
             MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
             MySqlDataReader reader;
@@ -1695,10 +1762,9 @@ namespace WindowsForms_packing_line
                 reader = dbcommand.ExecuteReader();
                 while (reader.Read())
                 {
-                    WindowsForms_packing_line.Properties.Settings.Default.ExportMaster = reader.GetString("Export");
+                    WindowsForms_packing_line.Properties.Settings.Default.ExportMaster = reader.GetString("bc4");
                     lMasterExport.Text = WindowsForms_packing_line.Properties.Settings.Default.ExportMaster;
                 }
-
             }
             catch (Exception ex)
             {
@@ -1713,8 +1779,8 @@ namespace WindowsForms_packing_line
         {
             lvModelMaster.Items.Clear();
             //Database display all data from table
-            string TABLE = "test_model_master";
-            string queryList = "SELECT * FROM " + TABLE + " ORDER BY CAST(Kanban AS UNSIGNED);";
+            string TABLE = "modelmaster";
+            string queryList = "SELECT * FROM " + TABLE + " ORDER BY CAST(kanban AS UNSIGNED);";
             MySqlConnection dbconnect = new MySqlConnection(connectStr);
             MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
             MySqlDataAdapter da = new MySqlDataAdapter(dbcommand);
@@ -1727,15 +1793,15 @@ namespace WindowsForms_packing_line
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     DataRow dr = dt.Rows[i];    //dr["Column Name from db"]
-                    ListViewItem list = new ListViewItem(dr["ID"].ToString());
-                    list.SubItems.Add(dr["Kanban"].ToString());
-                    list.SubItems.Add(dr["ModelNo"].ToString());
-                    list.SubItems.Add(dr["InnerA"].ToString());
-                    list.SubItems.Add(dr["InnerB"].ToString());
-                    list.SubItems.Add(dr["Carton"].ToString());
-                    list.SubItems.Add(dr["Export"].ToString());
-                    list.SubItems.Add(dr["InnerMax"].ToString());
-                    list.SubItems.Add(dr["CartonMax"].ToString());
+                    ListViewItem list = new ListViewItem(dr["kanban"].ToString());
+                    list.SubItems.Add(dr["modelName"].ToString());
+                    list.SubItems.Add(dr["bc1"].ToString());
+                    list.SubItems.Add(dr["bc2"].ToString());
+                    list.SubItems.Add(dr["bc3"].ToString());
+                    list.SubItems.Add(dr["bc4"].ToString());
+                    list.SubItems.Add(dr["obMax"].ToString());
+                    list.SubItems.Add(dr["ebMax"].ToString());
+                    //list.SubItems.Add(dr["CartonMax"].ToString());
                     lvModelMaster.Items.Add(list);
                 }
                 lvModelMaster.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
@@ -1753,8 +1819,8 @@ namespace WindowsForms_packing_line
         public void dbSearchKanban()
         {
             lvModelMaster.Items.Clear();
-            string TABLE = "test_model_master";
-            string queryList = "SELECT * FROM " + TABLE + " WHERE Kanban = '" + tbKBSearch.Text + "';";
+            string TABLE = "modelmaster";
+            string queryList = "SELECT * FROM " + TABLE + " WHERE kanban = '" + tbKBSearch.Text + "';";
             MySqlConnection dbconnect = new MySqlConnection(connectStr);
             MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
             MySqlDataAdapter da = new MySqlDataAdapter(dbcommand);
@@ -1767,15 +1833,15 @@ namespace WindowsForms_packing_line
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     DataRow dr = dt.Rows[i];    //dr["Column Name from db"]
-                    ListViewItem list = new ListViewItem(dr["ID"].ToString());
-                    list.SubItems.Add(dr["Kanban"].ToString());
-                    list.SubItems.Add(dr["ModelNo"].ToString());
-                    list.SubItems.Add(dr["InnerA"].ToString());
-                    list.SubItems.Add(dr["InnerB"].ToString());
-                    list.SubItems.Add(dr["Carton"].ToString());
-                    list.SubItems.Add(dr["Export"].ToString());
-                    list.SubItems.Add(dr["InnerMax"].ToString());
-                    list.SubItems.Add(dr["CartonMax"].ToString());
+                    ListViewItem list = new ListViewItem(dr["kanban"].ToString());
+                    list.SubItems.Add(dr["modelName"].ToString());
+                    list.SubItems.Add(dr["bc1"].ToString());
+                    list.SubItems.Add(dr["bc2"].ToString());
+                    list.SubItems.Add(dr["bc3"].ToString());
+                    list.SubItems.Add(dr["bc4"].ToString());
+                    list.SubItems.Add(dr["obMax"].ToString());
+                    list.SubItems.Add(dr["ebMax"].ToString());
+                    //list.SubItems.Add(dr["CartonMax"].ToString());
                     lvModelMaster.Items.Add(list);
                 }
             }
@@ -1791,8 +1857,8 @@ namespace WindowsForms_packing_line
         public void refreshListViewAccount()
         {
             lvAccount.Items.Clear();
-            string TABLE = "test_account";
-            string queryList = "SELECT * FROM " + TABLE + " ORDER BY CAST(Tagpass AS UNSIGNED);";
+            string TABLE = "account";
+            string queryList = "SELECT * FROM " + TABLE + " ORDER BY CAST(tagpass AS UNSIGNED);";
             MySqlConnection dbconnect = new MySqlConnection(connectStr);
             MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
             MySqlDataAdapter da = new MySqlDataAdapter(dbcommand);
@@ -1805,11 +1871,11 @@ namespace WindowsForms_packing_line
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     DataRow dr = dt.Rows[i];    //dr["Column Name from db"]
-                    ListViewItem list = new ListViewItem(dr["Tagpass"].ToString());
-                    list.SubItems.Add(dr["OperatorID"].ToString());
-                    list.SubItems.Add(dr["Name"].ToString());
-                    list.SubItems.Add(dr["Surname"].ToString());
-                    list.SubItems.Add(dr["Position"].ToString());
+                    ListViewItem list = new ListViewItem(dr["tagpass"].ToString());
+                    list.SubItems.Add(dr["operatorID"].ToString());
+                    list.SubItems.Add(dr["fname"].ToString());
+                    list.SubItems.Add(dr["lname"].ToString());
+                    list.SubItems.Add(dr["position"].ToString());
                     lvAccount.Items.Add(list);
                 }
                 lvAccount.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
@@ -1827,8 +1893,8 @@ namespace WindowsForms_packing_line
         public void dbSearchTagpass()
         {
             lvAccount.Items.Clear();
-            string TABLE = "test_account";
-            string queryList = "SELECT * FROM " + TABLE + " WHERE Tagpass = '" + tbDBTagpass.Text + "';";
+            string TABLE = "account";
+            string queryList = "SELECT * FROM " + TABLE + " WHERE tagpass = '" + tbDBTagpass.Text + "';";
             MySqlConnection dbconnect = new MySqlConnection(connectStr);
             MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
             MySqlDataAdapter da = new MySqlDataAdapter(dbcommand);
@@ -1841,11 +1907,11 @@ namespace WindowsForms_packing_line
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     DataRow dr = dt.Rows[i];    //dr["Column Name from db"]
-                    ListViewItem list = new ListViewItem(dr["Tagpass"].ToString());
-                    list.SubItems.Add(dr["OperatorID"].ToString());
-                    list.SubItems.Add(dr["Name"].ToString());
-                    list.SubItems.Add(dr["Surname"].ToString());
-                    list.SubItems.Add(dr["Position"].ToString());
+                    ListViewItem list = new ListViewItem(dr["tagpass"].ToString());
+                    list.SubItems.Add(dr["operatorID"].ToString());
+                    list.SubItems.Add(dr["fname"].ToString());
+                    list.SubItems.Add(dr["lname"].ToString());
+                    list.SubItems.Add(dr["position"].ToString());
                     lvAccount.Items.Add(list);
                 }
             }
@@ -1860,8 +1926,8 @@ namespace WindowsForms_packing_line
         }//OK
         public void refreshDGVAcutalTable()
         {
-            string TABLE = "test_actual_table";
-            string queryList = "SELECT * FROM " + TABLE + " ORDER BY CAST(No AS UNSIGNED);";
+            string TABLE = "actualcount";
+            string queryList = "SELECT * FROM " + TABLE + " ORDER BY CAST(pn AS UNSIGNED);";
             MySqlConnection dbconnect = new MySqlConnection(connectStr);
             MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
             MySqlDataAdapter da = new MySqlDataAdapter(dbcommand);
@@ -1887,8 +1953,8 @@ namespace WindowsForms_packing_line
         public void updateActualTable(string kanban, int amount)
         {
             int db_count = 0;
-            string TABLE = "test_actual_table";
-            string queryList = "SELECT * FROM " + TABLE + " WHERE PartNo = '" + kanban + "';";
+            string TABLE = "actualcount";
+            string queryList = "SELECT * FROM " + TABLE + " WHERE pn = '" + kanban + "';";
             MySqlConnection dbconnect = new MySqlConnection(connectStr);
             MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
             MySqlDataReader reader;
@@ -1899,7 +1965,7 @@ namespace WindowsForms_packing_line
                 reader = dbcommand.ExecuteReader();
                 while (reader.Read())
                 {
-                    db_count = Int32.Parse(reader.GetString("Count"));
+                    db_count = Int32.Parse(reader.GetString("count"));
                 }
             }
             catch (Exception ex)
@@ -1908,7 +1974,7 @@ namespace WindowsForms_packing_line
             }
             if (db_count == 0)
             {
-                TABLE = "`test_actual_table`(PartNo, Count)";
+                TABLE = "`actualcount`(pn, count)";
                 queryList = "INSERT INTO " + TABLE + " VALUES('" + kanban + "', '" + amount + "');";
                 dbconnect = new MySqlConnection(connectStr);
                 dbcommand = new MySqlCommand(queryList, dbconnect);
@@ -1930,8 +1996,8 @@ namespace WindowsForms_packing_line
             else
             {
                 amount += db_count;
-                TABLE = "`test_actual_table`";
-                queryList = "UPDATE " + TABLE + " SET Count = '" + amount +"' WHERE PartNo = '" + kanban + "';";
+                TABLE = "`actualcount`";
+                queryList = "UPDATE " + TABLE + " SET count = '" + amount +"' WHERE pn = '" + kanban + "';";
                 dbconnect = new MySqlConnection(connectStr);
                 dbcommand = new MySqlCommand(queryList, dbconnect);
                 dbcommand.CommandTimeout = 60;
@@ -2084,6 +2150,7 @@ namespace WindowsForms_packing_line
             enableTab(Edit, true);
             enableTab(Account, true);
             hideTab(Settings, false);
+            hideTab(Actualtable, false);
             hideTab(Edit, false);
             hideTab(Account, false);
 
@@ -2105,7 +2172,7 @@ namespace WindowsForms_packing_line
             btnCreateAccount.Show();
             btnUpdateAccount.Show();
             btnDeleteAccount.Show();
-            if (s.Equals("Operator"))
+            if (s == "operator")
             {
                 enableTab(Settings, false);
                 tbDBModel.Enabled = false;
@@ -2120,7 +2187,7 @@ namespace WindowsForms_packing_line
                 btnDeleteMaster.Hide();
                 hideTab(Account, true);
             }
-            else if (s.Equals("Supervisor"))
+            else if (s == "supervisor")
             {
                 tbDBOperatorID.Enabled = false;
                 tbDBName.Enabled = false;
@@ -2130,7 +2197,7 @@ namespace WindowsForms_packing_line
                 btnUpdateAccount.Hide();
                 btnDeleteAccount.Hide();
             }
-            else if (s.Equals("Administrator"))
+            else if (s == "admin")
             {
 
             }
@@ -2138,6 +2205,7 @@ namespace WindowsForms_packing_line
             {
                 enableTab(Checker, false);
                 hideTab(Settings, true);
+                hideTab(Actualtable, true);
                 hideTab(Edit, true);
                 hideTab(Account, true);
             }
@@ -2157,6 +2225,85 @@ namespace WindowsForms_packing_line
                 foreach (Control ctl in page.Controls) ctl.Show();
             }
         }//OK
+        //Login
+        public void Login()
+        {
+            try
+            {
+                if (portRFID != null && portRFID.IsOpen == true)
+                {
+                    string TABLE = "account";
+                    string queryList = "SELECT * FROM " + TABLE + " WHERE tagpass = '" + tbLogin.Text + "';";
+                    MySqlConnection dbconnect = new MySqlConnection(connectStr);
+                    MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
+                    MySqlDataReader reader;
+                    dbcommand.CommandTimeout = 100;
+                    try
+                    {
+                        dbconnect.Open();
+                        reader = dbcommand.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            lOperatorID.Text = "Operator ID: " + reader.GetString("operatorID");
+                            lOperatorName.Text = "Operator Name: " + reader.GetString("fname") + " " + reader.GetString("lname");
+                            lPosition.Text = "Position: " + reader.GetString("position");
+                            pLogin.Hide();
+                            btnLogout.Show();
+                            roleChecker(reader.GetString("position"));
+                            tbKanban.Focus();
+                            portsCloser();
+                        }
+                        tbLogin.SelectAll();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    finally
+                    {
+                        dbconnect.Close();
+                    }
+                }
+                else
+                {
+                    string TABLE = "account";
+                    string queryList = "SELECT * FROM " + TABLE + " WHERE operatorID = '" + tbLogin.Text + "';";
+                    MySqlConnection dbconnect = new MySqlConnection(connectStr);
+                    MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
+                    MySqlDataReader reader;
+                    dbcommand.CommandTimeout = 100;
+                    try
+                    {
+                        dbconnect.Open();
+                        reader = dbcommand.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            lOperatorID.Text = "Operator ID: " + reader.GetString("operatorID");
+                            lOperatorName.Text = "Operator Name: " + reader.GetString("fname") + " " + reader.GetString("lname");
+                            lPosition.Text = "Position: " + reader.GetString("position");
+                            pLogin.Hide();
+                            btnLogout.Show();
+                            roleChecker(reader.GetString("position"));
+                            tbKanban.Focus();
+                            portsCloser();
+                        }
+                        tbLogin.SelectAll();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    finally
+                    {
+                        dbconnect.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }//Waittest
         //Alarm auth
         public void alarmAuth()
         {
@@ -2253,23 +2400,6 @@ namespace WindowsForms_packing_line
             try
             {
                 //modbus_tcp.Connect();
-                if (true)
-                {
-                    lTowerLamp.Text = "Tower Lamp: Connected";
-                    lTowerLamp.ForeColor = Color.Green;
-                    sendToUSB(colors.red);
-                    Thread.Sleep(500);
-                    sendToUSB(colors.yellow);
-                    Thread.Sleep(500);
-                    sendToUSB(colors.green);
-                    Thread.Sleep(500);
-                    sendToUSB(colors.reset);
-                }
-                else
-                {
-                    lTowerLamp.Text = "Tower Lamp: Disconnected";
-                    lTowerLamp.ForeColor = Color.Red;
-                }
             }
             catch
             {
@@ -2288,6 +2418,11 @@ namespace WindowsForms_packing_line
                     lTowerLamp.Text = "Tower Lamp: Connected";
                     lTowerLamp.ForeColor = Color.Green;
                 }
+                else
+                {
+                    lTowerLamp.Text = "Tower Lamp: Disconnected";
+                    lTowerLamp.ForeColor = Color.Red;
+                }
             }
             catch (Exception ex)
             {
@@ -2299,7 +2434,7 @@ namespace WindowsForms_packing_line
             try
             {
                 Thread.Sleep(60);
-                if (portTowerLamp != null)
+                if (portTowerLamp != null && cbPortTL.Text != "")
                 {
                     if (colors.red == c)
                     {
@@ -2325,13 +2460,13 @@ namespace WindowsForms_packing_line
                     {
                         byte[] buffer = new byte[] { 0X21 };
                         portTowerLamp.Write(buffer, 0, buffer.Length);
-                        Thread.Sleep(50);
+                        Thread.Sleep(60);
                         byte[] buffer1 = new byte[] { 0X22 };
                         portTowerLamp.Write(buffer1, 0, buffer.Length);
-                        Thread.Sleep(50);
+                        Thread.Sleep(60);
                         byte[] buffer2 = new byte[] { 0X24 };
                         portTowerLamp.Write(buffer2, 0, buffer.Length);
-                        Thread.Sleep(50);
+                        Thread.Sleep(60);
                         byte[] buffer3 = new byte[] { 0X28 };
                         portTowerLamp.Write(buffer3, 0, buffer.Length);
                     }
@@ -2339,7 +2474,7 @@ namespace WindowsForms_packing_line
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Send to usb", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         //PDF
@@ -2365,25 +2500,32 @@ namespace WindowsForms_packing_line
                 MessageBox.Show(ex.Message, "Port PDF Link", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        public void sendToRS232()
+        public void sendToRS232(string s)
         {
             Thread.Sleep(500);
             try
             {
-                if (portPDFLink.IsOpen == true)
+                if (portPDFLink != null && portPDFLink.IsOpen == true)
                 {
                     Thread.Sleep(60);
-                    portPDFLink.Write(kanban_master + Environment.NewLine);
+                    if (s != "")
+                    {
+                        portPDFLink.Write(s + Environment.NewLine);
+                    }
+                    else
+                    {
+                        portPDFLink.Write(tbKanban.Text + Environment.NewLine);
+                    }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Send to RS232", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        public async Task redAlarm()
+        public void redAlarm()
         {
-            await Task.Run(() =>
+            Invoke((MethodInvoker)delegate
             {
                 sendToUSB(colors.reset);
                 sendToUSB(colors.red);
@@ -2394,19 +2536,22 @@ namespace WindowsForms_packing_line
         {
             await Task.Run(() =>
             {
-                sendToUSB(colors.reset);
-                sendToUSB(colors.green);
+                Invoke((MethodInvoker)delegate
+                {
+                    sendToUSB(colors.reset);
+                    sendToUSB(colors.green);
+                });
             });
         }
-        public async Task yellowAlarm()
+        public void yellowAlarm()
         {
-            await Task.Run(() =>
+            Invoke((MethodInvoker)delegate
             {
                 sendToUSB(colors.reset);
                 sendToUSB(colors.yellow);
             });
         }
-        
+
         //private List<ActualTable> getActualTable()
         //{
         //    var list = new List<ActualTable>();
