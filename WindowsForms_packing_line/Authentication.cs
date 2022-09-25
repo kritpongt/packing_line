@@ -29,7 +29,7 @@ namespace WindowsForms_packing_line
             if (e.KeyCode == Keys.Enter)
             {
                 string TABLE = "account";
-                string queryList = "SELECT * FROM " + TABLE + " WHERE operatorID = '" + tbAlarm.Text + "';";
+                string queryList = "SELECT * FROM " + TABLE + " WHERE tagpass = '" + tbAlarm.Text + "';";
                 MySqlConnection dbconnect = new MySqlConnection(connectStr);
                 MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
                 MySqlDataReader reader;
@@ -40,7 +40,7 @@ namespace WindowsForms_packing_line
                     reader = dbcommand.ExecuteReader();
                     while (reader.Read())
                     {
-                        if (reader.GetString("position").Equals("Administrator") || reader.GetString("position").Equals("Supervisor"))
+                        if (reader.GetString("position").Equals("admin") || reader.GetString("position").Equals("supervisor"))
                         {
                             this.Close();
                             alarm_turn_off = true;
@@ -61,7 +61,7 @@ namespace WindowsForms_packing_line
         private void btnLogin_Click(object sender, EventArgs e)
         {
             string TABLE = "account";
-            string queryList = "SELECT * FROM " + TABLE + " WHERE operatorID = '" + tbAlarm.Text + "';";
+            string queryList = "SELECT * FROM " + TABLE + " WHERE tagpass = '" + tbAlarm.Text + "';";
             MySqlConnection dbconnect = new MySqlConnection(connectStr);
             MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
             MySqlDataReader reader;
@@ -72,7 +72,7 @@ namespace WindowsForms_packing_line
                 reader = dbcommand.ExecuteReader();
                 while (reader.Read())
                 {
-                    if (reader.GetString("position").Equals("Administrator") || reader.GetString("pposition").Equals("Supervisor"))
+                    if (reader.GetString("position").Equals("admin") || reader.GetString("position").Equals("supervisor"))
                     {
                         this.Close();
                     }

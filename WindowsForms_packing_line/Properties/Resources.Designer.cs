@@ -61,6 +61,15 @@ namespace WindowsForms_packing_line.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream AlarmNG {
+            get {
+                return ResourceManager.GetStream("AlarmNG", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap ATLOGONewWhite {
@@ -87,6 +96,43 @@ namespace WindowsForms_packing_line.Properties {
             get {
                 object obj = ResourceManager.GetObject("NEW LOGO-03", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap NEW_LOGO_05 {
+            get {
+                object obj = ResourceManager.GetObject("NEW LOGO-05", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream NotifyOK {
+            get {
+                return ResourceManager.GetStream("NotifyOK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream ScannerOK {
+            get {
+                return ResourceManager.GetStream("ScannerOK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream ScannerOK2 {
+            get {
+                return ResourceManager.GetStream("ScannerOK2", resourceCulture);
             }
         }
     }

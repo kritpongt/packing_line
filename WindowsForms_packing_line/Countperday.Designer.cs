@@ -36,6 +36,7 @@
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnExportExcel = new System.Windows.Forms.Button();
             this.btnResetCountperday = new System.Windows.Forms.Button();
+            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // lvCountperday
@@ -45,7 +46,8 @@
             this.columnHeader2,
             this.columnHeader3,
             this.columnHeader4,
-            this.columnHeader5});
+            this.columnHeader5,
+            this.columnHeader6});
             this.lvCountperday.Dock = System.Windows.Forms.DockStyle.Left;
             this.lvCountperday.FullRowSelect = true;
             this.lvCountperday.GridLines = true;
@@ -66,25 +68,25 @@
             // columnHeader2
             // 
             this.columnHeader2.Text = "Kanban";
-            this.columnHeader2.Width = 151;
+            this.columnHeader2.Width = 109;
             // 
             // columnHeader3
             // 
-            this.columnHeader3.Text = "Inner Box";
+            this.columnHeader3.Text = "Inner Box A";
             this.columnHeader3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader3.Width = 166;
+            this.columnHeader3.Width = 199;
             // 
             // columnHeader4
             // 
-            this.columnHeader4.Text = "Carton Box";
+            this.columnHeader4.Text = "Inner Box B";
             this.columnHeader4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.columnHeader4.Width = 177;
             // 
             // columnHeader5
             // 
-            this.columnHeader5.Text = "Export Box";
+            this.columnHeader5.Text = "Carton Box";
             this.columnHeader5.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader5.Width = 179;
+            this.columnHeader5.Width = 125;
             // 
             // btnExportExcel
             // 
@@ -105,6 +107,12 @@
             this.btnResetCountperday.Text = "Reset\r\nCount Per day";
             this.btnResetCountperday.UseVisualStyleBackColor = true;
             this.btnResetCountperday.Click += new System.EventHandler(this.btnResetCountperday_Click);
+            // 
+            // columnHeader6
+            // 
+            this.columnHeader6.Text = "Export Box";
+            this.columnHeader6.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.columnHeader6.Width = 113;
             // 
             // Countperday
             // 
@@ -132,5 +140,6 @@
         private System.Windows.Forms.ColumnHeader columnHeader4;
         private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.Windows.Forms.Button btnResetCountperday;
+        private System.Windows.Forms.ColumnHeader columnHeader6;
     }
 }

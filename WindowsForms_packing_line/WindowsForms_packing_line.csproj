@@ -189,5 +189,20 @@
   <ItemGroup>
     <None Include="Resources\NEW LOGO-03.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\NEW LOGO-05.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ScannerOK.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ScannerOK2.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\NotifyOK.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AlarmNG.wav" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
