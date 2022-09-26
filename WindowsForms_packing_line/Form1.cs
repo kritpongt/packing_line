@@ -68,8 +68,8 @@ namespace WindowsForms_packing_line
         public Form1()
         {
             InitializeComponent();
-            //this.WindowState = FormWindowState.Maximized;
-            //this.FormBorderStyle = FormBorderStyle.None;
+            this.WindowState = FormWindowState.Maximized;
+            this.FormBorderStyle = FormBorderStyle.None;
             refreshListViewMaster();
             refreshListViewAccount();
             refreshDGVAcutalTable();
@@ -488,7 +488,7 @@ namespace WindowsForms_packing_line
                         kanban_master = tbKanban.Text;
                         tbModel.Text = reader.GetString("modelName"); //Get Model
                         tbQTY.Text = quantity;
-                        tbQTY.Focus();
+                        //tbQTY.Focus();
                         //qty_kanban = int.Parse(kanban_array[5]);
                         qty = int.Parse(quantity);
                         Calculate();
@@ -502,7 +502,7 @@ namespace WindowsForms_packing_line
                 finally
                 {
                     dbconnect.Close();
-                    MessageBox.Show(kanban_master, "SendToUSB");//Send to USB
+                    //MessageBox.Show(kanban_master, "SendToUSB");//Send to USB
                     sendToRS232(kanban_master);
                 }
             }
@@ -546,11 +546,11 @@ namespace WindowsForms_packing_line
                         {
                             total = qty;
                             Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + total; });
-                            Invoke((MethodInvoker)delegate { lCartonBox.Text = "Max: " + cartonbox_max + " / " + cartonbox_max; });
-                            if (total < cartonbox_max)
+                            Invoke((MethodInvoker)delegate { lCartonBox.Text = "Max: " + innerbox_max + " / " + innerbox_max; }); //cartonbox_max = eb max, innerbox_max = ob max
+                            if (total < innerbox_max)
                             {
                                 if (total < 0) { total = 0; }
-                                Invoke((MethodInvoker)delegate { lCartonBox.Text = "Max: " + total + " / " + cartonbox_max; });
+                                Invoke((MethodInvoker)delegate { lCartonBox.Text = "Max: " + total + " / " + innerbox_max; }); //cartonbox_max = eb max, innerbox_max = ob max
                             }
                             Invoke((MethodInvoker)delegate { pArrow2.Visible = true; });
                             port4Open();
@@ -1026,8 +1026,9 @@ namespace WindowsForms_packing_line
                         {
                             portsCloser();
                             //reset
-                            MessageBox.Show(qty.ToString(), "type1");
+                            //MessageBox.Show(qty.ToString(), "type1");
                             updateActualTable(kanban_master, qty);
+                            updateActualTable_NotEdit(kanban_master, qty);
                             Invoke((MethodInvoker)delegate { resetDefault(); });
                         }
                         else
@@ -1051,8 +1052,9 @@ namespace WindowsForms_packing_line
                         {
                             portsCloser();
                             //reset
-                            MessageBox.Show(qty.ToString(), "type2");
+                            //MessageBox.Show(qty.ToString(), "type2");
                             updateActualTable(kanban_master, qty);
+                            updateActualTable_NotEdit(kanban_master, qty);
                             Invoke((MethodInvoker)delegate { resetDefault(); });
                         }
                         else
@@ -1067,11 +1069,11 @@ namespace WindowsForms_packing_line
                         exportbox_counter++;
                         Invoke((MethodInvoker)delegate { lExportBox.Text = "Export Box: " + exportbox_counter; });
                         insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'Export Box');");
-                        total -= cartonbox_max;
-                        if (total < cartonbox_max)
+                        total -= innerbox_max; //cartonbox_max = eb max, innerbox_max = ob max
+                        if (total < innerbox_max) //cartonbox_max = eb max, innerbox_max = ob max
                         {
                             if (total < 0) { total = 0; }
-                            Invoke((MethodInvoker)delegate { lCartonBox.Text = "Max: " + total + " / " + cartonbox_max; });
+                            Invoke((MethodInvoker)delegate { lCartonBox.Text = "Max: " + total + " / " + innerbox_max; }); //cartonbox_max = eb max, innerbox_max = ob max
                         }
                         Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + total; });
                         if (total <= 0)
@@ -1080,8 +1082,9 @@ namespace WindowsForms_packing_line
                             Invoke((MethodInvoker)delegate { pArrow2.Visible = false; });
                             portsCloser();
                             //reset
-                            MessageBox.Show(qty.ToString(), "type3");
+                            //MessageBox.Show(qty.ToString(), "type3");
                             updateActualTable(kanban_master, qty);
+                            updateActualTable_NotEdit(kanban_master, qty);
                             Invoke((MethodInvoker)delegate { resetDefault(); });
                         }
                     }
@@ -1102,8 +1105,9 @@ namespace WindowsForms_packing_line
                         {
                             portsCloser();
                             //reset
-                            MessageBox.Show(qty.ToString(), "type4");
+                            //MessageBox.Show(qty.ToString(), "type4");
                             updateActualTable(kanban_master, qty);
+                            updateActualTable_NotEdit(kanban_master, qty);
                             Invoke((MethodInvoker)delegate { resetDefault(); });
                         }
                         else
@@ -1658,11 +1662,13 @@ namespace WindowsForms_packing_line
                     {
                         Invoke((MethodInvoker)delegate { gbInnerA.BackColor = Color.Transparent; });
                         port1Open();
+                        port2Open();
                     }
                     else if (portAlarm == 2)
                     {
                         Invoke((MethodInvoker)delegate { gbInnerB.BackColor = Color.Transparent; });
                         port2Open();
+                        port1Open();
                     }
                     else if (portAlarm == 3)
                     {
@@ -1950,15 +1956,19 @@ namespace WindowsForms_packing_line
             }
             else
             {
+                lvModelMaster.Items.Clear();
+                string kb = "";
+                string TABLE = "modelmaster";
+                string queryList = "SELECT * FROM " + TABLE + " WHERE kanban LIKE '%" + tbKBSearch.Text + "%' ORDER BY CAST(kanban AS UNSIGNED);";
                 if (checkVerticalBar(tbKBSearch.Text))
                 {
                     string[] kanban_array = tbKBSearch.Text.Split('|');
-                    tbKBSearch.Text = kanban_array[2];
+                    kb = kanban_array[2];
+                    queryList = "SELECT * FROM " + TABLE + " WHERE kanban LIKE '%" + kb + "%' ORDER BY CAST(kanban AS UNSIGNED);";
+                    tbKBSearch.Text = kb;
+                    lvModelMaster.Items.Clear();
                 }
-                lvModelMaster.Items.Clear();
                 //Database display Search data from table
-                string TABLE = "modelmaster";
-                string queryList = "SELECT * FROM " + TABLE + " WHERE kanban LIKE '%" + tbKBSearch.Text + "%' ORDER BY CAST(kanban AS UNSIGNED);";
                 MySqlConnection dbconnect = new MySqlConnection(connectStr);
                 MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
                 MySqlDataAdapter da = new MySqlDataAdapter(dbcommand);
@@ -1990,8 +2000,6 @@ namespace WindowsForms_packing_line
                 finally
                 {
                     dbconnect.Close();
-                    tbKBSearch.SelectAll();
-                    tbKBSearch.Focus();
                 }
             }
         }//OK
@@ -2593,6 +2601,72 @@ namespace WindowsForms_packing_line
                 }
             }
         }//Waittest
+        public void updateActualTable_NotEdit(string kanban, int amount)
+        {
+            int db_count = 0;
+            string TABLE = "actualcount_not_edit";
+            string queryList = "SELECT * FROM " + TABLE + " WHERE pn = '" + kanban + "';";
+            MySqlConnection dbconnect = new MySqlConnection(connectStr);
+            MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
+            MySqlDataReader reader;
+            dbcommand.CommandTimeout = 60;
+            try
+            {
+                dbconnect.Open();
+                reader = dbcommand.ExecuteReader();
+                while (reader.Read())
+                {
+                    db_count = Int32.Parse(reader.GetString("count"));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            if (db_count == 0)
+            {
+                TABLE = "`actualcount_not_edit`(pn, count)";
+                queryList = "INSERT INTO " + TABLE + " VALUES('" + kanban + "', '" + amount + "');";
+                dbconnect = new MySqlConnection(connectStr);
+                dbcommand = new MySqlCommand(queryList, dbconnect);
+                dbcommand.CommandTimeout = 60;
+                try
+                {
+                    dbconnect.Open();
+                    reader = dbcommand.ExecuteReader();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    dbconnect.Close();
+                }
+            }
+            else
+            {
+                amount += db_count;
+                TABLE = "`actualcount_not_edit`";
+                queryList = "UPDATE " + TABLE + " SET count = '" + amount + "' WHERE pn = '" + kanban + "';";
+                dbconnect = new MySqlConnection(connectStr);
+                dbcommand = new MySqlCommand(queryList, dbconnect);
+                dbcommand.CommandTimeout = 60;
+                try
+                {
+                    dbconnect.Open();
+                    reader = dbcommand.ExecuteReader();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    dbconnect.Close();
+                }
+            }
+        }//Waittest
         public void insertCountperday(string s)
         {
             MySqlConnection dbconnect = new MySqlConnection(Form1.connectStr);
@@ -2958,8 +3032,8 @@ namespace WindowsForms_packing_line
             lCartonBox.Text = "Carton Box: " + cartonbox_counter + " / " + cartonbox_max;
             lExportBox.Text = "Export Box: " + exportbox_counter;
             tbKanban.ReadOnly = false;
-            pArrow1.BackColor = Color.Transparent;
-            pArrow2.BackColor = Color.Transparent;
+            pArrow1.Visible = false;
+            pArrow2.Visible = false;
             btnStart.BackColor = Color.MediumAquamarine;
             btnStart.Text = "START";
             switchIsOn = false;
@@ -3192,7 +3266,7 @@ namespace WindowsForms_packing_line
                     {
                         Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + qty; });
                         lInnerBox.Text = "Max: -";
-                        lCartonBox.Text = "Max: " + cartonbox_max + " / " + cartonbox_max;
+                        lCartonBox.Text = "Max: " + innerbox_max + " / " + innerbox_max; //cartonbox_max = eb max, innerbox_max = ob max
                     }
                     else if (typeCheck() == 4)
                     {

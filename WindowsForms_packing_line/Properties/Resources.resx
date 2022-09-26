@@ -135,7 +135,7 @@
         AAEAAAD/////AQAAAAAAAAAEAQAAABZTeXN0ZW0uSU8uTWVtb3J5U3RyZWFtCgAAAAdfYnVmZmVyB19v
         cmlnaW4JX3Bvc2l0aW9uB19sZW5ndGgJX2NhcGFjaXR5C19leHBhbmRhYmxlCV93cml0YWJsZQpfZXhw
         b3NhYmxlB19pc09wZW4dTWFyc2hhbEJ5UmVmT2JqZWN0K19faWRlbnRpdHkHAAAAAAAAAAACAggICAgB
-        AQEBCQIAAAAAAAAAAAAAAM5lAADOZQAAAAEAAQoPAgAAAM5lAAACUklGRsZlAABXQVZFZm10IBAAAAAB
+        AQEBCQIAAAAAAAAAzmUAAM5lAADOZQAAAAEAAQoPAgAAAM5lAAACUklGRsZlAABXQVZFZm10IBAAAAAB
         AAIAESsAAESsAAAEABAATElTVBoAAABJTkZPSVNGVA4AAABMYXZmNTguNDUuMTAwAGRhdGGAZQAA//8A
         AP//AAD//wAA////////AAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAEAAQAAAAEAAAAA
         AAAAAAABAAAAAAAAAAAAAAABAAEAAQACAAAAAAD//wEAAAAAAAAAAAD//wAA//8AAAAAAQABAAEAAQAB
@@ -581,5 +581,8 @@
   </data>
   <data name="ScannerOK2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ScannerOK2.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="AlianHead" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\AlianHead.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

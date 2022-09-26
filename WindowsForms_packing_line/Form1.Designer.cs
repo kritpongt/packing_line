@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.lOperatorID = new System.Windows.Forms.Label();
             this.lOperatorName = new System.Windows.Forms.Label();
             this.lPosition = new System.Windows.Forms.Label();
@@ -1772,10 +1773,9 @@
             this.pLogin.Controls.Add(this.btnLogin);
             this.pLogin.Controls.Add(this.tbLogin);
             this.pLogin.Controls.Add(this.label29);
-            this.pLogin.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pLogin.Location = new System.Drawing.Point(0, 85);
             this.pLogin.Name = "pLogin";
-            this.pLogin.Size = new System.Drawing.Size(1029, 676);
+            this.pLogin.Size = new System.Drawing.Size(1029, 10);
             this.pLogin.TabIndex = 4;
             // 
             // pictureBox1
@@ -1848,6 +1848,7 @@
             this.Controls.Add(this.pLogin);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.panel1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "Packing Line";
             this.Load += new System.EventHandler(this.Form1_Load);
