@@ -55,6 +55,7 @@ namespace WindowsForms_packing_line
         int qty = 0;
         int kb_qty = 0;
         int innerbox_counter = 0;
+        int innerbox_counterA = 0;
         int innerbox_counterB = 0;
         int cartonbox_counter = 0;
         int exportbox_counter = 0;
@@ -70,8 +71,8 @@ namespace WindowsForms_packing_line
         public Form1()
         {
             InitializeComponent();
-            this.WindowState = FormWindowState.Maximized;
-            this.FormBorderStyle = FormBorderStyle.None;
+            //this.WindowState = FormWindowState.Maximized;
+            //this.FormBorderStyle = FormBorderStyle.None;
             refreshListViewMaster();
             refreshListViewAccount();
             refreshDGVAcutalTable();
@@ -584,12 +585,16 @@ namespace WindowsForms_packing_line
                     }
                     else
                     {
-                        //Be stoping
-                        btnStart.BackColor = Color.MediumAquamarine;
-                        btnStart.Text = "START";
-                        switchIsOn = false;
-                        portsCloser();
-                        resetDefault();
+                        alarmAuth();
+                        if (Authentication.alarm_turn_off == true)
+                        {
+                            //Be stoping
+                            btnStart.BackColor = Color.MediumAquamarine;
+                            btnStart.Text = "START";
+                            switchIsOn = false;
+                            portsCloser();
+                            resetDefault();
+                        }
                     }
                     //qeuryMax();
                     //queryInnerA();
@@ -715,20 +720,23 @@ namespace WindowsForms_packing_line
                     {
                         a++;
                         total = a + b;
+                        innerbox_counterA++;
                         innerbox_counter++;
                         if (typeCheck() == 1 && innerbox_counter == innerbox_max)
                         {
+                            innerbox_counterA = 0;
                             innerbox_counter = 0;
                             carton_need++;
                         }
                         else if (typeCheck() == 2 && innerbox_counter == cartonbox_max)
                         {
+                            innerbox_counterA = 0;
                             innerbox_counter = 0;
                             export_need++;
                         }
-                        Invoke((MethodInvoker)delegate 
+                        Invoke((MethodInvoker)delegate
                         { 
-                            lCountA.Text = innerbox_counter.ToString();
+                            lCountA.Text = innerbox_counterA.ToString();
                             lTotal.Text = "Total: " + total + "/" + qty;
                             lInnerBox.Text = "Inner Box: " + total + "/" + qty;
                             lCartonNeed.Text = "WaitForScan: " + carton_need;
@@ -1325,14 +1333,15 @@ namespace WindowsForms_packing_line
         {
             if (typeCheck() == 1 || typeCheck() == 2)
             {
-                if (innerbox_counter > 0 && a > 0)
+                if (innerbox_counterA > 0 && a > 0)
                 {
                     innerbox_counter--;
+                    innerbox_counterA--;
                     a--;
                     total = a + b;
                     Invoke((MethodInvoker)delegate
                     {
-                        lCountA.Text = innerbox_counter.ToString();
+                        lCountA.Text = innerbox_counterA.ToString();
                         lInnerBox.Text = "Inner Box: " + total + "/" + qty;
                         lTotal.Text = "Total: " + total + "/" + qty;
                         if (typeCheck() == 1) { lCartonNeed.Text = "WaitForScan: " + total / innerbox_max; }
@@ -1471,10 +1480,10 @@ namespace WindowsForms_packing_line
         {
             if (typeCheck() == 1 || typeCheck() == 2)
             {
-                if (innerbox_counter > 0 && b > 0)
+                if (innerbox_counterB > 0 && b > 0)
                 {
-                    innerbox_counterB--;
                     innerbox_counter--;
+                    innerbox_counterB--;
                     b--;
                     total = a + b;
                     Invoke((MethodInvoker)delegate
@@ -1617,15 +1626,15 @@ namespace WindowsForms_packing_line
             {
                 pauseIsOn = false;
                 portsCloser();
+                port1Open();
+                port2Open();
+                port3Open();
+                port4Open();
             }
             else
             {
                 pauseIsOn = true;
                 portsCloser();
-                port1Open();
-                port2Open();
-                port3Open();
-                port4Open();
             }
         }
         //Close and Open port 1-4 Checker page
@@ -3341,6 +3350,7 @@ namespace WindowsForms_packing_line
             tbCartonBox.Clear();
             tbExportBox.Clear();
             innerbox_counter = 0;
+            innerbox_counterA = 0;
             innerbox_counterB = 0;
             cartonbox_counter = 0;
             exportbox_counter = 0;

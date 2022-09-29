@@ -32,6 +32,7 @@
             this.tbAlarm = new System.Windows.Forms.TextBox();
             this.btnLogin = new System.Windows.Forms.Button();
             this.btnRFID = new System.Windows.Forms.Button();
+            this.btnX = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -85,12 +86,26 @@
             this.btnRFID.UseVisualStyleBackColor = true;
             this.btnRFID.Click += new System.EventHandler(this.btnRFID_Click);
             // 
+            // btnX
+            // 
+            this.btnX.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnX.Font = new System.Drawing.Font("Consolas", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnX.ForeColor = System.Drawing.SystemColors.Control;
+            this.btnX.Location = new System.Drawing.Point(602, 12);
+            this.btnX.Name = "btnX";
+            this.btnX.Size = new System.Drawing.Size(50, 50);
+            this.btnX.TabIndex = 4;
+            this.btnX.Text = "X";
+            this.btnX.UseVisualStyleBackColor = true;
+            this.btnX.Click += new System.EventHandler(this.btnX_Click);
+            // 
             // Authentication
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Maroon;
             this.ClientSize = new System.Drawing.Size(664, 411);
+            this.Controls.Add(this.btnX);
             this.Controls.Add(this.btnRFID);
             this.Controls.Add(this.btnLogin);
             this.Controls.Add(this.tbAlarm);
@@ -109,5 +124,6 @@
         private System.Windows.Forms.TextBox tbAlarm;
         private System.Windows.Forms.Button btnLogin;
         private System.Windows.Forms.Button btnRFID;
+        private System.Windows.Forms.Button btnX;
     }
 }

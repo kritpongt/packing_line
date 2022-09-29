@@ -100,6 +100,10 @@ namespace WindowsForms_packing_line
                 MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        private void btnX_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
         private void dataReceiverRFIDAlarm(object sender, SerialDataReceivedEventArgs e)
         {
             try
