@@ -24,7 +24,6 @@ using EasyModbus;
 using System.Runtime.CompilerServices;
 using System.Security;
 using System.Media;
-using QiHe.CodeLib;
 
 namespace WindowsForms_packing_line
 {
@@ -43,7 +42,7 @@ namespace WindowsForms_packing_line
         private SoundPlayer _sound_player4 = new SoundPlayer(WindowsForms_packing_line.Properties.Resources.AlarmNG);
         //private ModbusClient modbus_tcp = new ModbusClient("192.168.1.110", 502);
         private int qty_kanban, qty_current, innerbox_max, cartonbox_max;   //get from db
-        //int inner_count = 0, carton_count = 0, carton_need = 0, export_need = 0; //counter +1 the larger box
+        int inner_count = 0, carton_count = 0, carton_need = 0, export_need = 0; //counter +1 the larger box
         //int carton_scanned = 0, export_scanned = 0; // carton box, export box when scanned
         string inner_a_master = "";  //inner a master
         string inner_b_master = "";  //inner b master
@@ -54,10 +53,13 @@ namespace WindowsForms_packing_line
         string kanban_master = "";  //kanban no for update actual table
         //NEW VARIABLE
         int qty = 0;
+        int kb_qty = 0;
         int innerbox_counter = 0;
+        int innerbox_counterB = 0;
         int cartonbox_counter = 0;
         int exportbox_counter = 0;
         int total = 0;
+        int a, b;
         bool switchIsOn = false; //Start
         bool pauseIsOn = false; //Pause
         bool port3IsOn = false;
@@ -456,7 +458,7 @@ namespace WindowsForms_packing_line
             WindowsForms_packing_line.Properties.Settings.Default.PortTL = cbPortTL.Text;
             WindowsForms_packing_line.Properties.Settings.Default.PortLink = cbPortLink.Text;
             WindowsForms_packing_line.Properties.Settings.Default.Save();
-            //portsCloser();
+            //portsOpener();
             //portsOtherClose();
             //portsOpener();
             //portsOtherOpen();
@@ -467,7 +469,7 @@ namespace WindowsForms_packing_line
             if (e.KeyCode == Keys.Enter)
             {
                 string quantity = "0";
-                if(checkVerticalBar(tbKanban.Text) == true)
+                if (checkVerticalBar(tbKanban.Text) == true)
                 {
                     string[] kanban_array = tbKanban.Text.Split('|');
                     Invoke((MethodInvoker)delegate { tbKanban.Text = kanban_array[2]; });
@@ -488,9 +490,9 @@ namespace WindowsForms_packing_line
                         kanban_master = tbKanban.Text;
                         tbModel.Text = reader.GetString("modelName"); //Get Model
                         tbQTY.Text = quantity;
-                        //tbQTY.Focus();
                         //qty_kanban = int.Parse(kanban_array[5]);
                         qty = int.Parse(quantity);
+                        kb_qty = int.Parse(quantity);
                         Calculate();
                     }
                     tbKanban.SelectAll();
@@ -534,32 +536,49 @@ namespace WindowsForms_packing_line
                         portsCloser();
                         if (typeCheck() == 1)
                         {
+                            Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + total + "/" + qty; });
+                            Invoke((MethodInvoker)delegate { lInnerBox.Text = "Inner Box: " + total + "/" + qty; });
+                            Invoke((MethodInvoker)delegate { lCartonBox.Text = "Carton Box: " + cartonbox_counter + "/" + qty / cartonbox_max; });
                             port1Open();
                             port2Open();
+                            port3Open();
+                            port4Open();
                         }
                         else if (typeCheck() == 2)
                         {
+                            Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + total + "/" + qty; });
+                            Invoke((MethodInvoker)delegate { lInnerBox.Text = "Inner Box: " + total + "/" + qty; });
+                            Invoke((MethodInvoker)delegate { lCartonBox.Text = "Max: " + innerbox_counter + " / " + qty / cartonbox_max; });
                             port1Open();
                             port2Open();
+                            port4Open();
                         }
                         else if (typeCheck() == 3)
                         {
-                            total = qty;
-                            Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + total; });
+                            //total = qty;
+                            innerbox_counter = qty;
+                            Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + total + "/" + qty; });
                             Invoke((MethodInvoker)delegate { lCartonBox.Text = "Max: " + innerbox_max + " / " + innerbox_max; }); //cartonbox_max = eb max, innerbox_max = ob max
-                            if (total < innerbox_max)
+                            if (innerbox_counter < innerbox_max)
                             {
-                                if (total < 0) { total = 0; }
-                                Invoke((MethodInvoker)delegate { lCartonBox.Text = "Max: " + total + " / " + innerbox_max; }); //cartonbox_max = eb max, innerbox_max = ob max
+                                if (innerbox_counter < 0) { innerbox_counter = 0; }
+                                Invoke((MethodInvoker)delegate { lCartonBox.Text = "Max: " + innerbox_counter + " / " + innerbox_max; }); //cartonbox_max = eb max, innerbox_max = ob max
                             }
-                            Invoke((MethodInvoker)delegate { pArrow2.Visible = true; });
+                            float f = (float)qty / (float)innerbox_max; ;
+                            export_need = (int)Math.Ceiling(f);
+                            Invoke((MethodInvoker)delegate { lExportNeed.Text = "WaitForPack: " + export_need; });
+                            //Invoke((MethodInvoker)delegate { pArrow2.Visible = true; });
                             port4Open();
                         }
                         else if (typeCheck() == 4)
                         {
-                            total = qty;
-                            Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + total; });
-                            Invoke((MethodInvoker)delegate { pArrow1.Visible = true; });
+                            //total = qty;
+                            float f = (float)qty / (float)innerbox_max;
+                            carton_need = (int)Math.Ceiling(f);
+                            Invoke((MethodInvoker)delegate { lCartonNeed.Text = "WaitForScan: " + carton_need; });
+                            Invoke((MethodInvoker)delegate { lCartonBox.Text = "Carton Box: " + cartonbox_counter + "/" + (qty * cartonbox_max) / kb_qty; });
+                            Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + total + "/" + qty; });
+                            //Invoke((MethodInvoker)delegate { pArrow1.Visible = true; });
                             port3Open();
                         }
                     }
@@ -572,7 +591,6 @@ namespace WindowsForms_packing_line
                         portsCloser();
                         resetDefault();
                     }
-
                     //qeuryMax();
                     //queryInnerA();
                     //queryInnerB();
@@ -693,78 +711,36 @@ namespace WindowsForms_packing_line
                 inner_a_master = WindowsForms_packing_line.Properties.Settings.Default.InnerAMaster;
                 if (input_value.Equals(inner_a_master))
                 {
-                    if (total < qty)
+                    if (a + b < qty)
                     {
+                        a++;
+                        total = a + b;
                         innerbox_counter++;
-                        total++;
-                        Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + total; });
+                        if (typeCheck() == 1 && innerbox_counter == innerbox_max)
+                        {
+                            innerbox_counter = 0;
+                            carton_need++;
+                        }
+                        else if (typeCheck() == 2 && innerbox_counter == cartonbox_max)
+                        {
+                            innerbox_counter = 0;
+                            export_need++;
+                        }
+                        Invoke((MethodInvoker)delegate 
+                        { 
+                            lCountA.Text = innerbox_counter.ToString();
+                            lTotal.Text = "Total: " + total + "/" + qty;
+                            lInnerBox.Text = "Inner Box: " + total + "/" + qty;
+                            lCartonNeed.Text = "WaitForScan: " + carton_need;
+                            lExportNeed.Text = "WaitForPack: " + export_need;
+                        });
                         insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'Inner Box A');");
-                        if (typeCheck() == 1)
-                        {
-                            Invoke((MethodInvoker)delegate { lInnerBox.Text = "Inner Box: " + innerbox_counter + " / " + innerbox_max; });
-                            if (innerbox_counter % innerbox_max == 0 || total == qty)
-                            {
-                                portsCloser();
-                                port3Open();
-                                Invoke((MethodInvoker)delegate { pArrow1.Visible = true; });
-                                port3IsOn = true;
-                            }
-                        }
-                        else if (typeCheck() == 2)
-                        {
-                            Invoke((MethodInvoker)delegate { lCartonBox.Text = "Max: " + innerbox_counter + " / " + cartonbox_max; });
-                            if (innerbox_counter % cartonbox_max == 0 || total == qty)
-                            {
-                                portsCloser();
-                                port4Open();
-                                port4IsOn = true;
-                                Invoke((MethodInvoker)delegate { pArrow2.Visible = true; });
-                            }
-                        }
                         _sound_player1.Play();
                     }
-                    //if(qty_current - inner_count > 0)
-                    //{
-                    //    //Log
-                    //    Invoke((MethodInvoker)delegate { lbLog.Items.Add(input_value + "\tInner Box A"); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
-                    //    //db Count per day
-                    //    insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'Inner Box');");
-
-                    //    inner_count++;
-                    //    total = qty_current - inner_count;
-                    //    Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + total.ToString(); });
-
-                    //    if (typeCheck() == 1)
-                    //    {
-                    //        if (inner_count % innerbox_max == 0)
-                    //        {
-                    //            carton_need = (inner_count / innerbox_max) - carton_scanned;
-                    //            Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Scan: " + carton_need.ToString() + " Scanned: " + carton_scanned.ToString(); });
-                    //        }
-                    //        else if (qty_current - inner_count == 0)//Fraction
-                    //        {
-                    //            carton_need++;
-                    //            Invoke((MethodInvoker)delegate { lNeedCarton.Text = "Scan: " + carton_need.ToString() + " Scanned: " + carton_scanned.ToString(); });
-                    //        }
-                    //    }
-                    //    else if (typeCheck() == 2)
-                    //    {
-                    //        if (inner_count % cartonbox_max == 0)
-                    //        {
-                    //            export_need = (inner_count / cartonbox_max) - export_scanned;
-                    //            Invoke((MethodInvoker)delegate { lNeedExport.Text = "Scan: " + export_need.ToString() + " Scanned: " + export_scanned.ToString(); });
-                    //        }
-                    //        else if (qty_current - inner_count == 0)
-                    //        {
-                    //            export_need++;
-                    //            Invoke((MethodInvoker)delegate { lNeedExport.Text = "Scan: " + export_need.ToString() + " Scanned: " + export_scanned.ToString(); });
-                    //        }
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    Invoke((MethodInvoker)delegate { lbLog.Items.Add("not count."); lbLog.SelectedIndex = lbLog.Items.Count - 1; lbLog.SelectedIndex = -1; });
-                    //}
+                    else
+                    {
+                        //portsCloser();
+                    }
                 }
                 else
                 {
@@ -791,36 +767,121 @@ namespace WindowsForms_packing_line
                 inner_b_master = WindowsForms_packing_line.Properties.Settings.Default.InnerBMaster;
                 if (input_value.Equals(inner_b_master))
                 {
-                    if (total < qty)
+                    if (a + b < qty)
                     {
+                        b++;
+                        total = a + b;
                         innerbox_counter++;
-                        total++;
-                        Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + total; });
+                        innerbox_counterB++;
+                        if (typeCheck() == 1 && innerbox_counter == innerbox_max)
+                        {
+                            innerbox_counterB = 0;
+                            innerbox_counter = 0;
+                            carton_need++;
+                        }
+                        else if (typeCheck() == 2 && innerbox_counter == cartonbox_max)
+                        {
+                            innerbox_counterB = 0;
+                            innerbox_counter = 0;
+                            export_need++;
+                        }
+                        Invoke((MethodInvoker)delegate
+                        {
+                            lCountB.Text = innerbox_counterB.ToString();
+                            lTotal.Text = "Total: " + total + "/" + qty;
+                            lInnerBox.Text = "Inner Box: " + total + "/" + qty;
+                            lCartonNeed.Text = "WaitForScan: " + carton_need;
+                            lExportNeed.Text = "WaitForPack: " + export_need;
+                        });
                         insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'Inner Box B');");
-                        if (typeCheck() == 1)
-                        {
-                            Invoke((MethodInvoker)delegate { lInnerBox.Text = "Inner Box: " + innerbox_counter + " / " + innerbox_max; });
-                            if (innerbox_counter % innerbox_max == 0 || total == qty)
-                            {
-                                portsCloser();
-                                port3Open();
-                                Invoke((MethodInvoker)delegate { pArrow1.Visible = true; });
-                                port3IsOn = true;
-                            }
-                        }
-                        else if (typeCheck() == 2)
-                        {
-                            Invoke((MethodInvoker)delegate { lCartonBox.Text = "Max: " + innerbox_counter + " / " + cartonbox_max; });
-                            if (innerbox_counter % cartonbox_max == 0 || total == qty)
-                            {
-                                portsCloser();
-                                port4Open();
-                                Invoke((MethodInvoker)delegate { pArrow2.Visible = true; });
-                                port4IsOn = true;
-                            }
-                        }
                         _sound_player1.Play();
                     }
+                    else
+                    {
+                        //portsCloser();
+                        //port3Open();
+                        //port4Open();
+                    }
+                    //if (a + b < qty)
+                    //{
+                    //    b++;
+                    //    total = a + b;
+                    //    //innerbox_counter++;
+                    //    Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + total + "/" + qty; });
+                    //    Invoke((MethodInvoker)delegate { lCountB.Text = b.ToString(); });
+                    //    insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'Inner Box B');");
+                    //    if (typeCheck() == 1)
+                    //    {
+                    //        Invoke((MethodInvoker)delegate { lInnerBox.Text = "Inner Box: " + total + "/" + qty; });
+                    //        if (total % innerbox_max == 0 || total == qty)
+                    //        {
+                    //            carton_need++;
+                    //            Invoke((MethodInvoker)delegate { lCartonNeed.Text = "WaitForScan: " + carton_need; });
+                    //        }
+
+                    //        //Invoke((MethodInvoker)delegate { lInnerBox.Text = "Inner Box: " + innerbox_counter + " / " + innerbox_max; });
+                    //        //if (innerbox_counter % innerbox_max == 0 || total == qty)
+                    //        //{
+                    //        //    portsCloser();
+                    //        //    port3Open();
+                    //        //    Invoke((MethodInvoker)delegate { pArrow1.Visible = true; });
+                    //        //    port3IsOn = true;
+                    //        //}
+                    //    }
+                    //    else if (typeCheck() == 2)
+                    //    {
+                    //        Invoke((MethodInvoker)delegate { lInnerBox.Text = "Inner Box: " + total + "/" + qty; });
+                    //        Invoke((MethodInvoker)delegate { lCartonBox.Text = "Max: " + innerbox_counter + " / " + qty / cartonbox_max; });
+                    //        if (total % cartonbox_max == 0 || total == qty)
+                    //        {
+                    //            export_need++;
+                    //            Invoke((MethodInvoker)delegate { lExportNeed.Text = "WaitForPack: " + export_need; });
+                    //        }
+                    //        //Invoke((MethodInvoker)delegate { lCartonBox.Text = "Max: " + innerbox_counter + " / " + cartonbox_max; });
+                    //        //if (innerbox_counter % cartonbox_max == 0 || total == qty)
+                    //        //{
+                    //        //    portsCloser();
+                    //        //    port4Open();
+                    //        //    port4IsOn = true;
+                    //        //    Invoke((MethodInvoker)delegate { pArrow2.Visible = true; });
+                    //        //}
+                    //    }
+                    //    _sound_player1.Play();
+                    //}
+                    //else
+                    //{
+                    //    portsCloser();
+                    //}
+                    //if (total < qty)
+                    //{
+                    //    innerbox_counter++;
+                    //    total++;
+                    //    Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + total; });
+                    //    insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'Inner Box B');");
+                    //    if (typeCheck() == 1)
+                    //    {
+                    //        Invoke((MethodInvoker)delegate { lInnerBox.Text = "Inner Box: " + innerbox_counter + " / " + innerbox_max; });
+                    //        if (innerbox_counter % innerbox_max == 0 || total == qty)
+                    //        {
+                    //            portsCloser();
+                    //            port3Open();
+                    //            Invoke((MethodInvoker)delegate { pArrow1.Visible = true; });
+                    //            port3IsOn = true;
+                    //        }
+                    //    }
+                    //    else if (typeCheck() == 2)
+                    //    {
+                    //        Invoke((MethodInvoker)delegate { lCartonBox.Text = "Max: " + innerbox_counter + " / " + cartonbox_max; });
+                    //        if (innerbox_counter % cartonbox_max == 0 || total == qty)
+                    //        {
+                    //            portsCloser();
+                    //            port4Open();
+                    //            Invoke((MethodInvoker)delegate { pArrow2.Visible = true; });
+                    //            port4IsOn = true;
+                    //        }
+                    //    }
+                    //    _sound_player1.Play();
+                    //}
                     //if (qty_current - inner_count > 0)
                     //{
                     //    //Log
@@ -888,52 +949,83 @@ namespace WindowsForms_packing_line
                 carton_master = WindowsForms_packing_line.Properties.Settings.Default.CartonMaster;
                 if (input_value.Equals(carton_master))
                 {
-                    if (typeCheck() == 1 && cartonbox_counter < cartonbox_max)
+                    if (typeCheck() == 1 && carton_need > 0)
                     {
+                        carton_need--;
                         cartonbox_counter++;
-                        innerbox_counter = 0;
-                        Invoke((MethodInvoker)delegate
+                        carton_count++;
+                        Invoke((MethodInvoker)delegate 
                         {
-                            lInnerBox.Text = "Inner Box: " + innerbox_counter + " / " + innerbox_max;
-                            lCartonBox.Text = "Carton Box: " + cartonbox_counter + " / " + cartonbox_max;
-
+                            lCartonNeed.Text = "WaitForScan: " + carton_need;
+                            lCartonBox.Text = "Carton Box: " + carton_count + "/" + qty / cartonbox_max;
                         });
+                        if (cartonbox_counter == kb_qty / cartonbox_max)
+                        {
+                            cartonbox_counter = 0;
+                            export_need++;
+                            Invoke((MethodInvoker)delegate { lExportNeed.Text = "WaitForScan: " + export_need; });
+                        }
+                        _sound_player2.Play();
                         insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'Carton Box');");
-                        port3IsOn = false;
-                        
-                        if (cartonbox_counter % cartonbox_max == 0 ||total == qty)
-                        {
-                            portsCloser();
-                            port4Open();
-                            Invoke((MethodInvoker)delegate { pArrow1.Visible = false; pArrow2.Visible = true; });
-                            port4IsOn = true;
-                        }
-                        else
-                        {
-                            portsCloser();
-                            port1Open();
-                            port2Open();
-                            Invoke((MethodInvoker)delegate { pArrow1.Visible = false; });
-                        }
+                        //cartonbox_counter++;
+                        //innerbox_counter = 0;
+                        //Invoke((MethodInvoker)delegate
+                        //{
+                        //    lInnerBox.Text = "Inner Box: " + innerbox_counter + " / " + innerbox_max;
+                        //    lCartonBox.Text = "Carton Box: " + cartonbox_counter + " / " + cartonbox_max;
+
+                        //});
+                        //insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'Carton Box');");
+                        //port3IsOn = false;
+
+                        //if (cartonbox_counter % cartonbox_max == 0 ||total == qty)
+                        //{
+                        //    portsCloser();
+                        //    port4Open();
+                        //    Invoke((MethodInvoker)delegate { pArrow1.Visible = false; pArrow2.Visible = true; });
+                        //    port4IsOn = true;
+                        //}
+                        //else
+                        //{
+                        //    portsCloser();
+                        //    port1Open();
+                        //    port2Open();
+                        //    Invoke((MethodInvoker)delegate { pArrow1.Visible = false; });
+                        //}
                     }
-                    else if (typeCheck() == 4)
+                    else if (typeCheck() == 4 && carton_need > 0)
                     {
-                        cartonbox_counter++;
-                        Invoke((MethodInvoker)delegate { lCartonBox.Text = "Max: " + cartonbox_counter + " / " + cartonbox_max; });
-                        insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'Carton Box');");
-                        total -= innerbox_max;
-                        if (total < 0) { total = 0; }
-                        Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + total; });
-                        if (cartonbox_counter % cartonbox_max == 0 || total == 0)
+                        if (carton_need > 0)
                         {
-                            portsCloser();
-                            port4Open();
-                            Invoke((MethodInvoker)delegate { pArrow1.Visible = false; });
-                            Invoke((MethodInvoker)delegate { pArrow2.Visible = true; });
-                            port4IsOn = true;
+                            carton_need--;
+                            total += innerbox_max;
+                            Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + total + "/" + qty; });
+                            Invoke((MethodInvoker)delegate { lCartonNeed.Text = "WaitForScan: " + carton_need; });
+                            cartonbox_counter++;
+                            Invoke((MethodInvoker)delegate { lCartonBox.Text = "Carton Box: " + cartonbox_counter + "/" + (qty * cartonbox_max) / kb_qty; ; });
+                            if (cartonbox_counter % cartonbox_max == 0)
+                            {
+                                export_need++;
+                                Invoke((MethodInvoker)delegate { lExportNeed.Text = "WaitForPack: " + export_need; });
+                            }
+                            _sound_player2.Play();
+                            insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'Carton Box');");
                         }
+                        //cartonbox_counter++;
+                        //Invoke((MethodInvoker)delegate { lCartonBox.Text = "Max: " + cartonbox_counter + " / " + cartonbox_max; });
+                        //insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'Carton Box');");
+                        //total -= innerbox_max;
+                        //if (total < 0) { total = 0; }
+                        //Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + total; });
+                        //if (cartonbox_counter % cartonbox_max == 0 || total == 0)
+                        //{
+                        //    portsCloser();
+                        //    port4Open();
+                        //    Invoke((MethodInvoker)delegate { pArrow1.Visible = false; });
+                        //    Invoke((MethodInvoker)delegate { pArrow2.Visible = true; });
+                        //    port4IsOn = true;
+                        //}
                     }
-                    _sound_player2.Play();
                     //if (carton_need > 0)
                     //{
                     //    //Log
@@ -1012,75 +1104,119 @@ namespace WindowsForms_packing_line
                 export_master = WindowsForms_packing_line.Properties.Settings.Default.ExportMaster;
                 if (input_value.Equals(export_master))
                 {
-                    if (typeCheck() == 1 && (cartonbox_counter == cartonbox_max || total == qty))
+                    if (typeCheck() == 1 && export_need > 0)
                     {
-                        exportbox_counter++;
-                        Invoke((MethodInvoker)delegate { lExportBox.Text = "Export Box: " + exportbox_counter; });
                         insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'Export Box');");
-                        cartonbox_counter = 0;
-                        Invoke((MethodInvoker)delegate { lCartonBox.Text = "Carton Box: " + cartonbox_counter + " / " + innerbox_max; });
-                        port4IsOn = false;
-                        Invoke((MethodInvoker)delegate { pArrow2.Visible = false; });
-
-                        if (total == qty)
+                        export_need--;
+                        exportbox_counter++;
+                        Invoke((MethodInvoker)delegate
+                        {
+                            lExportNeed.Text = "WaitForPack: " + export_need;
+                            lExportBox.Text = "Export Box: " + exportbox_counter;
+                        });
+                        if (total == qty && carton_need == 0 && export_need ==0)
                         {
                             portsCloser();
+                            //MessageBox.Show(qty.ToString());
                             //reset
-                            //MessageBox.Show(qty.ToString(), "type1");
                             updateActualTable(kanban_master, qty);
                             updateActualTable_NotEdit(kanban_master, qty);
                             Invoke((MethodInvoker)delegate { resetDefault(); });
+                            innerbox_counter = 0;
+                            innerbox_counterB = 0;
                         }
-                        else
-                        {
-                            portsCloser();
-                            port1Open();
-                            port2Open();
-                        }
-                    }
-                    else if (typeCheck() == 2 && (innerbox_counter == cartonbox_max || total == qty))
-                    {
-                        exportbox_counter++;
-                        Invoke((MethodInvoker)delegate { lExportBox.Text = "Export Box: " + exportbox_counter; });
-                        insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'Export Box');");
-                        innerbox_counter = 0;
-                        Invoke((MethodInvoker)delegate { lCartonBox.Text = "Max: " + innerbox_counter + " / " + cartonbox_max; });
-                        port4IsOn = false;
-                        Invoke((MethodInvoker)delegate { pArrow2.Visible = false; });
+                        //exportbox_counter++;
+                        //Invoke((MethodInvoker)delegate { lExportBox.Text = "Export Box: " + exportbox_counter; });
+                        //insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'Export Box');");
+                        //cartonbox_counter = 0;
+                        //Invoke((MethodInvoker)delegate { lCartonBox.Text = "Carton Box: " + cartonbox_counter + " / " + innerbox_max; });
+                        //port4IsOn = false;
+                        //Invoke((MethodInvoker)delegate { pArrow2.Visible = false; });
 
-                        if (total == qty)
+                        //if (total == qty)
+                        //{
+                        //    portsCloser();
+                        //    //reset
+                        //    //MessageBox.Show(qty.ToString(), "type1");
+                        //    updateActualTable(kanban_master, qty);
+                        //    updateActualTable_NotEdit(kanban_master, qty);
+                        //    Invoke((MethodInvoker)delegate { resetDefault(); });
+                        //}
+                        //else
+                        //{
+                        //    portsCloser();
+                        //    port1Open();
+                        //    port2Open();
+                        //}
+                    }
+                    else if (typeCheck() == 2 && export_need > 0)
+                    {
+                        _sound_player3.Play();
+                        insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'Export Box');");
+                        export_need--;
+                        exportbox_counter++;
+                        Invoke((MethodInvoker)delegate
+                        {
+                            lExportNeed.Text = "WaitForPack: " + export_need;
+                            lCartonBox.Text = "Max: " + exportbox_counter + " / " + qty / cartonbox_max;
+                            lExportBox.Text = "Export Box: " + exportbox_counter;
+                        });
+                        if (total == qty && carton_need == 0 && export_need == 0)
                         {
                             portsCloser();
+                            //MessageBox.Show(qty.ToString());
                             //reset
-                            //MessageBox.Show(qty.ToString(), "type2");
                             updateActualTable(kanban_master, qty);
                             updateActualTable_NotEdit(kanban_master, qty);
                             Invoke((MethodInvoker)delegate { resetDefault(); });
+                            innerbox_counter = 0;
+                            innerbox_counterB = 0;
                         }
-                        else
-                        {
-                            portsCloser();
-                            port1Open();
-                            port2Open();
-                        }
+                        //exportbox_counter++;
+                        //Invoke((MethodInvoker)delegate { lExportBox.Text = "Export Box: " + exportbox_counter; });
+                        //insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'Export Box');");
+                        //innerbox_counter = 0;
+                        //Invoke((MethodInvoker)delegate { lCartonBox.Text = "Max: " + innerbox_counter + " / " + cartonbox_max; });
+                        //port4IsOn = false;
+                        //Invoke((MethodInvoker)delegate { pArrow2.Visible = false; });
+
+                        //if (total == qty)
+                        //{
+                        //    portsCloser();
+                        //    //reset
+                        //    //MessageBox.Show(qty.ToString(), "type2");
+                        //    updateActualTable(kanban_master, qty);
+                        //    updateActualTable_NotEdit(kanban_master, qty);
+                        //    Invoke((MethodInvoker)delegate { resetDefault(); });
+                        //}
+                        //else
+                        //{
+                        //    portsCloser();
+                        //    port1Open();
+                        //    port2Open();
+                        //}
                     }
-                    else if (typeCheck() == 3 && total > 0)
+                    else if (typeCheck() == 3 && total < qty)
                     {
                         exportbox_counter++;
                         Invoke((MethodInvoker)delegate { lExportBox.Text = "Export Box: " + exportbox_counter; });
                         insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'Export Box');");
-                        total -= innerbox_max; //cartonbox_max = eb max, innerbox_max = ob max
-                        if (total < innerbox_max) //cartonbox_max = eb max, innerbox_max = ob max
+                        innerbox_counter -= innerbox_max; //cartonbox_max = eb max, innerbox_max = ob max
+                        if (innerbox_counter < innerbox_max) //cartonbox_max = eb max, innerbox_max = ob max
                         {
-                            if (total < 0) { total = 0; }
-                            Invoke((MethodInvoker)delegate { lCartonBox.Text = "Max: " + total + " / " + innerbox_max; }); //cartonbox_max = eb max, innerbox_max = ob max
+                            if (innerbox_counter < 0) { innerbox_counter = 0; }
+                            Invoke((MethodInvoker)delegate { lCartonBox.Text = "Max: " + innerbox_counter + " / " + innerbox_max; }); //cartonbox_max = eb max, innerbox_max = ob max
                         }
-                        Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + total; });
-                        if (total <= 0)
+                        export_need--;
+                        Invoke((MethodInvoker)delegate { lExportNeed.Text = "WaitForPack: " + export_need; });
+                        total += innerbox_max;
+                        Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + total + "/" + qty; });
+                        if (innerbox_counter <= 0)
                         {
-                            if (total < 0) { total = 0; Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + total; }); }
+                            if (total > qty) { total = qty; Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + total + "/" + qty; }); }
                             Invoke((MethodInvoker)delegate { pArrow2.Visible = false; });
                             portsCloser();
+                            //MessageBox.Show(qty.ToString());
                             //reset
                             //MessageBox.Show(qty.ToString(), "type3");
                             updateActualTable(kanban_master, qty);
@@ -1088,37 +1224,57 @@ namespace WindowsForms_packing_line
                             Invoke((MethodInvoker)delegate { resetDefault(); });
                         }
                     }
-                    else if (typeCheck() == 4 && cartonbox_counter == cartonbox_max || total == 0)
+                    else if (typeCheck() == 4)
                     {
-                        cartonbox_counter = 0;
-                        exportbox_counter++;
-                        Invoke((MethodInvoker)delegate
+                        if (export_need > 0)
                         {
-                            lCartonBox.Text = "Max: " + cartonbox_counter + " / " + cartonbox_max;
-                            lExportBox.Text = "Export Box: " + exportbox_counter;
-                        });
-                        insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'Export Box');");
-                        port4IsOn = false;
-                        Invoke((MethodInvoker)delegate { pArrow2.Visible = false; });
+                            _sound_player3.Play();
+                            insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'Export Box');");
+                            export_need--;
+                            exportbox_counter++;
+                            Invoke((MethodInvoker)delegate
+                            {
+                                Invoke((MethodInvoker)delegate { lExportNeed.Text = "WaitForPack: " + export_need; });
+                                lExportBox.Text = "Export Box: " + exportbox_counter;
+                            });
+                            if (export_need == 0)
+                            {
+                                portsCloser();
+                                //MessageBox.Show(qty.ToString());
+                                //reset
+                                updateActualTable(kanban_master, qty);
+                                updateActualTable_NotEdit(kanban_master, qty);
+                                Invoke((MethodInvoker)delegate { resetDefault(); });
+                            }
+                        }
+                        //cartonbox_counter = 0;
+                        //exportbox_counter++;
+                        //Invoke((MethodInvoker)delegate
+                        //{
+                        //    lCartonBox.Text = "Max: " + cartonbox_counter + " / " + cartonbox_max;
+                        //    lExportBox.Text = "Export Box: " + exportbox_counter;
+                        //});
+                        //insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'Export Box');");
+                        //port4IsOn = false;
+                        //Invoke((MethodInvoker)delegate { pArrow2.Visible = false; });
 
-                        if (total == 0)
-                        {
-                            portsCloser();
-                            //reset
-                            //MessageBox.Show(qty.ToString(), "type4");
-                            updateActualTable(kanban_master, qty);
-                            updateActualTable_NotEdit(kanban_master, qty);
-                            Invoke((MethodInvoker)delegate { resetDefault(); });
-                        }
-                        else
-                        {
-                            Invoke((MethodInvoker)delegate { pArrow1.Visible = true; });
-                            portsCloser();
-                            port3Open();
-                            port3IsOn = true;
-                        }
+                        //if (total == 0)
+                        //{
+                        //    portsCloser();
+                        //    //reset
+                        //    //MessageBox.Show(qty.ToString(), "type4");
+                        //    updateActualTable(kanban_master, qty);
+                        //    updateActualTable_NotEdit(kanban_master, qty);
+                        //    Invoke((MethodInvoker)delegate { resetDefault(); });
+                        //}
+                        //else
+                        //{
+                        //    Invoke((MethodInvoker)delegate { pArrow1.Visible = true; });
+                        //    portsCloser();
+                        //    port3Open();
+                        //    port3IsOn = true;
+                        //}
                     }
-                    _sound_player3.Play();
                     //if (export_need > 0) //type1-2
                     //{
                     //    //Log
@@ -1167,59 +1323,115 @@ namespace WindowsForms_packing_line
         //Decrease a counter -1 at a time
         private void btnDecreaseInnerA_Click(object sender, EventArgs e)
         {
-            if (pauseIsOn == true)
+            if (typeCheck() == 1 || typeCheck() == 2)
             {
-                pauseIsOn = false;
-                portsCloser();
-                if (typeCheck() == 1)
+                if (innerbox_counter > 0 && a > 0)
                 {
-                    if (port3IsOn)
+                    innerbox_counter--;
+                    a--;
+                    total = a + b;
+                    Invoke((MethodInvoker)delegate
                     {
-                        port3Open();
-                    }
-                    else if (port4IsOn)
-                    {
-                        port4Open();
-                    }
-                    else
-                    {
-                        port1Open();
-                        port2Open();
-                    }
-                }
-                else if (typeCheck() == 2)
-                {
-                    if (port4IsOn)
-                    {
-                        port4Open();
-                    }
-                    else
-                    {
-                        port1Open();
-                        port2Open();
-                    }
-                }
-                else if (typeCheck() == 3)
-                {
-                    port4Open();
-                }
-                else if (typeCheck() == 4)
-                {
-                    if (port4IsOn)
-                    {
-                        port4Open();
-                    }
-                    else
-                    {
-                        port3Open();
-                    }
+                        lCountA.Text = innerbox_counter.ToString();
+                        lInnerBox.Text = "Inner Box: " + total + "/" + qty;
+                        lTotal.Text = "Total: " + total + "/" + qty;
+                        if (typeCheck() == 1) { lCartonNeed.Text = "WaitForScan: " + total / innerbox_max; }
+                        else if (typeCheck() == 2) { lExportNeed.Text = "WaitForPack: " + total / cartonbox_max; }
+                    });
+                    deleteCountperday("DELETE FROM countperday WHERE countFrom = 'Inner Box A' LIMIT 1;");
+                    //if (typeCheck() == 1)
+                    //{
+                    //    carton_need = (a / innerbox_max) - cartonbox_counter;
+                    //    Invoke((MethodInvoker)delegate { lCartonNeed.Text = "WaitForScan: " + carton_need; });
+                    //    if (a % innerbox_max == 0 && cartonbox_counter > 0)
+                    //    {
+                    //        carton_need++;
+                    //        Invoke((MethodInvoker)delegate { lCartonNeed.Text = "WaitForScan: " + carton_need; });
+                    //        cartonbox_counter--;
+                    //        Invoke((MethodInvoker)delegate { lCartonBox.Text = "Carton Box: " + cartonbox_counter + "/" + (qty * cartonbox_max) / kb_qty; });
+                    //        deleteCountperday("DELETE FROM countperday WHERE countFrom = 'Carton Box' LIMIT 1;");
+                    //    }
+                    //}
+                    //else if (typeCheck() == 2)
+                    //{
+                    //    //export_need = (a / cartonbox_max) - exportbox_counter;
+                    //    //Invoke((MethodInvoker)delegate { lExportNeed.Text = "WaitForPack: " + export_need; });
+                    //    //if (a % cartonbox_max == 0 && exportbox_counter > 0)
+                    //    //{
+                    //    //    export_need++;
+                    //    //    Invoke((MethodInvoker)delegate { lExportNeed.Text = "WaitForPack: " + export_need; });
+                    //    //    exportbox_counter--;
+                    //    //    Invoke((MethodInvoker)delegate { lCartonBox.Text = "Max: " + exportbox_counter + "/" + qty / cartonbox_max; });
+                    //    //    lExportBox.Text = "Export Box: " + exportbox_counter;
+                    //    //    deleteCountperday("DELETE FROM countperday WHERE countFrom = 'Export Box' LIMIT 1;");
+                    //    //}
+                    //    export_need = (a / cartonbox_max) - exportbox_counter;
+                    //    Invoke((MethodInvoker)delegate { lExportNeed.Text = "WaitForPack: " + export_need; });
+                    //    if (a % cartonbox_max == 0 && exportbox_counter > export_need)
+                    //    {
+                    //        export_need++;
+                    //        Invoke((MethodInvoker)delegate { lExportNeed.Text = "WaitForPack: " + export_need; });
+                    //        exportbox_counter--;
+                    //        Invoke((MethodInvoker)delegate { lCartonBox.Text = "Max: " + exportbox_counter + " / " + qty / cartonbox_max; });
+                    //        lExportBox.Text = "Export Box: " + exportbox_counter;
+                    //        deleteCountperday("DELETE FROM countperday WHERE countFrom = 'Export Box' LIMIT 1;");
+                    //    }
+                    //}
                 }
             }
-            else
-            {
-                pauseIsOn = true;
-                portsCloser();
-            }
+            //if (pauseIsOn == true)
+            //{
+            //    pauseIsOn = false;
+            //    portsCloser();
+            //    if (typeCheck() == 1)
+            //    {
+            //        if (port3IsOn)
+            //        {
+            //            port3Open();
+            //        }
+            //        else if (port4IsOn)
+            //        {
+            //            port4Open();
+            //        }
+            //        else
+            //        {
+            //            port1Open();
+            //            port2Open();
+            //        }
+            //    }
+            //    else if (typeCheck() == 2)
+            //    {
+            //        if (port4IsOn)
+            //        {
+            //            port4Open();
+            //        }
+            //        else
+            //        {
+            //            port1Open();
+            //            port2Open();
+            //        }
+            //    }
+            //    else if (typeCheck() == 3)
+            //    {
+            //        port4Open();
+            //    }
+            //    else if (typeCheck() == 4)
+            //    {
+            //        if (port4IsOn)
+            //        {
+            //            port4Open();
+            //        }
+            //        else
+            //        {
+            //            port3Open();
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    pauseIsOn = true;
+            //    portsCloser();
+            //}
             //if (inner_count > 0)
             //{
             //    inner_count--;
@@ -1257,59 +1469,114 @@ namespace WindowsForms_packing_line
         }
         private void btnDecreaseInnerB_Click(object sender, EventArgs e)
         {
-            if (pauseIsOn == true)
+            if (typeCheck() == 1 || typeCheck() == 2)
             {
-                pauseIsOn = false;
-                portsCloser();
-            }
-            else
-            {
-                pauseIsOn = true;
-                portsCloser();
-                if (typeCheck() == 1)
+                if (innerbox_counter > 0 && b > 0)
                 {
-                    if (port3IsOn)
+                    innerbox_counterB--;
+                    innerbox_counter--;
+                    b--;
+                    total = a + b;
+                    Invoke((MethodInvoker)delegate
                     {
-                        port3Open();
-                    }
-                    else if (port4IsOn)
-                    {
-                        port4Open();
-                    }
-                    else
-                    {
-                        port1Open();
-                        port2Open();
-                    }
-                }
-                else if (typeCheck() == 2)
-                {
-                    if (port4IsOn)
-                    {
-                        port4Open();
-                    }
-                    else
-                    {
-                        port1Open();
-                        port2Open();
-                    }
-                }
-                else if (typeCheck() == 3)
-                {
-                    port4Open();
-                }
-                else if (typeCheck() == 4)
-                {
-                    if (port4IsOn)
-                    {
-                        port4Open();
-                    }
-                    else
-                    {
-                        port3Open();
-                    }
+                        lCountB.Text = innerbox_counterB.ToString();
+                        lInnerBox.Text = "Inner Box: " + total + "/" + qty;
+                        lTotal.Text = "Total: " + total + "/" + qty;
+                        if (typeCheck() == 1) { lCartonNeed.Text = "WaitForScan: " + total / innerbox_max; }
+                        else if (typeCheck() == 2) { lExportNeed.Text = "WaitForPack: " + total / cartonbox_max; }
+                    });
+                    deleteCountperday("DELETE FROM countperday WHERE countFrom = 'Inner Box B' LIMIT 1;");
                 }
             }
+            //if (b > 0 && total > 0)
+            //{
+            //    b--;
+            //    total = a + b;
+            //    Invoke((MethodInvoker)delegate { lCountB.Text = b.ToString(); });
+            //    Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + total + "/" + qty; });
+            //    Invoke((MethodInvoker)delegate { lInnerBox.Text = "Inner Box: " + total + "/" + qty; });
+            //    deleteCountperday("DELETE FROM countperday WHERE countFrom = 'Inner Box B' LIMIT 1;");
+            //    if (typeCheck() == 1)
+            //    {
+            //        carton_need = (b / innerbox_max) - cartonbox_counter;
+            //        Invoke((MethodInvoker)delegate { lCartonNeed.Text = "WaitForScan: " + carton_need; });
+            //        if (b % innerbox_max == 0 && cartonbox_counter > 0)
+            //        {
+            //            carton_need++;
+            //            Invoke((MethodInvoker)delegate { lCartonNeed.Text = "WaitForScan: " + carton_need; });
+            //            cartonbox_counter--;
+            //            Invoke((MethodInvoker)delegate { lCartonBox.Text = "Carton Box: " + cartonbox_counter + "/" + (qty * cartonbox_max) / kb_qty; });
+            //            deleteCountperday("DELETE FROM countperday WHERE countFrom = 'Carton Box' LIMIT 1;");
+            //        }
+            //    }
+            //    else if (typeCheck() == 2)
+            //    {
+            //        export_need = (b / cartonbox_max) - exportbox_counter;
+            //        Invoke((MethodInvoker)delegate { lExportNeed.Text = "WaitForPack: " + export_need; });
+            //        if (b % cartonbox_max == 0 && exportbox_counter > export_need)
+            //        {
+            //            export_need++;
+            //            Invoke((MethodInvoker)delegate { lExportNeed.Text = "WaitForPack: " + export_need; });
+            //            exportbox_counter--;
+            //            Invoke((MethodInvoker)delegate { lCartonBox.Text = "Max: " + exportbox_counter + " / " + qty / cartonbox_max; });
+            //            lExportBox.Text = "Export Box: " + exportbox_counter;
+            //            deleteCountperday("DELETE FROM countperday WHERE countFrom = 'Export Box' LIMIT 1;");
+            //        }
+            //    }
+            //}
+            //if (pauseIsOn == true)
+            //{
+            //    pauseIsOn = false;
+            //    portsCloser();
+            //}
+            //else
+            //{
+            //    pauseIsOn = true;
+            //    portsCloser();
+            //    if (typeCheck() == 1)
+            //    {
+            //        if (port3IsOn)
+            //        {
+            //            port3Open();
+            //        }
+            //        else if (port4IsOn)
+            //        {
+            //            port4Open();
+            //        }
+            //        else
+            //        {
+            //            port1Open();
+            //            port2Open();
+            //        }
+            //    }
+            //    else if (typeCheck() == 2)
+            //    {
+            //        if (port4IsOn)
+            //        {
+            //            port4Open();
+            //        }
+            //        else
+            //        {
+            //            port1Open();
+            //            port2Open();
+            //        }
+            //    }
+            //    else if (typeCheck() == 3)
+            //    {
+            //        port4Open();
+            //    }
+            //    else if (typeCheck() == 4)
+            //    {
+            //        if (port4IsOn)
+            //        {
+            //            port4Open();
+            //        }
+            //        else
+            //        {
+            //            port3Open();
+            //        }
+            //    }
+            //}
             //if (inner_count > 0)
             //{
             //    inner_count--;
@@ -1343,6 +1610,23 @@ namespace WindowsForms_packing_line
             //{
 
             //}
+        }
+        private void btnPause_Click(object sender, EventArgs e)
+        {
+            if (pauseIsOn == true)
+            {
+                pauseIsOn = false;
+                portsCloser();
+            }
+            else
+            {
+                pauseIsOn = true;
+                portsCloser();
+                port1Open();
+                port2Open();
+                port3Open();
+                port4Open();
+            }
         }
         //Close and Open port 1-4 Checker page
         private void lIsPort1Open_Click(object sender, EventArgs e)
@@ -1663,22 +1947,52 @@ namespace WindowsForms_packing_line
                         Invoke((MethodInvoker)delegate { gbInnerA.BackColor = Color.Transparent; });
                         port1Open();
                         port2Open();
+                        port3Open();
+                        port4Open();
                     }
                     else if (portAlarm == 2)
                     {
                         Invoke((MethodInvoker)delegate { gbInnerB.BackColor = Color.Transparent; });
                         port2Open();
                         port1Open();
+                        port3Open();
+                        port4Open();
                     }
                     else if (portAlarm == 3)
                     {
                         Invoke((MethodInvoker)delegate { gbCarton.BackColor = Color.Transparent; });
-                        port3Open();
+                        if (typeCheck() == 4)
+                        {
+                            port3Open();
+                            port4Open();
+                        }
+                        else
+                        {
+                            port1Open();
+                            port2Open();
+                            port3Open();
+                            port4Open();
+                        }
                     }
                     else if (portAlarm == 4)
                     {
                         Invoke((MethodInvoker)delegate { gbExport.BackColor = Color.Transparent; });
-                        port4Open();
+                        if (typeCheck() == 3)
+                        {
+                            port4Open();
+                        }
+                        else if (typeCheck() == 4)
+                        {
+                            port3Open();
+                            port4Open();
+                        }
+                        else
+                        {
+                            port2Open();
+                            port1Open();
+                            port3Open();
+                            port4Open();
+                        }
                     }
                     portAlarm = 0;
                 }
@@ -2990,20 +3304,22 @@ namespace WindowsForms_packing_line
         //Reset Checker
         public void resetDefault()
         {
-
             WindowsForms_packing_line.Properties.Settings.Default.InnerAMaster = "";
             WindowsForms_packing_line.Properties.Settings.Default.InnerBMaster = "";
             WindowsForms_packing_line.Properties.Settings.Default.CartonMaster = "";
             WindowsForms_packing_line.Properties.Settings.Default.ExportMaster = "";
             //qty_current = 0;
             qty = 0;
+            kb_qty = 0;
+            a = 0;
+            b = 0;
             total = 0;
             innerbox_max = 0;
             cartonbox_max = 0;
             //inner_count = 0;
-            //carton_count = 0;
-            //carton_need = 0;
-            //export_need = 0;
+            carton_count = 0;
+            carton_need = 0;
+            export_need = 0;
             //carton_scanned = 0;
             //export_scanned = 0;
             inner_a_master = "";
@@ -3025,10 +3341,15 @@ namespace WindowsForms_packing_line
             tbCartonBox.Clear();
             tbExportBox.Clear();
             innerbox_counter = 0;
+            innerbox_counterB = 0;
             cartonbox_counter = 0;
             exportbox_counter = 0;
+            lCountA.Text = "-";
+            lCountB.Text = "-";
             lTotal.Text = "Total: 0";
+            lCartonNeed.Text = "WaitForScan: 0";
             lInnerBox.Text = "Inner Box: " + innerbox_counter + " / " + innerbox_max;
+            lExportNeed.Text = "WaitForPack: 0";
             lCartonBox.Text = "Carton Box: " + cartonbox_counter + " / " + cartonbox_max;
             lExportBox.Text = "Export Box: " + exportbox_counter;
             tbKanban.ReadOnly = false;
@@ -3037,6 +3358,7 @@ namespace WindowsForms_packing_line
             btnStart.BackColor = Color.MediumAquamarine;
             btnStart.Text = "START";
             switchIsOn = false;
+            pauseIsOn = false;
             //lbLog.Items.Clear();
             //btnStart.Show();
         }//OK
@@ -3251,29 +3573,34 @@ namespace WindowsForms_packing_line
                     queryCarton();
                     queryExport();
                     lTotal.Text = "Total: " + total;
+                    lCartonNeed.Text = "WaitForScan: 0";
+                    lExportNeed.Text = "WaitForPack: 0";
                     lExportBox.Text = "Export Box: " + exportbox_counter;
                     if (typeCheck() == 1)
                     {
-                        lInnerBox.Text = "Inner Box: " + innerbox_counter + " / " + innerbox_max;
-                        lCartonBox.Text = "Carton Box: " + cartonbox_counter + " / " + cartonbox_max;
+                        lInnerBox.Text = "Inner Box: " + total + "/" + qty;
+                        //lInnerBox.Text = "Inner Box: " + innerbox_counter + " / " + innerbox_max;
+                        lCartonBox.Text = "Carton Box: " + cartonbox_counter + "/" + qty / cartonbox_max;
                     }
                     else if (typeCheck() == 2)
                     {
-                        lInnerBox.Text = "Max: -";
-                        lCartonBox.Text = "Max: " + innerbox_counter + " / " + cartonbox_max;
+                        lInnerBox.Text = "Inner Box: " + total + "/" + qty;
+                        lCartonBox.Text = "Max: " + innerbox_counter + " / " + qty / cartonbox_max;
+                        //lInnerBox.Text = "Max: -";
+                        //lCartonBox.Text = "Max: " + innerbox_counter + " / " + cartonbox_max;
                     }
                     else if (typeCheck() == 3)
                     {
-                        Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + qty; });
-                        lInnerBox.Text = "Max: -";
+                        Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + total + "/" + qty; });
+                        lInnerBox.Text = "Inner Box: -";
                         lCartonBox.Text = "Max: " + innerbox_max + " / " + innerbox_max; //cartonbox_max = eb max, innerbox_max = ob max
                     }
                     else if (typeCheck() == 4)
                     {
-                        Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + qty; });
+                        Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + total + "/" + qty; });
                         innerbox_counter += innerbox_max;
                         lInnerBox.Text = "Max: " + innerbox_counter + " / " + innerbox_max;
-                        lCartonBox.Text = "Max: " + cartonbox_counter + " / " + cartonbox_max;
+                        lCartonBox.Text = "Carton Box: " + cartonbox_counter + "/" + cartonbox_max;
                     }
                 }
             }
@@ -3287,7 +3614,7 @@ namespace WindowsForms_packing_line
             char target = '~';
             char[] c_array = s.ToCharArray();
             int index = 0;
-            foreach(char c in c_array)
+            foreach (char c in c_array)
             {
                 if (c.Equals(target))
                 {
@@ -3301,7 +3628,7 @@ namespace WindowsForms_packing_line
         {
             char target = '|';
             char[] c_array = str.ToCharArray();
-            foreach(char c in c_array)
+            foreach (char c in c_array)
             {
                 if (c.Equals(target))
                 {
