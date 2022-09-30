@@ -71,8 +71,8 @@ namespace WindowsForms_packing_line
         public Form1()
         {
             InitializeComponent();
-            //this.WindowState = FormWindowState.Maximized;
-            //this.FormBorderStyle = FormBorderStyle.None;
+            this.WindowState = FormWindowState.Maximized;
+            this.FormBorderStyle = FormBorderStyle.None;
             refreshListViewMaster();
             refreshListViewAccount();
             refreshDGVAcutalTable();
@@ -534,6 +534,8 @@ namespace WindowsForms_packing_line
                         btnStart.Text = "STOP";
                         switchIsOn = true;
                         //MessageBox.Show(qty.ToString());
+                        tbKanban.ReadOnly = true;
+                        tbQTY.ReadOnly = true;
                         portsCloser();
                         if (typeCheck() == 1)
                         {
@@ -722,21 +724,24 @@ namespace WindowsForms_packing_line
                         total = a + b;
                         innerbox_counterA++;
                         innerbox_counter++;
-                        if (typeCheck() == 1 && innerbox_counter == innerbox_max)
+                        if (typeCheck() == 1 && innerbox_counterA+ innerbox_counterB == innerbox_max)
                         {
                             innerbox_counterA = 0;
+                            innerbox_counterB = 0;
                             innerbox_counter = 0;
                             carton_need++;
                         }
-                        else if (typeCheck() == 2 && innerbox_counter == cartonbox_max)
+                        else if (typeCheck() == 2 && innerbox_counterA + innerbox_counterB == cartonbox_max)
                         {
                             innerbox_counterA = 0;
+                            innerbox_counterB = 0;
                             innerbox_counter = 0;
                             export_need++;
                         }
                         Invoke((MethodInvoker)delegate
                         { 
                             lCountA.Text = innerbox_counterA.ToString();
+                            lCountB.Text = innerbox_counterB.ToString();
                             lTotal.Text = "Total: " + total + "/" + qty;
                             lInnerBox.Text = "Inner Box: " + total + "/" + qty;
                             lCartonNeed.Text = "WaitForScan: " + carton_need;
@@ -781,21 +786,24 @@ namespace WindowsForms_packing_line
                         total = a + b;
                         innerbox_counter++;
                         innerbox_counterB++;
-                        if (typeCheck() == 1 && innerbox_counter == innerbox_max)
+                        if (typeCheck() == 1 && innerbox_counterA + innerbox_counterB == innerbox_max)
                         {
                             innerbox_counterB = 0;
+                            innerbox_counterA = 0;
                             innerbox_counter = 0;
                             carton_need++;
                         }
-                        else if (typeCheck() == 2 && innerbox_counter == cartonbox_max)
+                        else if (typeCheck() == 2 && innerbox_counterA + innerbox_counterB == cartonbox_max)
                         {
                             innerbox_counterB = 0;
+                            innerbox_counterA = 0;
                             innerbox_counter = 0;
                             export_need++;
                         }
                         Invoke((MethodInvoker)delegate
                         {
                             lCountB.Text = innerbox_counterB.ToString();
+                            lCountA.Text = innerbox_counterA.ToString();
                             lTotal.Text = "Total: " + total + "/" + qty;
                             lInnerBox.Text = "Inner Box: " + total + "/" + qty;
                             lCartonNeed.Text = "WaitForScan: " + carton_need;
@@ -1622,19 +1630,22 @@ namespace WindowsForms_packing_line
         }
         private void btnPause_Click(object sender, EventArgs e)
         {
-            if (pauseIsOn == true)
+            if (switchIsOn == true)
             {
-                pauseIsOn = false;
-                portsCloser();
-                port1Open();
-                port2Open();
-                port3Open();
-                port4Open();
-            }
-            else
-            {
-                pauseIsOn = true;
-                portsCloser();
+                if (pauseIsOn == true)
+                {
+                    pauseIsOn = false;
+                    portsCloser();
+                    port1Open();
+                    port2Open();
+                    port3Open();
+                    port4Open();
+                }
+                else
+                {
+                    pauseIsOn = true;
+                    portsCloser();
+                }
             }
         }
         //Close and Open port 1-4 Checker page
@@ -1642,24 +1653,31 @@ namespace WindowsForms_packing_line
         {
             try
             {
-                if (port1 != null)
+                if (switchIsOn == true)
                 {
-                    if (port1.IsOpen)
+                    if (port1 != null)
                     {
-                        port1.Close();
-                        lIsPort1Open.Text = "Port1: Offline";
-                        lIsPort1Open.BackColor = System.Drawing.Color.Crimson;
+                        if (port1.IsOpen)
+                        {
+                            port1.Close();
+                            lIsPort1Open.Text = "Port1: Offline";
+                            lIsPort1Open.BackColor = System.Drawing.Color.Crimson;
+                        }
+                        else if (port1.IsOpen == false)
+                        {
+                            port1.Open();
+                            lIsPort1Open.Text = "Port1: Online ";
+                            lIsPort1Open.BackColor = System.Drawing.Color.Green;
+                        }
                     }
-                    else if (port1.IsOpen == false)
+                    else if (port1 == null && cbPort1.Text != "")
                     {
-                        port1.Open();
-                        lIsPort1Open.Text = "Port1: Online ";
-                        lIsPort1Open.BackColor = System.Drawing.Color.Green;
+                        port1Open();
                     }
-                }
-                else
-                {
-                    MessageBox.Show("Port1 hasn't been selected!", "Ports Setting");
+                    else
+                    {
+                        MessageBox.Show("Port1 hasn't been selected!", "Ports Setting");
+                    }
                 }
             }
             catch (Exception ex)
@@ -1671,28 +1689,31 @@ namespace WindowsForms_packing_line
         {
             try
             {
-                if (port2 != null)
+                if (switchIsOn == true)
                 {
-                    if (port2.IsOpen)
+                    if (port2 != null)
                     {
-                        port2.Close();
-                        lIsPort2Open.Text = "Port2: Offline";
-                        lIsPort2Open.BackColor = System.Drawing.Color.Crimson;
+                        if (port2.IsOpen)
+                        {
+                            port2.Close();
+                            lIsPort2Open.Text = "Port2: Offline";
+                            lIsPort2Open.BackColor = System.Drawing.Color.Crimson;
+                        }
+                        else if (port2.IsOpen == false)
+                        {
+                            port2.Open();
+                            lIsPort2Open.Text = "Port2: Online ";
+                            lIsPort2Open.BackColor = System.Drawing.Color.Green;
+                        }
                     }
-                    else if (port2.IsOpen == false)
+                    else if (port2 == null && cbPort2.Text != "")
                     {
-                        port2.Open();
-                        lIsPort2Open.Text = "Port2: Online ";
-                        lIsPort2Open.BackColor = System.Drawing.Color.Green;
+                        port2Open();
                     }
-                }
-                else if (cbPort2.Text != "")
-                {
-                    portsOpener();
-                }
-                else
-                {
-                    MessageBox.Show("Port2 hasn't been selected!", "Ports Setting");
+                    else
+                    {
+                        MessageBox.Show("Port2 hasn't been selected!", "Ports Setting");
+                    }
                 }
             }
             catch (Exception ex)
@@ -2323,6 +2344,7 @@ namespace WindowsForms_packing_line
                 finally
                 {
                     dbconnect.Close();
+                    tbKBSearch.SelectAll();
                 }
             }
         }//OK
@@ -3363,6 +3385,7 @@ namespace WindowsForms_packing_line
             lCartonBox.Text = "Carton Box: " + cartonbox_counter + " / " + cartonbox_max;
             lExportBox.Text = "Export Box: " + exportbox_counter;
             tbKanban.ReadOnly = false;
+            tbQTY.ReadOnly = false;
             pArrow1.Visible = false;
             pArrow2.Visible = false;
             btnStart.BackColor = Color.MediumAquamarine;
@@ -3576,7 +3599,6 @@ namespace WindowsForms_packing_line
                 }
                 else
                 {
-                    tbKanban.ReadOnly = true;
                     qeuryMax();
                     queryInnerA();
                     queryInnerB();

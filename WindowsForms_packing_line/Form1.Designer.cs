@@ -42,6 +42,7 @@
             this.btnDelB = new System.Windows.Forms.Button();
             this.lMasterB = new System.Windows.Forms.Label();
             this.tbInnerBoxB = new System.Windows.Forms.TextBox();
+            this.panel3 = new System.Windows.Forms.Panel();
             this.lCartonNeed = new System.Windows.Forms.Label();
             this.btnResetAlarm = new System.Windows.Forms.Button();
             this.btnStart = new System.Windows.Forms.Button();
@@ -68,6 +69,7 @@
             this.btnDelA = new System.Windows.Forms.Button();
             this.lMasterA = new System.Windows.Forms.Label();
             this.tbInnerBoxA = new System.Windows.Forms.TextBox();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.lTotal = new System.Windows.Forms.Label();
             this.pArrow2 = new System.Windows.Forms.Panel();
             this.pArrow1 = new System.Windows.Forms.Panel();
@@ -172,6 +174,7 @@
             this.btnLogin = new System.Windows.Forms.Button();
             this.tbLogin = new System.Windows.Forms.TextBox();
             this.label29 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.Checker.SuspendLayout();
             this.gbInnerB.SuspendLayout();
@@ -246,6 +249,7 @@
             this.Checker.Controls.Add(this.lExportNeed);
             this.Checker.Controls.Add(this.btnPause);
             this.Checker.Controls.Add(this.gbInnerB);
+            this.Checker.Controls.Add(this.label1);
             this.Checker.Controls.Add(this.lCartonNeed);
             this.Checker.Controls.Add(this.btnResetAlarm);
             this.Checker.Controls.Add(this.btnStart);
@@ -256,7 +260,6 @@
             this.Checker.Controls.Add(this.lExportBox);
             this.Checker.Controls.Add(this.label6);
             this.Checker.Controls.Add(this.label5);
-            this.Checker.Controls.Add(this.lInnerBox);
             this.Checker.Controls.Add(this.label4);
             this.Checker.Controls.Add(this.gbCarton);
             this.Checker.Controls.Add(this.lCartonBox);
@@ -289,12 +292,13 @@
             this.btnPause.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.btnPause.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.btnPause.Font = new System.Drawing.Font("Consolas", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPause.Location = new System.Drawing.Point(21, 542);
+            this.btnPause.Location = new System.Drawing.Point(8, 542);
             this.btnPause.Name = "btnPause";
             this.btnPause.Size = new System.Drawing.Size(117, 61);
             this.btnPause.TabIndex = 27;
             this.btnPause.Text = "PAUSE";
             this.btnPause.UseVisualStyleBackColor = false;
+            this.btnPause.Visible = false;
             this.btnPause.Click += new System.EventHandler(this.btnPause_Click);
             // 
             // gbInnerB
@@ -305,6 +309,7 @@
             this.gbInnerB.Controls.Add(this.btnDelB);
             this.gbInnerB.Controls.Add(this.lMasterB);
             this.gbInnerB.Controls.Add(this.tbInnerBoxB);
+            this.gbInnerB.Controls.Add(this.panel3);
             this.gbInnerB.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gbInnerB.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.gbInnerB.Location = new System.Drawing.Point(516, 104);
@@ -338,6 +343,7 @@
             this.lIsPort2Open.Size = new System.Drawing.Size(120, 28);
             this.lIsPort2Open.TabIndex = 26;
             this.lIsPort2Open.Text = "Port2: Offline";
+            this.lIsPort2Open.Click += new System.EventHandler(this.lIsPort2Open_Click);
             // 
             // btnDelB
             // 
@@ -373,6 +379,14 @@
             this.tbInnerBoxB.ReadOnly = true;
             this.tbInnerBoxB.Size = new System.Drawing.Size(360, 39);
             this.tbInnerBoxB.TabIndex = 14;
+            // 
+            // panel3
+            // 
+            this.panel3.Location = new System.Drawing.Point(319, 9);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(178, 54);
+            this.panel3.TabIndex = 29;
+            this.panel3.Click += new System.EventHandler(this.lIsPort2Open_Click);
             // 
             // lCartonNeed
             // 
@@ -521,11 +535,12 @@
             // lInnerBox
             // 
             this.lInnerBox.AutoSize = true;
-            this.lInnerBox.Font = new System.Drawing.Font("Consolas", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lInnerBox.Location = new System.Drawing.Point(717, 327);
+            this.lInnerBox.Font = new System.Drawing.Font("Consolas", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lInnerBox.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lInnerBox.Location = new System.Drawing.Point(174, 109);
             this.lInnerBox.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
             this.lInnerBox.Name = "lInnerBox";
-            this.lInnerBox.Size = new System.Drawing.Size(191, 34);
+            this.lInnerBox.Size = new System.Drawing.Size(155, 28);
             this.lInnerBox.TabIndex = 25;
             this.lInnerBox.Text = "Inner Box: ";
             // 
@@ -547,6 +562,7 @@
             this.gbCarton.Controls.Add(this.lMasterCarton);
             this.gbCarton.Controls.Add(this.lIsPort3Open);
             this.gbCarton.Controls.Add(this.tbCartonBox);
+            this.gbCarton.Controls.Add(this.lInnerBox);
             this.gbCarton.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gbCarton.ForeColor = System.Drawing.Color.MediumSpringGreen;
             this.gbCarton.Location = new System.Drawing.Point(148, 253);
@@ -608,6 +624,7 @@
             this.gbInnerA.Controls.Add(this.btnDelA);
             this.gbInnerA.Controls.Add(this.lMasterA);
             this.gbInnerA.Controls.Add(this.tbInnerBoxA);
+            this.gbInnerA.Controls.Add(this.panel2);
             this.gbInnerA.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gbInnerA.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.gbInnerA.Location = new System.Drawing.Point(8, 104);
@@ -641,6 +658,7 @@
             this.lIsPort1Open.Size = new System.Drawing.Size(120, 28);
             this.lIsPort1Open.TabIndex = 25;
             this.lIsPort1Open.Text = "Port1: Offline";
+            this.lIsPort1Open.Click += new System.EventHandler(this.lIsPort1Open_Click);
             // 
             // btnDelA
             // 
@@ -677,6 +695,14 @@
             this.tbInnerBoxA.ReadOnly = true;
             this.tbInnerBoxA.Size = new System.Drawing.Size(360, 39);
             this.tbInnerBoxA.TabIndex = 13;
+            // 
+            // panel2
+            // 
+            this.panel2.Location = new System.Drawing.Point(319, 9);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(178, 54);
+            this.panel2.TabIndex = 29;
+            this.panel2.Click += new System.EventHandler(this.lIsPort1Open_Click);
             // 
             // lTotal
             // 
@@ -1838,10 +1864,9 @@
             this.pLogin.Controls.Add(this.btnLogin);
             this.pLogin.Controls.Add(this.tbLogin);
             this.pLogin.Controls.Add(this.label29);
-            this.pLogin.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pLogin.Location = new System.Drawing.Point(0, 85);
             this.pLogin.Name = "pLogin";
-            this.pLogin.Size = new System.Drawing.Size(1029, 676);
+            this.pLogin.Size = new System.Drawing.Size(1029, 10);
             this.pLogin.TabIndex = 4;
             // 
             // pictureBox1
@@ -1905,6 +1930,18 @@
             this.label29.Size = new System.Drawing.Size(291, 29);
             this.label29.TabIndex = 0;
             this.label29.Text = "แสกนบัตร/ใส่รหัส เพื่อ Login";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Consolas", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label1.Location = new System.Drawing.Point(717, 327);
+            this.label1.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(191, 34);
+            this.label1.TabIndex = 25;
+            this.label1.Text = "Inner Box: ";
             // 
             // Form1
             // 
@@ -2092,6 +2129,9 @@
         private System.Windows.Forms.Label lCountA;
         private System.Windows.Forms.Label lCartonNeed;
         private System.Windows.Forms.Label lExportNeed;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Label label1;
     }
 }
 

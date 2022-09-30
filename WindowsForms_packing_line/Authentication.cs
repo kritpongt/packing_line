@@ -45,6 +45,10 @@ namespace WindowsForms_packing_line
                             this.Close();
                             alarm_turn_off = true;
                         }
+                        else
+                        {
+                            alarm_turn_off = false;
+                        }
                     }
                     tbAlarm.SelectAll();
                 }
@@ -58,6 +62,11 @@ namespace WindowsForms_packing_line
                 }
             }
         }//OK
+        private void btnX_Click(object sender, EventArgs e)
+        {
+            alarm_turn_off = false;
+            this.Close();
+        }
         private void btnLogin_Click(object sender, EventArgs e)
         {
             string TABLE = "account";
@@ -99,10 +108,6 @@ namespace WindowsForms_packing_line
             {
                 MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-        private void btnX_Click(object sender, EventArgs e)
-        {
-            this.Close();
         }
         private void dataReceiverRFIDAlarm(object sender, SerialDataReceivedEventArgs e)
         {
