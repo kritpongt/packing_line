@@ -24,6 +24,11 @@ using EasyModbus;
 using System.Runtime.CompilerServices;
 using System.Security;
 using System.Media;
+using System.Net.Sockets;
+using System.IO.Pipes;
+using System.Net;
+using System.IO;
+using SimpleTCP;
 
 namespace WindowsForms_packing_line
 {
@@ -40,9 +45,16 @@ namespace WindowsForms_packing_line
         private SoundPlayer _sound_player2 = new SoundPlayer(WindowsForms_packing_line.Properties.Resources.ScannerOK2);
         private SoundPlayer _sound_player3 = new SoundPlayer(WindowsForms_packing_line.Properties.Resources.NotifyOK);
         private SoundPlayer _sound_player4 = new SoundPlayer(WindowsForms_packing_line.Properties.Resources.AlarmNG);
+        
+        private TcpClient tcp_client = new TcpClient();
+        //private NetworkStream network_stream = default(NetworkStream);
+        bool _connected = false;
+        SimpleTcpClient client;
+
         //private ModbusClient modbus_tcp = new ModbusClient("192.168.1.110", 502);
         private int qty_kanban, qty_current, innerbox_max, cartonbox_max;   //get from db
         int inner_count = 0, carton_count = 0, carton_need = 0, export_need = 0; //counter +1 the larger box
+        int export_need_cal = 0;
         //int carton_scanned = 0, export_scanned = 0; // carton box, export box when scanned
         string inner_a_master = "";  //inner a master
         string inner_b_master = "";  //inner b master
@@ -105,8 +117,21 @@ namespace WindowsForms_packing_line
             cbPort4.Text = WindowsForms_packing_line.Properties.Settings.Default.Port4;
             cbPortTL.Text = WindowsForms_packing_line.Properties.Settings.Default.PortTL;
             cbPortLink.Text = WindowsForms_packing_line.Properties.Settings.Default.PortLink;
+            tbPDFIP.Text = WindowsForms_packing_line.Properties.Settings.Default.hostIPServer;
             //STATUS
+            //yellowAlarm();
             greenAlarm();
+            if (WindowsForms_packing_line.Properties.Settings.Default.hostIPServer != "")
+            {
+                connectServer(WindowsForms_packing_line.Properties.Settings.Default.hostIPServer, 23);
+            }
+            //startServer();
+        }
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            portsCloser();
+            sendToUSB(colors.reset);
+            tcp_client.Close();
         }
         //Login
         private void tbLogin_KeyDown(object sender, KeyEventArgs e)
@@ -458,6 +483,7 @@ namespace WindowsForms_packing_line
             WindowsForms_packing_line.Properties.Settings.Default.Port4 = cbPort4.Text;
             WindowsForms_packing_line.Properties.Settings.Default.PortTL = cbPortTL.Text;
             WindowsForms_packing_line.Properties.Settings.Default.PortLink = cbPortLink.Text;
+            WindowsForms_packing_line.Properties.Settings.Default.hostIPServer = tbPDFIP.Text;
             WindowsForms_packing_line.Properties.Settings.Default.Save();
             //portsOpener();
             //portsOtherClose();
@@ -469,10 +495,20 @@ namespace WindowsForms_packing_line
         {
             if (e.KeyCode == Keys.Enter)
             {
+                WindowsForms_packing_line.Properties.Settings.Default.InnerAMaster = "";
+                WindowsForms_packing_line.Properties.Settings.Default.InnerBMaster = "";
+                WindowsForms_packing_line.Properties.Settings.Default.CartonMaster = "";
+                WindowsForms_packing_line.Properties.Settings.Default.ExportMaster = "";
                 string quantity = "0";
                 if (checkVerticalBar(tbKanban.Text) == true)
                 {
                     string[] kanban_array = tbKanban.Text.Split('|');
+                    Invoke((MethodInvoker)delegate { tbKanban.Text = kanban_array[2]; });
+                    quantity = kanban_array[5];
+                }
+                else if(checkTilde(tbKanban.Text) == true) //error test
+                {
+                    string[] kanban_array = tbKanban.Text.Split('~');
                     Invoke((MethodInvoker)delegate { tbKanban.Text = kanban_array[2]; });
                     quantity = kanban_array[5];
                 }
@@ -507,6 +543,8 @@ namespace WindowsForms_packing_line
                     dbconnect.Close();
                     //MessageBox.Show(kanban_master, "SendToUSB");//Send to USB
                     sendToRS232(kanban_master);
+                    sendSimpleTcp(kanban_master);
+                    //send(kanban_master);
                 }
             }
         }//Waitfix
@@ -536,12 +574,18 @@ namespace WindowsForms_packing_line
                         //MessageBox.Show(qty.ToString());
                         tbKanban.ReadOnly = true;
                         tbQTY.ReadOnly = true;
+                        //greenAlarm();
+                        yellowAlarm();
                         portsCloser();
                         if (typeCheck() == 1)
                         {
-                            Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + total + "/" + qty; });
-                            Invoke((MethodInvoker)delegate { lInnerBox.Text = "Inner Box: " + total + "/" + qty; });
-                            Invoke((MethodInvoker)delegate { lCartonBox.Text = "Carton Box: " + cartonbox_counter + "/" + qty / cartonbox_max; });
+                            Invoke((MethodInvoker)delegate
+                            {
+                                lTotal.Text = "Total: " + total + "/" + qty;
+                                lInnerBox.Text = "Inner Box: " + total + "/" + qty;
+                                lCartonBox.Text = "Carton Box: " + cartonbox_counter + "/" + qty / innerbox_max;
+                                lExportMax.Text = "Export Box: 0/" + qty / (innerbox_max * cartonbox_max);
+                            });
                             port1Open();
                             port2Open();
                             port3Open();
@@ -549,9 +593,13 @@ namespace WindowsForms_packing_line
                         }
                         else if (typeCheck() == 2)
                         {
-                            Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + total + "/" + qty; });
-                            Invoke((MethodInvoker)delegate { lInnerBox.Text = "Inner Box: " + total + "/" + qty; });
-                            Invoke((MethodInvoker)delegate { lCartonBox.Text = "Max: " + innerbox_counter + " / " + qty / cartonbox_max; });
+                            Invoke((MethodInvoker)delegate
+                            {
+                                lTotal.Text = "Total: " + total + "/" + qty;
+                                lInnerBox.Text = "Inner Box: " + total + "/" + qty;
+                                //lCartonBox.Text = "Max: " + innerbox_counter + " / " + qty / cartonbox_max;
+                                lExportMax.Text = "Export Box: 0/" + qty / cartonbox_max;
+                            });
                             port1Open();
                             port2Open();
                             port4Open();
@@ -561,15 +609,23 @@ namespace WindowsForms_packing_line
                             //total = qty;
                             innerbox_counter = qty;
                             Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + total + "/" + qty; });
-                            Invoke((MethodInvoker)delegate { lCartonBox.Text = "Max: " + innerbox_max + " / " + innerbox_max; }); //cartonbox_max = eb max, innerbox_max = ob max
-                            if (innerbox_counter < innerbox_max)
-                            {
-                                if (innerbox_counter < 0) { innerbox_counter = 0; }
-                                Invoke((MethodInvoker)delegate { lCartonBox.Text = "Max: " + innerbox_counter + " / " + innerbox_max; }); //cartonbox_max = eb max, innerbox_max = ob max
-                            }
+                            //Invoke((MethodInvoker)delegate { lCartonBox.Text = "Max: " + innerbox_max + " / " + innerbox_max; }); //cartonbox_max = eb max, innerbox_max = ob max
+                            //if (innerbox_counter < innerbox_max)
+                            //{
+                            //    if (innerbox_counter < 0) { innerbox_counter = 0; }
+                            //    Invoke((MethodInvoker)delegate { lCartonBox.Text = "Max: " + innerbox_counter + " / " + innerbox_max; }); //cartonbox_max = eb max, innerbox_max = ob max
+                            //}
                             float f = (float)qty / (float)innerbox_max; ;
                             export_need = (int)Math.Ceiling(f);
-                            Invoke((MethodInvoker)delegate { lExportNeed.Text = "WaitForPack: " + export_need; });
+                            export_need_cal = (int)Math.Ceiling(f);
+                            Invoke((MethodInvoker)delegate 
+                            {
+                                lMaxCT.Text = "Max CT: " + innerbox_max + " PCS";
+                                lExportNeed.Text = "WaitForPack: " + export_need;
+                                lExportMax.Text = "Export Box: 0/" + export_need_cal;
+                                lCartonBox.Text = "Max: " + innerbox_max + " / " + innerbox_max; //cartonbox_max = eb max, innerbox_max = ob max
+
+                            });
                             //Invoke((MethodInvoker)delegate { pArrow2.Visible = true; });
                             port4Open();
                         }
@@ -578,9 +634,13 @@ namespace WindowsForms_packing_line
                             //total = qty;
                             float f = (float)qty / (float)innerbox_max;
                             carton_need = (int)Math.Ceiling(f);
-                            Invoke((MethodInvoker)delegate { lCartonNeed.Text = "WaitForScan: " + carton_need; });
-                            Invoke((MethodInvoker)delegate { lCartonBox.Text = "Carton Box: " + cartonbox_counter + "/" + (qty * cartonbox_max) / kb_qty; });
-                            Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + total + "/" + qty; });
+                            Invoke((MethodInvoker)delegate
+                            {
+                                lCartonNeed.Text = "WaitForScan: " + carton_need;
+                                lCartonBox.Text = "Carton Box: " + cartonbox_counter + "/" + (qty * cartonbox_max) / kb_qty;
+                                lTotal.Text = "Total: " + total + "/" + qty;
+                                lExportMax.Text = "Export Box: 0/" + carton_need;
+                            });
                             //Invoke((MethodInvoker)delegate { pArrow1.Visible = true; });
                             port3Open();
                         }
@@ -595,6 +655,8 @@ namespace WindowsForms_packing_line
                             btnStart.Text = "START";
                             switchIsOn = false;
                             portsCloser();
+                            //yellowAlarm();
+                            greenAlarm();
                             resetDefault();
                         }
                     }
@@ -711,7 +773,7 @@ namespace WindowsForms_packing_line
         {
             try
             {
-                Thread.Sleep(60);
+                Thread.Sleep(500);
                 string input_value = port1.ReadExisting();
                 input_value = cutStr(input_value);
                 Invoke((MethodInvoker)delegate { tbInnerBoxA.Text = input_value; });
@@ -739,7 +801,15 @@ namespace WindowsForms_packing_line
                             export_need++;
                         }
                         Invoke((MethodInvoker)delegate
-                        { 
+                        {
+                            if (typeCheck() == 1)
+                            {
+                                lInnerMax.Text = innerbox_counter + "/" + innerbox_max;
+                            }
+                            else if (typeCheck() == 2)
+                            {
+                                lInnerMax.Text = innerbox_counter + "/" + cartonbox_max;
+                            }
                             lCountA.Text = innerbox_counterA.ToString();
                             lCountB.Text = innerbox_counterB.ToString();
                             lTotal.Text = "Total: " + total + "/" + qty;
@@ -747,7 +817,7 @@ namespace WindowsForms_packing_line
                             lCartonNeed.Text = "WaitForScan: " + carton_need;
                             lExportNeed.Text = "WaitForPack: " + export_need;
                         });
-                        insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'Inner Box A');");
+                        insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'a');");
                         _sound_player1.Play();
                     }
                     else
@@ -773,7 +843,7 @@ namespace WindowsForms_packing_line
         {
             try
             {
-                Thread.Sleep(60);
+                Thread.Sleep(500);
                 string input_value = port2.ReadExisting();
                 input_value = cutStr(input_value);
                 Invoke((MethodInvoker)delegate { tbInnerBoxB.Text = input_value; });
@@ -802,6 +872,14 @@ namespace WindowsForms_packing_line
                         }
                         Invoke((MethodInvoker)delegate
                         {
+                            if (typeCheck() == 1)
+                            {
+                                Invoke((MethodInvoker)delegate { lInnerMax.Text = innerbox_counter + "/" + innerbox_max; });
+                            }
+                            else if (typeCheck() == 2)
+                            {
+                                Invoke((MethodInvoker)delegate { lInnerMax.Text = innerbox_counter + "/" + cartonbox_max; });
+                            }
                             lCountB.Text = innerbox_counterB.ToString();
                             lCountA.Text = innerbox_counterA.ToString();
                             lTotal.Text = "Total: " + total + "/" + qty;
@@ -809,7 +887,7 @@ namespace WindowsForms_packing_line
                             lCartonNeed.Text = "WaitForScan: " + carton_need;
                             lExportNeed.Text = "WaitForPack: " + export_need;
                         });
-                        insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'Inner Box B');");
+                        insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'b');");
                         _sound_player1.Play();
                     }
                     else
@@ -958,7 +1036,7 @@ namespace WindowsForms_packing_line
         {
             try
             {
-                Thread.Sleep(60);
+                Thread.Sleep(500);
                 string input_value = port3.ReadExisting();
                 input_value = cutStr(input_value);
                 Invoke((MethodInvoker)delegate { tbCartonBox.Text = input_value; });
@@ -973,16 +1051,16 @@ namespace WindowsForms_packing_line
                         Invoke((MethodInvoker)delegate 
                         {
                             lCartonNeed.Text = "WaitForScan: " + carton_need;
-                            lCartonBox.Text = "Carton Box: " + carton_count + "/" + qty / cartonbox_max;
+                            lCartonBox.Text = "Carton Box: " + carton_count + "/" + qty / innerbox_max;
                         });
-                        if (cartonbox_counter == kb_qty / cartonbox_max)
+                        if (cartonbox_counter == kb_qty / innerbox_max)
                         {
                             cartonbox_counter = 0;
                             export_need++;
                             Invoke((MethodInvoker)delegate { lExportNeed.Text = "WaitForScan: " + export_need; });
                         }
                         _sound_player2.Play();
-                        insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'Carton Box');");
+                        insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'ob');");
                         //cartonbox_counter++;
                         //innerbox_counter = 0;
                         //Invoke((MethodInvoker)delegate
@@ -1025,7 +1103,7 @@ namespace WindowsForms_packing_line
                                 Invoke((MethodInvoker)delegate { lExportNeed.Text = "WaitForPack: " + export_need; });
                             }
                             _sound_player2.Play();
-                            insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'Carton Box');");
+                            insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'ob');");
                         }
                         //cartonbox_counter++;
                         //Invoke((MethodInvoker)delegate { lCartonBox.Text = "Max: " + cartonbox_counter + " / " + cartonbox_max; });
@@ -1109,7 +1187,7 @@ namespace WindowsForms_packing_line
         {
             try
             {
-                Thread.Sleep(60);
+                Thread.Sleep(500);
                 string input_value = port4.ReadExisting();
                 if (checkVerticalBar(input_value))
                 {
@@ -1122,17 +1200,21 @@ namespace WindowsForms_packing_line
                 {
                     if (typeCheck() == 1 && export_need > 0)
                     {
-                        insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'Export Box');");
+                        insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'eb');");
                         export_need--;
                         exportbox_counter++;
                         Invoke((MethodInvoker)delegate
                         {
                             lExportNeed.Text = "WaitForPack: " + export_need;
                             lExportBox.Text = "Export Box: " + exportbox_counter;
+
+                            lExportMax.Text = "Export Box: " + exportbox_counter + "/" + qty / (innerbox_max * cartonbox_max);
                         });
                         if (total == qty && carton_need == 0 && export_need ==0)
                         {
                             portsCloser();
+                            //yellowAlarm();
+                            greenAlarm();
                             //MessageBox.Show(qty.ToString());
                             //reset
                             updateActualTable(kanban_master, qty);
@@ -1168,7 +1250,7 @@ namespace WindowsForms_packing_line
                     else if (typeCheck() == 2 && export_need > 0)
                     {
                         _sound_player3.Play();
-                        insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'Export Box');");
+                        insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'eb');");
                         export_need--;
                         exportbox_counter++;
                         Invoke((MethodInvoker)delegate
@@ -1176,10 +1258,14 @@ namespace WindowsForms_packing_line
                             lExportNeed.Text = "WaitForPack: " + export_need;
                             lCartonBox.Text = "Max: " + exportbox_counter + " / " + qty / cartonbox_max;
                             lExportBox.Text = "Export Box: " + exportbox_counter;
+
+                            lExportMax.Text = "Export Box: " + exportbox_counter + "/" + qty / cartonbox_max;
                         });
                         if (total == qty && carton_need == 0 && export_need == 0)
                         {
                             portsCloser();
+                            //yellowAlarm();
+                            greenAlarm();
                             //MessageBox.Show(qty.ToString());
                             //reset
                             updateActualTable(kanban_master, qty);
@@ -1215,8 +1301,13 @@ namespace WindowsForms_packing_line
                     else if (typeCheck() == 3 && total < qty)
                     {
                         exportbox_counter++;
-                        Invoke((MethodInvoker)delegate { lExportBox.Text = "Export Box: " + exportbox_counter; });
-                        insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'Export Box');");
+                        Invoke((MethodInvoker)delegate
+                        {
+                            lExportBox.Text = "Export Box: " + exportbox_counter;
+
+                            lExportMax.Text = "Export Box: " + exportbox_counter + "/" + export_need_cal;
+                        });
+                        insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'eb');");
                         innerbox_counter -= innerbox_max; //cartonbox_max = eb max, innerbox_max = ob max
                         if (innerbox_counter < innerbox_max) //cartonbox_max = eb max, innerbox_max = ob max
                         {
@@ -1232,6 +1323,8 @@ namespace WindowsForms_packing_line
                             if (total > qty) { total = qty; Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + total + "/" + qty; }); }
                             Invoke((MethodInvoker)delegate { pArrow2.Visible = false; });
                             portsCloser();
+                            //yellowAlarm();
+                            greenAlarm();
                             //MessageBox.Show(qty.ToString());
                             //reset
                             //MessageBox.Show(qty.ToString(), "type3");
@@ -1245,17 +1338,20 @@ namespace WindowsForms_packing_line
                         if (export_need > 0)
                         {
                             _sound_player3.Play();
-                            insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'Export Box');");
+                            insertCountperday("INSERT INTO `countperday`(kanban, countFrom) VALUES('" + kanban_master + "', 'eb');");
                             export_need--;
                             exportbox_counter++;
                             Invoke((MethodInvoker)delegate
                             {
-                                Invoke((MethodInvoker)delegate { lExportNeed.Text = "WaitForPack: " + export_need; });
+                                lExportNeed.Text = "WaitForPack: " + export_need;
                                 lExportBox.Text = "Export Box: " + exportbox_counter;
+                                lExportMax.Text = "Export Box: " + exportbox_counter + "/" + carton_need;
                             });
                             if (export_need == 0)
                             {
                                 portsCloser();
+                                //yellowAlarm();
+                                greenAlarm();
                                 //MessageBox.Show(qty.ToString());
                                 //reset
                                 updateActualTable(kanban_master, qty);
@@ -1662,12 +1758,14 @@ namespace WindowsForms_packing_line
                             port1.Close();
                             lIsPort1Open.Text = "Port1: Offline";
                             lIsPort1Open.BackColor = System.Drawing.Color.Crimson;
+                            pPort1.BackColor = System.Drawing.Color.Crimson;
                         }
                         else if (port1.IsOpen == false)
                         {
                             port1.Open();
                             lIsPort1Open.Text = "Port1: Online ";
                             lIsPort1Open.BackColor = System.Drawing.Color.Green;
+                            pPort1.BackColor = System.Drawing.Color.Green;
                         }
                     }
                     else if (port1 == null && cbPort1.Text != "")
@@ -1698,12 +1796,14 @@ namespace WindowsForms_packing_line
                             port2.Close();
                             lIsPort2Open.Text = "Port2: Offline";
                             lIsPort2Open.BackColor = System.Drawing.Color.Crimson;
+                            pPort2.BackColor = System.Drawing.Color.Crimson;
                         }
                         else if (port2.IsOpen == false)
                         {
                             port2.Open();
                             lIsPort2Open.Text = "Port2: Online ";
                             lIsPort2Open.BackColor = System.Drawing.Color.Green;
+                            pPort2.BackColor = System.Drawing.Color.Green;
                         }
                     }
                     else if (port2 == null && cbPort2.Text != "")
@@ -1732,12 +1832,14 @@ namespace WindowsForms_packing_line
                         port3.Close();
                         lIsPort3Open.Text = "Port3: Offline";
                         lIsPort3Open.BackColor = System.Drawing.Color.Crimson;
+                        pPort3.BackColor = System.Drawing.Color.Crimson;
                     }
                     else if (port3.IsOpen == false)
                     {
                         port3.Open();
                         lIsPort3Open.Text = "Port3: Online ";
                         lIsPort3Open.BackColor = System.Drawing.Color.Green;
+                        pPort3.BackColor = System.Drawing.Color.Green;
                     }
                 }
                 else if (cbPort3.Text != "")
@@ -1765,12 +1867,15 @@ namespace WindowsForms_packing_line
                         port4.Close();
                         lIsPort4Open.Text = "Port4: Offline";
                         lIsPort4Open.BackColor = System.Drawing.Color.Crimson;
+                        pPort4.BackColor = System.Drawing.Color.Crimson;
+
                     }
                     else if (port4.IsOpen == false)
                     {
                         port4.Open();
                         lIsPort4Open.Text = "Port4: Online ";
                         lIsPort4Open.BackColor = System.Drawing.Color.Green;
+                        pPort4.BackColor = System.Drawing.Color.Green;
                     }
                 }
                 else if (cbPort4.Text != "")
@@ -1804,6 +1909,7 @@ namespace WindowsForms_packing_line
                             {
                                 lIsPort1Open.Text = "Port1: Online ";
                                 lIsPort1Open.BackColor = System.Drawing.Color.Green;
+                                pPort1.BackColor = System.Drawing.Color.Green;
                             });
                         }
                     }
@@ -1821,6 +1927,7 @@ namespace WindowsForms_packing_line
                             {
                                 lIsPort1Open.Text = "Port1: Online ";
                                 lIsPort1Open.BackColor = System.Drawing.Color.Green;
+                                pPort1.BackColor = System.Drawing.Color.Green;
                             });
                         }
                     }
@@ -1848,6 +1955,7 @@ namespace WindowsForms_packing_line
                             {
                                 lIsPort2Open.Text = "Port2: Online ";
                                 lIsPort2Open.BackColor = System.Drawing.Color.Green;
+                                pPort2.BackColor = System.Drawing.Color.Green;
                             });
                         }
                     }
@@ -1865,6 +1973,7 @@ namespace WindowsForms_packing_line
                             {
                                 lIsPort2Open.Text = "Port2: Online ";
                                 lIsPort2Open.BackColor = System.Drawing.Color.Green;
+                                pPort2.BackColor = System.Drawing.Color.Green;
                             });
                         }
                     }
@@ -1892,6 +2001,7 @@ namespace WindowsForms_packing_line
                             {
                                 lIsPort3Open.Text = "Port3: Online ";
                                 lIsPort3Open.BackColor = System.Drawing.Color.Green;
+                                pPort3.BackColor = System.Drawing.Color.Green;
                             });
                         }
                     }
@@ -1909,6 +2019,7 @@ namespace WindowsForms_packing_line
                             {
                                 lIsPort3Open.Text = "Port3: Online ";
                                 lIsPort3Open.BackColor = System.Drawing.Color.Green;
+                                pPort3.BackColor = System.Drawing.Color.Green;
                             });
                         }
                     }
@@ -1936,6 +2047,7 @@ namespace WindowsForms_packing_line
                             {
                                 lIsPort4Open.Text = "Port4: Online ";
                                 lIsPort4Open.BackColor = System.Drawing.Color.Green;
+                                pPort4.BackColor = System.Drawing.Color.Green;
                             });
                         }
                     }
@@ -1953,6 +2065,7 @@ namespace WindowsForms_packing_line
                             {
                                 lIsPort4Open.Text = "Port4: Online ";
                                 lIsPort4Open.BackColor = System.Drawing.Color.Green;
+                                pPort4.BackColor = System.Drawing.Color.Green;
                             });
                         }
                     }
@@ -1971,6 +2084,7 @@ namespace WindowsForms_packing_line
                 if (Authentication.alarm_turn_off == true)
                 {
                     _sound_player4.Stop();
+                    //greenAlarm();
                     yellowAlarm();
                     if (portAlarm == 1)
                     {
@@ -2024,6 +2138,11 @@ namespace WindowsForms_packing_line
                             port4Open();
                         }
                     }
+                    //else if (switchIsOn == true)
+                    //{
+                    //    portsCloser();
+                    //    yellowAlarm();
+                    //}
                     portAlarm = 0;
                 }
             }
@@ -2044,8 +2163,15 @@ namespace WindowsForms_packing_line
         }
         private void btnCountPerDay_Click(object sender, EventArgs e)
         {
-            Countperday form_countperday = new Countperday();
-            form_countperday.Show();
+            try
+            {
+                Countperday form_countperday = new Countperday();
+                form_countperday.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Countperday Form", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         //Edit Master page
         //Create kanban button
@@ -2301,17 +2427,8 @@ namespace WindowsForms_packing_line
             else
             {
                 lvModelMaster.Items.Clear();
-                string kb = "";
                 string TABLE = "modelmaster";
                 string queryList = "SELECT * FROM " + TABLE + " WHERE kanban LIKE '%" + tbKBSearch.Text + "%' ORDER BY CAST(kanban AS UNSIGNED);";
-                if (checkVerticalBar(tbKBSearch.Text))
-                {
-                    string[] kanban_array = tbKBSearch.Text.Split('|');
-                    kb = kanban_array[2];
-                    queryList = "SELECT * FROM " + TABLE + " WHERE kanban LIKE '%" + kb + "%' ORDER BY CAST(kanban AS UNSIGNED);";
-                    tbKBSearch.Text = kb;
-                    lvModelMaster.Items.Clear();
-                }
                 //Database display Search data from table
                 MySqlConnection dbconnect = new MySqlConnection(connectStr);
                 MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
@@ -2344,10 +2461,65 @@ namespace WindowsForms_packing_line
                 finally
                 {
                     dbconnect.Close();
-                    tbKBSearch.SelectAll();
                 }
             }
         }//OK
+        private void tbKBSearch_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (checkVerticalBar(tbKBSearch.Text))
+                {
+                    try
+                    {
+                        string[] kanban_array = tbKBSearch.Text.Split('|');
+                        Invoke((MethodInvoker)delegate { tbKBSearch.Text = kanban_array[2]; });
+                        string TABLE = "modelmaster";
+                        string queryList = "SELECT * FROM " + TABLE + " WHERE kanban LIKE '%" + tbKBSearch.Text + "%' ORDER BY CAST(kanban AS UNSIGNED);";
+                        lvModelMaster.Items.Clear();
+                        MySqlConnection dbconnect = new MySqlConnection(connectStr);
+                        MySqlCommand dbcommand = new MySqlCommand(queryList, dbconnect);
+                        MySqlDataAdapter da = new MySqlDataAdapter(dbcommand);
+                        DataTable dt = new DataTable();
+                        dbcommand.CommandTimeout = 60;
+                        try
+                        {
+                            dbconnect.Open();
+                            da.Fill(dt);
+                            for (int i = 0; i < dt.Rows.Count; i++)
+                            {
+                                DataRow dr = dt.Rows[i];    //dr["Column Name from db"]
+                                ListViewItem list = new ListViewItem(dr["kanban"].ToString());
+                                list.SubItems.Add(dr["modelName"].ToString());
+                                list.SubItems.Add(dr["bc1"].ToString());
+                                list.SubItems.Add(dr["bc2"].ToString());
+                                list.SubItems.Add(dr["bc3"].ToString());
+                                list.SubItems.Add(dr["bc4"].ToString());
+                                list.SubItems.Add(dr["obMax"].ToString());
+                                list.SubItems.Add(dr["ebMax"].ToString());
+                                //list.SubItems.Add(dr["CartonMax"].ToString());
+                                lvModelMaster.Items.Add(list);
+                            }
+                            lvModelMaster.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                            lvModelMaster.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        finally
+                        {
+                            dbconnect.Close();
+                            tbKBSearch.SelectAll();
+                        }
+                    }
+                    catch
+                    {
+
+                    }
+                }
+            }
+        }
         public void portsCloser()
         {
             try
@@ -2359,6 +2531,7 @@ namespace WindowsForms_packing_line
                     {
                         lIsPort1Open.Text = "Port1: Offline";
                         lIsPort1Open.BackColor = System.Drawing.Color.Crimson;
+                        pPort1.BackColor = System.Drawing.Color.Crimson;
                     });
                 }
                 if (port2 != null)
@@ -2368,6 +2541,7 @@ namespace WindowsForms_packing_line
                     {
                         lIsPort2Open.Text = "Port2: Offline";
                         lIsPort2Open.BackColor = System.Drawing.Color.Crimson;
+                        pPort2.BackColor = System.Drawing.Color.Crimson;
                     });
                 }
                 if (port3 != null)
@@ -2377,6 +2551,7 @@ namespace WindowsForms_packing_line
                     {
                         lIsPort3Open.Text = "Port3: Offline";
                         lIsPort3Open.BackColor = System.Drawing.Color.Crimson;
+                        pPort3.BackColor = System.Drawing.Color.Crimson;
                     });
                 }
                 if (port4 != null)
@@ -2386,6 +2561,7 @@ namespace WindowsForms_packing_line
                     {
                         lIsPort4Open.Text = "Port4: Offline";
                         lIsPort4Open.BackColor = System.Drawing.Color.Crimson;
+                        pPort4.BackColor = System.Drawing.Color.Crimson;
                     });
                 }
                 if (portRFID != null)
@@ -3382,7 +3558,8 @@ namespace WindowsForms_packing_line
             lCartonNeed.Text = "WaitForScan: 0";
             lInnerBox.Text = "Inner Box: " + innerbox_counter + " / " + innerbox_max;
             lExportNeed.Text = "WaitForPack: 0";
-            lCartonBox.Text = "Carton Box: " + cartonbox_counter + " / " + cartonbox_max;
+            //lCartonBox.Text = "Carton Box: " + cartonbox_counter + " / " + cartonbox_max;
+            lCartonBox.Text = "Carton Box: ";
             lExportBox.Text = "Export Box: " + exportbox_counter;
             tbKanban.ReadOnly = false;
             tbQTY.ReadOnly = false;
@@ -3392,6 +3569,13 @@ namespace WindowsForms_packing_line
             btnStart.Text = "START";
             switchIsOn = false;
             pauseIsOn = false;
+            lInnerMax.Text = ".../...";
+            lMaxCT.Text = "Max CT: _ PCS";
+            lExportMax.Text = "Export Box: ";
+            pPort1.BackColor = System.Drawing.Color.Crimson;
+            pPort2.BackColor = System.Drawing.Color.Crimson;
+            pPort3.BackColor = System.Drawing.Color.Crimson;
+            pPort4.BackColor = System.Drawing.Color.Crimson;
             //lbLog.Items.Clear();
             //btnStart.Show();
         }//OK
@@ -3610,22 +3794,32 @@ namespace WindowsForms_packing_line
                     lExportBox.Text = "Export Box: " + exportbox_counter;
                     if (typeCheck() == 1)
                     {
-                        lInnerBox.Text = "Inner Box: " + total + "/" + qty;
+                        lInnerBox.Text = "Inner Box: .../" + qty;
+                        lMaxCT.Text = "Max CT: " + innerbox_max + " PCS";
+                        lInnerMax.Text = ".../" + innerbox_max;
+                        //lInnerBox.Text = "Inner Box: " + total + "/" + qty;
                         //lInnerBox.Text = "Inner Box: " + innerbox_counter + " / " + innerbox_max;
-                        lCartonBox.Text = "Carton Box: " + cartonbox_counter + "/" + qty / cartonbox_max;
+                        lCartonBox.Text = "Carton Box: " + cartonbox_counter + "/" + qty / innerbox_max;
+                        lExportMax.Text = "Export Box: 0/" + qty / (innerbox_max * cartonbox_max);
                     }
                     else if (typeCheck() == 2)
                     {
-                        lInnerBox.Text = "Inner Box: " + total + "/" + qty;
-                        lCartonBox.Text = "Max: " + innerbox_counter + " / " + qty / cartonbox_max;
+                        lInnerBox.Text = "Inner Box: .../" + qty;
+                        lMaxCT.Text = "Max CT: " + cartonbox_max + " PCS";
+                        lInnerMax.Text = ".../" + cartonbox_max;
+                        //lCartonBox.Text = "Max: " + innerbox_counter + " / " + qty / innerbox_max;
+
+                        //lInnerBox.Text = "Inner Box: " + total + "/" + qty;
                         //lInnerBox.Text = "Max: -";
                         //lCartonBox.Text = "Max: " + innerbox_counter + " / " + cartonbox_max;
+                        lExportMax.Text = "Export Box: 0/" + qty / cartonbox_max;
                     }
                     else if (typeCheck() == 3)
                     {
                         Invoke((MethodInvoker)delegate { lTotal.Text = "Total: " + total + "/" + qty; });
                         lInnerBox.Text = "Inner Box: -";
-                        lCartonBox.Text = "Max: " + innerbox_max + " / " + innerbox_max; //cartonbox_max = eb max, innerbox_max = ob max
+                        //lCartonBox.Text = "Max: " + innerbox_max + " / " + innerbox_max; //cartonbox_max = eb max, innerbox_max = ob max
+                        lMaxCT.Text = "Max CT: " + innerbox_max + " PCS";
                     }
                     else if (typeCheck() == 4)
                     {
@@ -3633,6 +3827,8 @@ namespace WindowsForms_packing_line
                         innerbox_counter += innerbox_max;
                         lInnerBox.Text = "Max: " + innerbox_counter + " / " + innerbox_max;
                         lCartonBox.Text = "Carton Box: " + cartonbox_counter + "/" + cartonbox_max;
+
+                        lMaxCT.Text = "Max CT: " + innerbox_max + " PCS";
                     }
                 }
             }
@@ -3669,7 +3865,115 @@ namespace WindowsForms_packing_line
             }
             return false;
         }
+        public bool checkTilde(string str)
+        {
+            char target = '~';
+            char[] c_array = str.ToCharArray();
+            foreach (char c in c_array)
+            {
+                if (c.Equals(target))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public async Task connectServer(string _network, int _port)
+        {
+            //tcp_client.Connect(_network, _port);
+            ////Thread ct_thread = new Thread(get);
+            ////ct_thread.Start();
+            //_connected = true;
+            try
+            {
+                client = new SimpleTcpClient();
+                client.Connect(_network, _port);
+                client.StringEncoder = Encoding.UTF8;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "connect server", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        public void sendSimpleTcp(string _s)
+        {
+            try
+            {
+                if (client != null)
+                {
+                    client.Write(_s);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "send simple tcp", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        //private void get()
+        //{
+        //    string response_data;
+        //    while (_connected)
+        //    {
+        //        network_stream = tcp_client.GetStream();
+        //        var buffsize = tcp_client.ReceiveBufferSize;
+        //        byte[] instream = new byte[buffsize];
+        //        network_stream.Read(instream, 0, buffsize);
+        //        response_data = System.Text.Encoding.ASCII.GetString(instream);
+        //    }
+        //}
+        private void send(string _s)
+        {
+            NetworkStream network_stream = tcp_client.GetStream();
+            byte[] out_streaming = Encoding.ASCII.GetBytes(_s + Environment.NewLine);
+            network_stream.Write(out_streaming, 0, out_streaming.Length);
+            network_stream.Flush();
+            network_stream.Close();
+        }
+        //TODO: Server listener
+        TcpClient tcp_client1;
+        TcpListener tcp_listener;
+        StreamReader stream_reader;
+        public void startServer()
+        {
+            IPAddress[] local_ip = Dns.GetHostAddresses(Dns.GetHostName());
+            foreach (IPAddress address in local_ip)
+            {
+                if (address.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    MessageBox.Show(address.ToString());
+                }
+            }
+            try
+            {
+                tcp_listener = new TcpListener(IPAddress.Any, 23);
+                tcp_listener.Start();
+                backgroundWorker1.RunWorkerAsync();
+            }
+            catch
+            {
 
+            }
+        }
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                while(true)
+                {
+                    tcp_client1 = tcp_listener.AcceptTcpClient();
+                    if (tcp_client1.Connected)
+                    {
+                        MessageBox.Show("GG");
+                    }
+                    stream_reader = new StreamReader(tcp_client1.GetStream());
+                    string recieve = stream_reader.ReadLine();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+        }
         //private List<ActualTable> getActualTable()
         //{
         //    var list = new List<ActualTable>();
@@ -3678,7 +3982,6 @@ namespace WindowsForms_packing_line
         //        No = 0,
         //        PartNo = "",
         //        Count = 0
-
         //    });
         //    return list;
         //}

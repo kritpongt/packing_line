@@ -346,5 +346,17 @@ namespace WindowsForms_packing_line.Properties {
                 this["PortLink"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string hostIPServer {
+            get {
+                return ((string)(this["hostIPServer"]));
+            }
+            set {
+                this["hostIPServer"] = value;
+            }
+        }
     }
 }

@@ -145,10 +145,10 @@ namespace WindowsForms_packing_line
             int countInnerBoxA = 0, countInnerBoxB = 0, countCartonBox = 0, countExportBox = 0, total = 0;
             for (int i = 0; i < kanban_perday.Length; i++)
             {
-                int dbInnerBoxA = dbCountBox(kanban_perday[i], "Inner Box A");
-                int dbInnerBoxB = dbCountBox(kanban_perday[i], "Inner Box B");
-                int dbCartonBox = dbCountBox(kanban_perday[i], "Carton Box");
-                int dbExportBox = dbCountBox(kanban_perday[i], "Export Box");
+                int dbInnerBoxA = dbCountBox(kanban_perday[i], "a");
+                int dbInnerBoxB = dbCountBox(kanban_perday[i], "b");
+                int dbCartonBox = dbCountBox(kanban_perday[i], "ob");
+                int dbExportBox = dbCountBox(kanban_perday[i], "eb");
                 countInnerBoxA += dbInnerBoxA;
                 countInnerBoxB += dbInnerBoxB;
                 countCartonBox += dbCartonBox;
