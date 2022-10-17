@@ -1956,6 +1956,7 @@
             // 
             // pictureBox1
             // 
+            this.pictureBox1.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox1.Image = global::WindowsForms_packing_line.Properties.Resources.NEW_LOGO_05;
             this.pictureBox1.Location = new System.Drawing.Point(365, 138);
